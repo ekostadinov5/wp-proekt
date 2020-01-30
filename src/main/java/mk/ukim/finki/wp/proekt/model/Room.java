@@ -23,10 +23,4 @@ public class Room {
     private List<ConsultationSlot> slots;
     private String description;
 
-    public boolean matches(String term) {
-        return this.name.contains(term) ||
-                this.description.contains(term) ||
-                this.building.getDescriotion().contains(term);
-    }
-
 }

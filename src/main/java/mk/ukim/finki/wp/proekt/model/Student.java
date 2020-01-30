@@ -23,4 +23,14 @@ public class Student {
     @ManyToMany(mappedBy = "students")
     private List<ConsultationSlot> slots;
 
+    public void addSlot(ConsultationSlot slot) {
+        this.slots.add(slot);
+        slot.getStudents().add(this);
+    }
+
+    public void removeSlot(ConsultationSlot slot) {
+        this.slots.remove(slot);
+        slot.getStudents().remove(this);
+    }
+
 }

@@ -22,10 +22,4 @@ public class Professor {
     @OneToMany(mappedBy = "professor")
     private List<ConsultationSlot> slots;
 
-    public boolean matches(String term) {
-        return this.firstName.contains(term) ||
-                this.lastName.contains(term) ||
-                this.title.contains(term);
-    }
-
 }
