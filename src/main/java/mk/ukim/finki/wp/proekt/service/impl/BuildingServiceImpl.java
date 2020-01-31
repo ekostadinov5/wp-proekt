@@ -29,7 +29,7 @@ public class BuildingServiceImpl implements BuildingService {
     public Building updateBuilding(String oldName, String name, String description) {
         Building building = this.buildingRepository.findById(oldName).orElseThrow(InvalidBuildingNameException::new);
         building.setName(name);
-        building.setDescriotion(description);
+        building.setDescription(description);
         return this.buildingRepository.save(building);
     }
 

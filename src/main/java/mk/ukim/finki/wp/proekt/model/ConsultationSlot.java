@@ -17,10 +17,6 @@ import java.util.List;
 @Entity
 @Data
 public class ConsultationSlot {
-    @Transient
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private static Long slotsCounter = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,10 +24,10 @@ public class ConsultationSlot {
     @JsonBackReference
     private Professor professor;
     @ManyToOne
-    @JsonIgnore
+    @JsonBackReference
     private Room room;
     @ManyToMany(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonBackReference
     private List<Student> students;
     private LocalDate date;
     private DayOfWeek dayOfWeek;
@@ -47,7 +43,6 @@ public class ConsultationSlot {
     public static synchronized ConsultationSlot createRecurringSlot(Professor professor, Room room, DayOfWeek dayOfWeek,
                                                                     LocalTime from, LocalTime to) {
         ConsultationSlot slot = new ConsultationSlot();
-        slot.id = slotsCounter++;
         slot.professor = professor;
         slot.room = room;
         slot.dayOfWeek = dayOfWeek;
@@ -59,7 +54,6 @@ public class ConsultationSlot {
     public static synchronized ConsultationSlot createOneTimeSlot(Professor professor, Room room, LocalDate date,
                                                                   LocalTime from, LocalTime to) {
         ConsultationSlot slot = new ConsultationSlot();
-        slot.id = slotsCounter++;
         slot.professor = professor;
         slot.room = room;
         slot.date = date;

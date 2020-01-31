@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(path = "/api/professors", produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
@@ -21,6 +23,11 @@ public class ProfessorApi {
             @RequestHeader(name = "page", defaultValue = "0", required = false) int page,
             @RequestHeader(name = "pageSize", defaultValue = "18", required = false) int pageSize) {
         return this.professorService.getAllProfessors(page, pageSize);
+    }
+
+    @GetMapping(params = "term")
+    public List<Professor> searchProfessors(@RequestParam String term) {
+        return this.professorService.searchProfessors(term);
     }
 
 }

@@ -1,13 +1,11 @@
 package mk.ukim.finki.wp.proekt.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -19,7 +17,8 @@ public class Room {
     private String name;
     @ManyToOne
     private Building building;
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<ConsultationSlot> slots;
     private String description;
 

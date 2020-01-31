@@ -106,7 +106,6 @@ public class DataHolder {
         s5.setStudents(new ArrayList<>());
         s6.setStudents(new ArrayList<>());
 
-
         slots.add(s1);
         slots.add(s2);
         slots.add(s3);

@@ -14,6 +14,6 @@ import javax.persistence.Id;
 public class Building {
     @Id
     private String name;
-    private String descriotion;
+    private String description;
 
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import Professor from '../Professor/professor';
+import ReactPaginate from 'react-paginate';
 
 const consultations = (props) => {
 
@@ -10,23 +11,37 @@ const consultations = (props) => {
         );
     }
 
+    const handlePageClick = (e) => {
+        props.onPageClick(e.selected);
+    }
+
     const pagination = () => {
-        return (
-            <nav aria-label="Page navigation example" className="mt-5">
-                <ul className="pagination justify-content-center">
-                    <li className="page-item"><a className="page-link" href="#">Previous</a></li>
-                    <li className="page-item"><a className="page-link" href="#">1</a></li>
-                    <li className="page-item"><a className="page-link" href="#">2</a></li>
-                    <li className="page-item"><a className="page-link" href="#">3</a></li>
-                    <li className="page-item"><a className="page-link" href="#">Next</a></li>
-                </ul>
-            </nav>
-        );
+        if (props.totalPages != 0) {
+            return (
+                <ReactPaginate previousLabel={"претходна"}
+                               nextLabel={"следна"}
+                               breakLabel={<span className="gap">...</span>}
+                               breakClassName={"break-me"}
+                               pageCount={props.totalPages}
+                               marginPagesDisplayed={2}
+                               pageRangeDisplayed={5}
+                               pageClassName={"page-item"}
+                               pageLinkClassName={"page-link"}
+                               previousClassName={"page-item"}
+                               nextClassName={"page-item"}
+                               previousLinkClassName={"page-link"}
+                               nextLinkClassName={"page-link"}
+                               forcePage={props.page}
+                               onPageChange={handlePageClick}
+                               containerClassName={"pagination justify-content-center"}
+                               activeClassName={"active"}/>
+            )
+        }
     }
 
     return (
         <div>
-            <div className="row">
+            <div className="row mb-5">
                 {consultations()}
             </div>
             {pagination()}

@@ -1,5 +1,6 @@
 package mk.ukim.finki.wp.proekt.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Student {
     private String lastName;
     @ManyToMany(mappedBy = "students")
     @NotFound(action = NotFoundAction.IGNORE)
+    @JsonManagedReference
     private List<ConsultationSlot> slots;
 
     public void addSlot(ConsultationSlot slot) {

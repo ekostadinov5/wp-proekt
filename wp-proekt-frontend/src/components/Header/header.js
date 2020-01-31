@@ -1,7 +1,53 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 
-const header = () => {
+const header = (props) => {
+
+    const changeActive = (e) => {
+        let clicked = e.target.parentElement;
+        clicked.parentElement.childNodes.forEach(child => child.classList.remove("active"));
+        clicked.classList.add("active");
+    }
+
+    const menuItems = () => {
+        return (
+            <ul className="navbar-nav mr-auto">
+                <li className="nav-item active">
+                    <Link onClick={changeActive} className="nav-link" to={"/consultations"}>Термини</Link>
+                </li>
+                <li className="nav-item">
+                    <Link onClick={changeActive} className="nav-link" to={"/rooms"}>Простории</Link>
+                </li>
+                <li className="nav-item">
+                    <Link onClick={changeActive} className="nav-link" to={"/consultations/professor"}>Мои термини</Link>
+                </li>
+            </ul>
+        );
+    }
+
+    const onSearch = (e) => {
+        e.preventDefault();
+        props.onSearch(e.target.searchTerm.value);
+    }
+    
+    const onEmpty = (e) => {
+        if(e.target.value == "") {
+            props.onEmpty();
+        }
+    }
+
+    const searchForm = () => {
+        return (
+            <form onSubmit={onSearch} className="nav-item form-inline mt-2">
+                <div className={"form-group m-auto"}>
+                    <input onChange={onEmpty} name={"searchTerm"} className="form-control my-2 mr-2" type="search" placeholder="Пребарај..."
+                           aria-label="Search"/>
+                    <button className="btn btn-outline-success my-2" type="submit">Пребарај</button>
+                </div>
+            </form>
+        );
+    }
+
     return (
         <header>
             <nav className="navbar navbar-expand-lg navbar-dark navbar-fixed bg-dark">
@@ -12,24 +58,8 @@ const header = () => {
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarCollapse">
-                    <ul className="navbar-nav mr-auto">
-                        <li className="nav-item active">
-                            <Link className="nav-link" to={"/consultations"}>Термини</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to={"/rooms"}>Простории</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to={"/consultations/professor"}>Мои термини</Link>
-                        </li>
-                    </ul>
-                    <form className="nav-item form-inline mt-2">
-                        <div className={"form-group m-auto"}>
-                            <input className="form-control my-2 mr-2" type="text" placeholder="Пребарај..."
-                                   aria-label="Search"/>
-                            <button className="btn btn-outline-success my-2" type="submit">Пребарај</button>
-                        </div>
-                    </form>
+                    {menuItems()}
+                    {searchForm()}
                     <Link className="nav-item btn btn-outline-info mt-2 ml-3" to={"/login"}>Најава</Link>
                 </div>
             </nav>

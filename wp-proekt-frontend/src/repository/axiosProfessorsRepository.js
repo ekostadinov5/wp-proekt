@@ -12,6 +12,9 @@ const ProfessorsService = {
                 'pageSize': pageSize
             }
         });
+    },
+    searchProfessors: (searchTerm) => {
+        return axios.get(`/api/professors?term=${searchTerm}`);
     }
 }
 

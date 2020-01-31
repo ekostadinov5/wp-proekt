@@ -11,6 +11,22 @@ page: 0
 
 GET http://localhost:8080/api/professors
 page: 0
-page-size: 2
+pageSize: 2
+
+###
+
+GET http://localhost:8080/api/professors?term=Рис
+
+###
+
+
+
+###
+
+GET http://localhost:8080/api/rooms
+
+###
+
+GET http://localhost:8080/api/rooms?term=11
 
 ###
