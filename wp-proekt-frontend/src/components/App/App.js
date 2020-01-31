@@ -1,20 +1,36 @@
 import React, {Component} from 'react';
 //import logo from '../../logo.svg';
 import './App.css';
-import {BrowserRouter as Router, Redirect, Route} from 'react-router-dom'
+import {BrowserRouter as Router, Redirect, Route} from 'react-router-dom';
 
-import * as consultationsRepository  from '../../repository/consultationsRepository'
+//import * as consultationsRepository  from '../../repository/consultationsRepository';
+import ProfessorsService from '../../repository/axiosProfessorsRepository'
 
 import Header from '../Header/header';
-import Consultations from '../Consultations/consultations'
+import Consultations from '../Consultations/consultations';
 import Rooms from '../Rooms/rooms';
-import ProfessorConsultations from '../ProfessorConsultations/professorConsultations'
-import Footer from '../Footer/footer'
+import ProfessorConsultations from '../ProfessorConsultations/professorConsultations';
+import Footer from '../Footer/footer';
 
 class App extends Component {
 
-    getConsultationsByProfessor = () => {
-        return consultationsRepository.getConsultations();
+    constructor(props) {
+        super(props);
+        this.state = {
+            professors: []
+        }
+    }
+
+    loadProfessors = () => {
+        ProfessorsService.fetchProfessors().then((promise) => {
+            this.setState({
+                professors: promise.data.content
+            });
+        });
+    }
+
+    componentDidMount() {
+        this.loadProfessors();
     }
 
     render() {
@@ -26,7 +42,7 @@ class App extends Component {
                     <div role="main" className="mt-3">
                         <div className="container">
                             <Route path={"/consultations"} exact render={()=>
-                                <Consultations consultations={this.getConsultationsByProfessor()} />}>
+                                <Consultations consultations={this.state.professors} />}>
                             </Route>
                             <Route path={"/rooms"} exact render={()=>
                                 <Rooms />}>

@@ -4,14 +4,20 @@ import Term from '../Consultations/term'
 const professor = (props) => {
 
     const termsWeekly = () => {
-        return props.value.dayTerms.map(term =>
-            <Term key={term.slotId} value={term} />
+        return props.value.slots.map(term => {
+                if(term.dayOfWeek) {
+                    return <Term key={term.id} value={term} />
+                }
+            }
         );
     }
 
     const termsDay = () => {
-        return props.value.dateTerms.map(term =>
-            <Term key={term.slotId} value={term} />
+        return props.value.slots.map(term => {
+                if(term.date) {
+                    return <Term key={term.id} value={term} />
+                }
+            }
         );
     }
 
@@ -21,7 +27,7 @@ const professor = (props) => {
                 <div className="card-header">
                     <div className="row">
                         <div className="col-8">
-                            {props.value.professor.title} {props.value.professor.firstName} {props.value.professor.lastName}
+                            {props.value.title} {props.value.firstName} {props.value.lastName}
                         </div>
                         <div className="col-4 text-right">
                             <a href="#" className="btn btn-light" title="Откажи">

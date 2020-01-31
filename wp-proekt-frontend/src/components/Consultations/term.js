@@ -15,7 +15,11 @@ const term = (props) => {
             return (
                 <div className="row">
                     <div className="col-md-6 font-weight-bold"> Датум:</div>
-                    <div className="col-md-6">{props.value.date}</div>
+                    <div className="col-md-6">
+                        <Moment parse={"YYYY-MM-DD"} format={"DD-MM-YYYY"}>
+                            {props.value.date}
+                        </Moment>
+                    </div>
                 </div>
             );
         } else {
