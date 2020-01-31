@@ -16,7 +16,7 @@ const consultations = (props) => {
     }
 
     const pagination = () => {
-        if (props.totalPages != 0) {
+        if (props.totalPages !== 0) {
             return (
                 <ReactPaginate previousLabel={"претходна"}
                                nextLabel={"следна"}

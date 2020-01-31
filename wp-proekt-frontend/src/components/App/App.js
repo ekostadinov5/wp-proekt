@@ -45,11 +45,6 @@ class App extends Component {
         });
     }
 
-    loadData = () => {
-        this.loadProfessors();
-        this.loadRooms();
-    }
-
     searchData = (searchTerm) => {
         ProfessorsService.searchProfessors(searchTerm).then((promise) => {
             this.setState({
@@ -76,7 +71,7 @@ class App extends Component {
         const routing = () => {
             return (
                 <Router>
-                    <Header onSearch={this.searchData} onEmpty={this.loadData} />
+                    <Header onSearch={this.searchData} />
                     <div role="main" className="mt-3">
                         <div className="container">
                             <Route path={"/consultations"} exact render={()=>

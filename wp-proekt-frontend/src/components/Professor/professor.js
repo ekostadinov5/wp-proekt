@@ -30,7 +30,7 @@ const professor = (props) => {
                             {props.value.title} {props.value.firstName} {props.value.lastName}
                         </div>
                         <div className="col-4 text-right">
-                            <a href="#" className="btn btn-light" title="Откажи">
+                            <a href="#" className="btn btn-light" title="Следи">
                                 <i className="fa fa-fw fa-star"></i>
                             </a>
                         </div>

@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 
 const header = (props) => {
 
-    const changeActive = (e) => {
+    const linkChange = (e) => {
         let clicked = e.target.parentElement;
         clicked.parentElement.childNodes.forEach(child => child.classList.remove("active"));
         clicked.classList.add("active");
@@ -13,13 +13,13 @@ const header = (props) => {
         return (
             <ul className="navbar-nav mr-auto">
                 <li className="nav-item active">
-                    <Link onClick={changeActive} className="nav-link" to={"/consultations"}>Термини</Link>
+                    <Link onClick={linkChange} className="nav-link" to={"/consultations"}>Термини</Link>
                 </li>
                 <li className="nav-item">
-                    <Link onClick={changeActive} className="nav-link" to={"/rooms"}>Простории</Link>
+                    <Link onClick={linkChange} className="nav-link" to={"/rooms"}>Простории</Link>
                 </li>
                 <li className="nav-item">
-                    <Link onClick={changeActive} className="nav-link" to={"/consultations/professor"}>Мои термини</Link>
+                    <Link onClick={linkChange} className="nav-link" to={"/consultations/professor"}>Мои термини</Link>
                 </li>
             </ul>
         );
@@ -27,20 +27,15 @@ const header = (props) => {
 
     const onSearch = (e) => {
         e.preventDefault();
+        let searchTerm = e.target.searchTerm.value;
         props.onSearch(e.target.searchTerm.value);
-    }
-    
-    const onEmpty = (e) => {
-        if(e.target.value == "") {
-            props.onEmpty();
-        }
     }
 
     const searchForm = () => {
         return (
             <form onSubmit={onSearch} className="nav-item form-inline mt-2">
                 <div className={"form-group m-auto"}>
-                    <input onChange={onEmpty} name={"searchTerm"} className="form-control my-2 mr-2" type="search" placeholder="Пребарај..."
+                    <input id={"searchTerm"} name={"searchTerm"} className="form-control my-2 mr-2" type="search" placeholder="Пребарај..."
                            aria-label="Search"/>
                     <button className="btn btn-outline-success my-2" type="submit">Пребарај</button>
                 </div>

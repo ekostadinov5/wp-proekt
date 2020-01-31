@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Building from '../Building/building';
 import {loadConsultations} from "../../repository/consultationsRepository";
 
 const rooms = (props) => {
-
+    
     const roomsByBuilding = () => {
         const data = props.rooms.reduce((acc, curr) => {
             if(!acc[curr.building.name]) {
@@ -27,6 +27,10 @@ const rooms = (props) => {
     return (
         <div role="main" className="mt-3">
             <div className="container">
+                <button className="btn btn-primary btn-lg rounded">
+                    <i className="fa fa-fw fa-plus mr-3"></i>
+                    Додади група на простории
+                </button>
                 <div className={"row"}>
                     {roomsByBuilding()}
                 </div>

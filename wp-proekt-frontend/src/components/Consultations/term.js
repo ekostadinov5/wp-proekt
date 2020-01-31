@@ -61,7 +61,7 @@ const term = (props) => {
             {termTime()}
             {termRoom()}
 
-            <a href="#" className="btn btn-light" title="Откажи">
+            <a href="#" className="btn btn-light" title="Додади се">
                 <i className="fa fa-arrow-circle-left"></i>
             </a>
 
