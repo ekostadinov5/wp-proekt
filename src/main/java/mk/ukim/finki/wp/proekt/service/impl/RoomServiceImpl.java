@@ -4,8 +4,8 @@ import mk.ukim.finki.wp.proekt.model.Building;
 import mk.ukim.finki.wp.proekt.model.Room;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidBuildingNameException;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidRoomNameException;
-import mk.ukim.finki.wp.proekt.repository.JpaBuildingRepository;
-import mk.ukim.finki.wp.proekt.repository.JpaRoomRepository;
+import mk.ukim.finki.wp.proekt.repository.jpa.JpaBuildingRepository;
+import mk.ukim.finki.wp.proekt.repository.jpa.JpaRoomRepository;
 import mk.ukim.finki.wp.proekt.service.RoomService;
 import org.springframework.stereotype.Service;
 

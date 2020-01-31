@@ -1,0 +1,16 @@
+###
+
+GET http://localhost:8080/api/professors
+
+###
+
+GET http://localhost:8080/api/professors
+page: 0
+
+###
+
+GET http://localhost:8080/api/professors
+page: 0
+page-size: 2
+
+###

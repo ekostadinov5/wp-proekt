@@ -2,7 +2,7 @@ package mk.ukim.finki.wp.proekt.service.impl;
 
 import mk.ukim.finki.wp.proekt.model.Building;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidBuildingNameException;
-import mk.ukim.finki.wp.proekt.repository.JpaBuildingRepository;
+import mk.ukim.finki.wp.proekt.repository.jpa.JpaBuildingRepository;
 import mk.ukim.finki.wp.proekt.service.BuildingService;
 import org.springframework.stereotype.Service;
 

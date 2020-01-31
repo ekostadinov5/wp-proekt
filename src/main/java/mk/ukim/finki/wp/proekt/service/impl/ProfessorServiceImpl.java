@@ -2,7 +2,7 @@ package mk.ukim.finki.wp.proekt.service.impl;
 
 import mk.ukim.finki.wp.proekt.model.Professor;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidProfessorIdException;
-import mk.ukim.finki.wp.proekt.repository.JpaProfessorRepository;
+import mk.ukim.finki.wp.proekt.repository.jpa.JpaProfessorRepository;
 import mk.ukim.finki.wp.proekt.service.ProfessorService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

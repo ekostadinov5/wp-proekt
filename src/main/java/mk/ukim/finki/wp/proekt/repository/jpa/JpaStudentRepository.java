@@ -1,4 +1,4 @@
-package mk.ukim.finki.wp.proekt.repository;
+package mk.ukim.finki.wp.proekt.repository.jpa;
 
 import mk.ukim.finki.wp.proekt.model.Student;
 import org.springframework.data.domain.Page;

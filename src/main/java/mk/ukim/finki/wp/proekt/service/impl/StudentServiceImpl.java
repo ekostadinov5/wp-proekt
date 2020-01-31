@@ -2,7 +2,7 @@ package mk.ukim.finki.wp.proekt.service.impl;
 
 import mk.ukim.finki.wp.proekt.model.Student;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidStudentIndexException;
-import mk.ukim.finki.wp.proekt.repository.JpaStudentRepository;
+import mk.ukim.finki.wp.proekt.repository.jpa.JpaStudentRepository;
 import mk.ukim.finki.wp.proekt.service.StudentService;
 import org.springframework.stereotype.Service;
 

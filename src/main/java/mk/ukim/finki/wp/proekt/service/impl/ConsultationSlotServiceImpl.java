@@ -6,19 +6,15 @@ import mk.ukim.finki.wp.proekt.model.Room;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidConsultationSlotIdException;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidProfessorIdException;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidRoomNameException;
-import mk.ukim.finki.wp.proekt.repository.JpaConsultationSlotRepository;
-import mk.ukim.finki.wp.proekt.repository.JpaProfessorRepository;
-import mk.ukim.finki.wp.proekt.repository.JpaRoomRepository;
+import mk.ukim.finki.wp.proekt.repository.jpa.JpaConsultationSlotRepository;
+import mk.ukim.finki.wp.proekt.repository.jpa.JpaProfessorRepository;
+import mk.ukim.finki.wp.proekt.repository.jpa.JpaRoomRepository;
 import mk.ukim.finki.wp.proekt.service.ConsultationSlotService;
-import org.hibernate.cfg.NotYetImplementedException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 @Service
 public class ConsultationSlotServiceImpl implements ConsultationSlotService {

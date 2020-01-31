@@ -3,6 +3,8 @@ package mk.ukim.finki.wp.proekt.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,6 +23,7 @@ public class Student {
     private String firstName;
     private String lastName;
     @ManyToMany(mappedBy = "students")
+    @NotFound(action = NotFoundAction.IGNORE)
     private List<ConsultationSlot> slots;
 
     public void addSlot(ConsultationSlot slot) {
