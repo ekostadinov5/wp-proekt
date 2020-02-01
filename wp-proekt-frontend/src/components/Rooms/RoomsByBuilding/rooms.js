@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
-import Building from '../Building/building';
-import {loadConsultations} from "../../repository/consultationsRepository";
+import Building from '../../Buildings/Building/building';
+import {loadConsultations} from "../../../repository/consultationsRepository";
+import {Link} from "react-router-dom";
 
 const rooms = (props) => {
     
@@ -28,10 +29,14 @@ const rooms = (props) => {
     return (
         <div role="main" className="mt-3">
             <div className="container">
-                <button className="btn btn-primary btn-lg rounded">
+                <Link className={"btn btn-primary btn-lg rounded"} to={"/buildings/add"}>
                     <i className="fa fa-fw fa-plus mr-3"></i>
                     Додади група на простории
-                </button>
+                </Link>
+                <Link className={"btn btn-primary btn-lg rounded ml-5"} to={"/rooms/add"}>
+                    <i className="fa fa-fw fa-plus mr-3"></i>
+                    Додади просторија
+                </Link>
                 <div className={"row"}>
                     {roomsByBuilding()}
                 </div>

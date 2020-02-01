@@ -37,11 +37,11 @@ const professor = (props) => {
                     </div>
                 </div>
                 <button className="btn btn-dark" type="button" data-toggle="collapse"
-                        data-target={"#collapseExample" + props.index} aria-expanded="false"
-                        aria-controls={"collapseExample" + props.index}>
+                        data-target={"#collapseProfessor" + props.index} aria-expanded="false"
+                        aria-controls={"collapseProfessor" + props.index}>
                     Термини
                 </button>
-                <div className={"collapse"} id={"collapseExample" + props.index}>
+                <div className={"collapse"} id={"collapseProfessor" + props.index}>
                     <div className="card-body">
                         <div className="card-text">
                             Редовни консултации:

@@ -56,6 +56,10 @@ DELETE http://localhost:8080/api/rooms/114
 
 ### ---BUILDINGS
 
+GET http://localhost:8080/api/buildings
+
+###
+
 GET http://localhost:8080/api/buildings/TMF
 
 ###

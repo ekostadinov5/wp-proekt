@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -17,6 +18,11 @@ public class BuildingApi {
 
     public BuildingApi(BuildingService buildingService) {
         this.buildingService = buildingService;
+    }
+
+    @GetMapping
+    public List<Building> getAllBuildings() {
+        return this.buildingService.getAllBuildingsSorted();
     }
 
     @GetMapping("/{name}")

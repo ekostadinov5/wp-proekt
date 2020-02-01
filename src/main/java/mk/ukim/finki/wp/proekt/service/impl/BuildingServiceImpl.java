@@ -9,6 +9,7 @@ import mk.ukim.finki.wp.proekt.service.BuildingService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class BuildingServiceImpl implements BuildingService {
@@ -18,6 +19,11 @@ public class BuildingServiceImpl implements BuildingService {
     public BuildingServiceImpl(JpaBuildingRepository buildingRepository, JpaRoomRepository roomRepository) {
         this.buildingRepository = buildingRepository;
         this.roomRepository = roomRepository;
+    }
+
+    @Override
+    public List<Building> getAllBuildingsSorted() {
+        return this.buildingRepository.findByOrderByNameAsc();
     }
 
     @Override

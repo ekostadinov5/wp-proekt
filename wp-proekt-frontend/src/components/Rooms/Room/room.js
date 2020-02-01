@@ -1,6 +1,24 @@
 import React from 'react';
 
+import {confirmAlert} from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 const room = (props) => {
+
+    const options = {
+        title: 'Избриши',
+        message: 'Дали сте сигурни? ' +
+                 '( ВАЖНО: Со ова ќе се избришат и сите консултациски термини закажани во дадената просторија! )',
+        buttons: [
+            {
+                label: 'Да',
+                onClick: () => props.onDelete(props.value.name)
+            },
+            {
+                label: 'Не',
+            }
+        ]
+    }
 
     const cardHeader = () => {
         return (
@@ -13,7 +31,7 @@ const room = (props) => {
                         <a href="#" className="btn btn-primary btn-sm" title="Уреди">
                             <i className="fa fa-fw fa-edit"></i>
                         </a>
-                        <a onClick={() => props.onDelete(props.value.name)} href="#"
+                        <a onClick={() => {confirmAlert(options)}} href="#"
                            className="btn btn-danger btn-sm ml-1" title="Избриши">
                             <i className="fa fa-fw fa-trash"></i>
                         </a>

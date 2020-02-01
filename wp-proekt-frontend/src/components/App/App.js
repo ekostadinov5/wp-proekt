@@ -6,13 +6,15 @@ import {BrowserRouter as Router, Redirect, Route} from 'react-router-dom';
 //import * as consultationsRepository  from '../../repository/consultationsRepository';
 import ProfessorsService from '../../repository/axiosProfessorsRepository';
 import RoomsService from '../../repository/axiosRoomsRepository';
+import BuildingsService from "../../repository/axiosBuildingsRepository";
 
 import Header from '../Header/header';
-import Consultations from '../Consultations/consultations';
-import Rooms from '../Rooms/rooms';
-import ProfessorConsultations from '../ProfessorConsultations/professorConsultations';
 import Footer from '../Footer/footer';
-import BuildingsService from "../../repository/axiosBuildingsRepository";
+import Consultations from '../Consultations/consultations';
+import Rooms from '../Rooms/RoomsByBuilding/rooms';
+import RoomAdd from '../Rooms/RoomAdd/roomAdd';
+import BuildingAdd from '../Buildings/BuildingAdd/buildingAdd';
+import ProfessorConsultations from '../ProfessorConsultations/professorConsultations';
 
 class App extends Component {
 
@@ -40,7 +42,6 @@ class App extends Component {
 
     loadRooms = () => {
         RoomsService.fetchRooms().then((promise) => {
-            console.log(promise.data)
             this.setState({
                 rooms: promise.data
             });
@@ -84,6 +85,22 @@ class App extends Component {
             });
         });
     }
+    
+    createBuilding = (newBuilding) => {
+        BuildingsService.addBuilding(newBuilding);
+    }
+    
+    createRoom = (newRoom) => {
+        RoomsService.addRoom(newRoom).then((promise) => {
+            const newRoom = promise.data;
+            this.setState((prevState) => {
+                const newRoomsRef = [...prevState.rooms, newRoom];
+                return {
+                    rooms: newRoomsRef
+                }
+            });
+        });
+    }
 
     componentDidMount() {
         this.loadProfessors();
@@ -106,8 +123,14 @@ class App extends Component {
                                 <Rooms rooms={this.state.rooms} onBuildingDelete={this.deleteBuilding}
                                        onRoomDelete={this.deleteRoom} />}>
                             </Route>
+                            <Route path={"/rooms/add"} exact render={()=>
+                                <RoomAdd onNewRoomAdded={this.createRoom} />}>
+                            </Route>
                             <Route path={"/consultations/professor"} exact render={()=>
                                 <ProfessorConsultations />}>
+                            </Route>
+                            <Route path={"/buildings/add"} exact render={()=>
+                                <BuildingAdd onNewBuildingAdded={this.createBuilding} />}>
                             </Route>
                             <Redirect to={"/consultations"} />
                         </div>
