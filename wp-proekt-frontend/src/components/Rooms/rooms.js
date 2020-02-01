@@ -20,7 +20,8 @@ const rooms = (props) => {
         }, {});
         let i = 0;
         return Object.values(data).map(building =>
-            <Building key={building.building.name} value={building} index={i++} />
+            <Building key={building.building.name} value={building} index={i++} 
+                      onBuildingDelete={props.onBuildingDelete} onRoomDelete={props.onRoomDelete} />
         );
     }
     

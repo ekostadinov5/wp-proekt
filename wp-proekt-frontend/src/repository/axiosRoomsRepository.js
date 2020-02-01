@@ -7,6 +7,9 @@ const RoomsService = {
     },
     searchRooms: (searchTerm) => {
         return axios.get(`/api/rooms?term=${searchTerm}`);
+    },
+    deleteRoom: (name) => {
+        return axios.delete(`/api/rooms/${name}`);
     }
 }
 

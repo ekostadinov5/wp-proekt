@@ -12,6 +12,7 @@ import Consultations from '../Consultations/consultations';
 import Rooms from '../Rooms/rooms';
 import ProfessorConsultations from '../ProfessorConsultations/professorConsultations';
 import Footer from '../Footer/footer';
+import BuildingsService from "../../repository/axiosBuildingsRepository";
 
 class App extends Component {
 
@@ -39,6 +40,7 @@ class App extends Component {
 
     loadRooms = () => {
         RoomsService.fetchRooms().then((promise) => {
+            console.log(promise.data)
             this.setState({
                 rooms: promise.data
             });
@@ -61,6 +63,28 @@ class App extends Component {
         });
     }
 
+    deleteBuilding = (buildingName) => {
+        BuildingsService.deleteBuilding(buildingName).then(() => {
+            this.setState((prevState) => {
+                const newRoomsRef = prevState.rooms.filter(r => buildingName !== r.building.name);
+                return {
+                    rooms: newRoomsRef
+                }
+            });
+        });
+    }
+
+    deleteRoom = (roomName) => {
+        RoomsService.deleteRoom(roomName).then(() => {
+            this.setState((prevState) => {
+                const newRoomsRef = prevState.rooms.filter(r => roomName !== r.name);
+                return {
+                    rooms: newRoomsRef
+                }
+            });
+        });
+    }
+
     componentDidMount() {
         this.loadProfessors();
         this.loadRooms();
@@ -79,7 +103,8 @@ class App extends Component {
                                                totalPages={this.state.totalPages} />}>
                             </Route>
                             <Route path={"/rooms"} exact render={()=>
-                                <Rooms rooms={this.state.rooms} />}>
+                                <Rooms rooms={this.state.rooms} onBuildingDelete={this.deleteBuilding}
+                                       onRoomDelete={this.deleteRoom} />}>
                             </Route>
                             <Route path={"/consultations/professor"} exact render={()=>
                                 <ProfessorConsultations />}>

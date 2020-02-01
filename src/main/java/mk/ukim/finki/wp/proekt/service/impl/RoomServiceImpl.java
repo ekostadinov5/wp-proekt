@@ -5,10 +5,12 @@ import mk.ukim.finki.wp.proekt.model.Room;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidBuildingNameException;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidRoomNameException;
 import mk.ukim.finki.wp.proekt.repository.jpa.JpaBuildingRepository;
+import mk.ukim.finki.wp.proekt.repository.jpa.JpaConsultationSlotRepository;
 import mk.ukim.finki.wp.proekt.repository.jpa.JpaRoomRepository;
 import mk.ukim.finki.wp.proekt.service.RoomService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -48,8 +50,8 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Room updateRoom(String oldName, String name, String buildingName, String description) {
-        Room room = this.roomRepository.findById(oldName).orElseThrow(InvalidRoomNameException::new);
+    public Room updateRoom(String name, String buildingName, String description) {
+        Room room = this.roomRepository.findById(name).orElseThrow(InvalidRoomNameException::new);
         Building building = this.buildingRepository.findById(buildingName)
                 .orElseThrow(InvalidBuildingNameException::new);
         room.setName(name);

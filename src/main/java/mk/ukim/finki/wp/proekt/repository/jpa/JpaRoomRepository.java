@@ -14,4 +14,6 @@ public interface JpaRoomRepository extends JpaRepository<Room, String> {
             "WHERE r.name LIKE %:term% OR r.description LIKE %:term% OR b.name LIKE %:term%")
     List<Room> searchRooms(@Param("term") String term);
 
+    List<Room> deleteAllByBuilding_Name(String name);
+
 }

@@ -1,4 +1,4 @@
-###
+### ---PROFESSORS
 
 GET http://localhost:8080/api/professors
 
@@ -21,12 +21,59 @@ GET http://localhost:8080/api/professors?term=Рис
 
 
 
-###
+### ---ROOMS
 
 GET http://localhost:8080/api/rooms
 
 ###
 
 GET http://localhost:8080/api/rooms?term=11
+
+###
+
+GET http://localhost:8080/api/rooms/007
+
+###
+
+POST http://localhost:8080/api/rooms
+Content-Type: application/x-www-form-urlencoded
+
+name=007&buildingName=TMF&description=Спроти%20студентски%20прашања
+
+###
+
+PATCH http://localhost:8080/api/rooms/007
+Content-Type: application/x-www-form-urlencoded
+
+buildingName=MF&description=На%20трети%20кат
+
+###
+
+DELETE http://localhost:8080/api/rooms/114
+
+###
+
+
+### ---BUILDINGS
+
+GET http://localhost:8080/api/buildings/TMF
+
+###
+
+POST http://localhost:8080/api/buildings
+Content-Type: application/x-www-form-urlencoded
+
+name=DEK&description=Спроти%20ТМФ
+
+###
+
+PATCH http://localhost:8080/api/buildings/DEK
+Content-Type: application/x-www-form-urlencoded
+
+description=Деканат%20-%20Зградата%20спроти%20ТМФ
+
+###
+
+DELETE http://localhost:8080/api/buildings/TMF
 
 ###

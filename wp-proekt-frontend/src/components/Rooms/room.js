@@ -10,10 +10,11 @@ const room = (props) => {
                         {props.value.name}
                     </div>
                     <div className="col-7 text-right">
-                        <a href="#" className="btn btn-primary" title="Уреди">
+                        <a href="#" className="btn btn-primary btn-sm" title="Уреди">
                             <i className="fa fa-fw fa-edit"></i>
                         </a>
-                        <a href="#" className="btn btn-danger ml-1" title="Избриши">
+                        <a onClick={() => props.onDelete(props.value.name)} href="#"
+                           className="btn btn-danger btn-sm ml-1" title="Избриши">
                             <i className="fa fa-fw fa-trash"></i>
                         </a>
                     </div>

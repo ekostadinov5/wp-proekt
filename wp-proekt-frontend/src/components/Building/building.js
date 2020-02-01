@@ -5,7 +5,7 @@ const building = (props) => {
 
     const rooms = () => {
         return props.value.rooms.map(room =>
-            <Room key={room.name} value={room} />
+            <Room key={room.name} value={room} onDelete={props.onRoomDelete} />
         );
     }
 
@@ -31,7 +31,8 @@ const building = (props) => {
                     <a href="#" className="btn btn-primary ml-1" title="Уреди">
                         <i className="fa fa-fw fa-edit"></i>
                     </a>
-                    <a href="#" className="btn btn-danger ml-1" title="Избриши">
+                    <a onClick={() => props.onBuildingDelete(props.value.building.name)} href="#"
+                       className="btn btn-danger ml-1" title="Избриши">
                         <i className="fa fa-fw fa-trash"></i>
                     </a>
                 </div>

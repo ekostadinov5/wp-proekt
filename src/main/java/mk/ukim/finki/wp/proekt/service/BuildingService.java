@@ -8,7 +8,7 @@ public interface BuildingService {
 
     Building getBuilding(String name);
 
-    Building updateBuilding(String oldName, String name, String description);
+    Building updateBuilding(String name, String description);
 
     void deleteBuilding(String name);
 

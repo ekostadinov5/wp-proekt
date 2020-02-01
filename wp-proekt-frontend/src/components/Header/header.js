@@ -11,7 +11,7 @@ const header = (props) => {
 
     const menuItems = () => {
         return (
-            <ul className="navbar-nav mr-auto">
+            <ul id={"menu"} className="navbar-nav mr-auto">
                 <li className="nav-item active">
                     <Link onClick={linkChange} className="nav-link" to={"/consultations"}>Термини</Link>
                 </li>
@@ -55,7 +55,8 @@ const header = (props) => {
                 <div className="collapse navbar-collapse" id="navbarCollapse">
                     {menuItems()}
                     {searchForm()}
-                    <Link className="nav-item btn btn-outline-info mt-2 ml-3" to={"/login"}>Најава</Link>
+                    <Link onClick={() => {document.getElementById("menu").childNodes.forEach(c => c.classList.remove("active"))}}
+                          className="nav-item btn btn-outline-info mt-2 ml-3" to={"/login"}>Најава</Link>
                 </div>
             </nav>
         </header>

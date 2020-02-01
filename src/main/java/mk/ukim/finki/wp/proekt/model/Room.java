@@ -17,7 +17,7 @@ public class Room {
     private String name;
     @ManyToOne
     private Building building;
-    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<ConsultationSlot> slots;
     private String description;
