@@ -20,7 +20,7 @@ const Room = (props) => {
                 <Modal.Footer>
                     <Button variant="danger" onClick={() => {
                         handleClose();
-                        props.onNewRoomAdded(props.value.name);}}>
+                        props.onDelete(props.value.name);}}>
                         Избриши
                     </Button>
                     <Button variant="secondary" onClick={handleClose}>

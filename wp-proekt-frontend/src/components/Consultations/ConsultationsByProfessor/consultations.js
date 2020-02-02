@@ -1,18 +1,18 @@
 import React from 'react';
-import Professor from '../Professor/professor';
+import Professor from '../../Professor/professor';
 import ReactPaginate from 'react-paginate';
 
 const Consultations = (props) => {
+
+    const handlePageClick = (e) => {
+        props.onPageClick(e.selected);
+    }
 
     const consultations = () => {
         let i = 0;
         return props.consultations.map(professor =>
             <Professor key={professor.id} value={professor} index={i++} />
         );
-    }
-
-    const handlePageClick = (e) => {
-        props.onPageClick(e.selected);
     }
 
     const pagination = () => {

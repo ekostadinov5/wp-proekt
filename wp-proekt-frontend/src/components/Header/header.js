@@ -9,6 +9,12 @@ const Header = (props) => {
         clicked.classList.add("active");
     }
 
+    const onSearch = (e) => {
+        e.preventDefault();
+        let searchTerm = e.target.searchTerm.value;
+        props.onSearch(e.target.searchTerm.value);
+    }
+
     const menuItems = () => {
         return (
             <ul id={"menu"} className="navbar-nav mr-auto">
@@ -23,12 +29,6 @@ const Header = (props) => {
                 </li>
             </ul>
         );
-    }
-
-    const onSearch = (e) => {
-        e.preventDefault();
-        let searchTerm = e.target.searchTerm.value;
-        props.onSearch(e.target.searchTerm.value);
     }
 
     const searchForm = () => {

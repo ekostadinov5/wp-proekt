@@ -10,12 +10,17 @@ import BuildingsService from "../../repository/axiosBuildingsRepository";
 
 import Header from '../Header/header';
 import Footer from '../Footer/footer';
-import Consultations from '../Consultations/consultations';
+
+import Consultations from '../Consultations/ConsultationsByProfessor/consultations';
+
 import Rooms from '../Rooms/RoomsByBuilding/rooms';
+
 import RoomAdd from '../Rooms/RoomAdd/roomAdd';
 import RoomEdit from '../Rooms/RoomEdit/roomEdit';
+
 import BuildingAdd from '../Buildings/BuildingAdd/buildingAdd';
-import BuildingEdit from '../Buildings/BuildingEdit/buildingEdit'
+import BuildingEdit from '../Buildings/BuildingEdit/buildingEdit';
+
 import ProfessorConsultations from '../ProfessorConsultations/professorConsultations';
 
 class App extends Component {
@@ -33,6 +38,91 @@ class App extends Component {
         }
     }
 
+    RoomsApi = {
+        loadRooms: () => {
+            RoomsService.fetchRoomsOrdered().then((promise) => {
+                this.setState({
+                    rooms: promise.data
+                });
+            });
+        },
+        createRoom: (newRoom) => {
+            RoomsService.addRoom(newRoom).then((promise) => {
+                const newRoom = promise.data;
+                this.setState((prevState) => {
+                    const newRoomsRef = [...prevState.rooms, newRoom];
+                    return {
+                        rooms: newRoomsRef
+                    }
+                });
+            });
+        },
+        updateRoom: (editedRoom) => {
+            RoomsService.updateRoom(editedRoom).then((promise) => {
+                const newRoom = promise.data;
+                this.setState((prevState) => {
+                    const newRoomsRef = prevState.rooms.map(r => (newRoom.name !== r.name) ? r : newRoom);
+                    return {
+                        rooms: newRoomsRef
+                    }
+                });
+            });
+        },
+        deleteRoom: (roomName) => {
+            RoomsService.deleteRoom(roomName).then(() => {
+                this.setState((prevState) => {
+                    const newRoomsRef = prevState.rooms.filter(r => roomName !== r.name);
+                    return {
+                        rooms: newRoomsRef
+                    }
+                });
+            });
+        }
+    }
+
+    BuildingsApi = {
+        loadBuildings: () => {
+            BuildingsService.fetchBuildings().then((promise) => {
+                this.setState({
+                    buildings: promise.data
+                });
+            });
+        },
+        createBuilding: (newBuilding) => {
+            BuildingsService.addBuilding(newBuilding).then((promise) => {
+                const newBuilding = promise.data;
+                this.setState((prevState) => {
+                    const newBuildingsRef = [...prevState.buildings, newBuilding];
+                    return {
+                        buildings: newBuildingsRef
+                    }
+                });
+            });
+        },
+        updateBuilding: (editedBuilding) => {
+            BuildingsService.updateBuilding(editedBuilding).then((promise) => {
+                const newBuilding = promise.data;
+                this.setState((prevState) => {
+                    const newBuildingsRef = prevState.buildings
+                        .map(b => (newBuilding.name !== b.name) ? b : newBuilding);
+                    return {
+                        buildings: newBuildingsRef
+                    }
+                })
+            });
+        },
+        deleteBuilding: (buildingName) => {
+            BuildingsService.deleteBuilding(buildingName).then(() => {
+                this.setState((prevState) => {
+                    const newRoomsRef = prevState.rooms.filter(r => buildingName !== r.building.name);
+                    return {
+                        rooms: newRoomsRef
+                    }
+                });
+            });
+        }
+    }
+
     loadProfessors = (page = 0) => {
         ProfessorsService.fetchProfessorsPaged(page, this.state.pageSize).then((promise) => {
             this.setState({
@@ -40,22 +130,6 @@ class App extends Component {
                 page: promise.data.number,
                 pageSize: promise.data.size,
                 totalPages: promise.data.totalPages
-            });
-        });
-    }
-    
-    loadBuildings = () => {
-        BuildingsService.fetchBuildings().then((promise) => {
-            this.setState({
-                buildings: promise.data
-            });
-        });
-    }
-
-    loadRooms = () => {
-        RoomsService.fetchRoomsOrdered().then((promise) => {
-            this.setState({
-                rooms: promise.data
             });
         });
     }
@@ -76,81 +150,10 @@ class App extends Component {
         });
     }
 
-    deleteBuilding = (buildingName) => {
-        BuildingsService.deleteBuilding(buildingName).then(() => {
-            this.setState((prevState) => {
-                const newRoomsRef = prevState.rooms.filter(r => buildingName !== r.building.name);
-                return {
-                    rooms: newRoomsRef
-                }
-            });
-        });
-    }
-
-    deleteRoom = (roomName) => {
-        RoomsService.deleteRoom(roomName).then(() => {
-            this.setState((prevState) => {
-                const newRoomsRef = prevState.rooms.filter(r => roomName !== r.name);
-                return {
-                    rooms: newRoomsRef
-                }
-            });
-        });
-    }
-
-    createBuilding = (newBuilding) => {
-        BuildingsService.addBuilding(newBuilding).then((promise) => {
-            const newBuilding = promise.data;
-            this.setState((prevState) => {
-                const newBuildingsRef = [...prevState.buildings, newBuilding];
-                return {
-                    buildings: newBuildingsRef
-                }
-            });
-        });
-    }
-
-    createRoom = (newRoom) => {
-        RoomsService.addRoom(newRoom).then((promise) => {
-            const newRoom = promise.data;
-            this.setState((prevState) => {
-                const newRoomsRef = [...prevState.rooms, newRoom];
-                return {
-                    rooms: newRoomsRef
-                }
-            });
-        });
-    }
-
-    updateBuilding = (editedBuilding) => {
-        BuildingsService.updateBuilding(editedBuilding).then((promise) => {
-            const newBuilding = promise.data;
-            this.setState((prevState) => {
-                const newBuildingsRef = prevState.buildings
-                    .map(b => (newBuilding.name !== b.name) ? b : newBuilding);
-                return {
-                    buildings: newBuildingsRef
-                }
-            })
-        });
-    }
-
-    updateRoom = (editedRoom) => {
-        RoomsService.updateRoom(editedRoom).then((promise) => {
-            const newRoom = promise.data;
-            this.setState((prevState) => {
-                const newRoomsRef = prevState.rooms.map(r => (newRoom.name !== r.name) ? r : newRoom);
-                return {
-                    rooms: newRoomsRef
-                }
-            });
-        });
-    }
-
     componentDidMount() {
         this.loadProfessors();
-        this.loadBuildings();
-        this.loadRooms();
+        this.BuildingsApi.loadBuildings();
+        this.RoomsApi.loadRooms();
     }
 
     render() {
@@ -165,26 +168,31 @@ class App extends Component {
                                 <Consultations consultations={this.state.professors} onPageClick={this.loadProfessors}
                                                totalPages={this.state.totalPages} />}>
                             </Route>
+
                             <Route path={"/rooms"} exact render={()=>
                                 <Rooms key={this.state.forceRerender}
                                        buildings={this.state.buildings} rooms={this.state.rooms}
-                                       onBuildingDelete={this.deleteBuilding} onRoomDelete={this.deleteRoom} />}>
+                                       onBuildingDelete={this.BuildingsApi.deleteBuilding} onRoomDelete={this.RoomsApi.deleteRoom} />}>
                             </Route>
+
                             <Route path={"/rooms/add"} exact render={()=>
-                                <RoomAdd onNewRoomAdded={this.createRoom} />}>
+                                <RoomAdd onNewRoomAdded={this.RoomsApi.createRoom} />}>
                             </Route>
                             <Route path={"/rooms/:roomName/edit"} exact render={()=>
-                                <RoomEdit onRoomEdited={this.updateRoom} />}>
+                                <RoomEdit onRoomEdited={this.RoomsApi.updateRoom} />}>
                             </Route>
+
+                            <Route path={"/buildings/add"} exact render={()=>
+                                <BuildingAdd onNewBuildingAdded={this.BuildingsApi.createBuilding} />}>
+                            </Route>
+                            <Route path={"/buildings/:buildingName/edit"} exact render={()=>
+                                <BuildingEdit onBuildingEdited={this.BuildingsApi.updateBuilding} />}>
+                            </Route>
+
                             <Route path={"/consultations/professor"} exact render={()=>
                                 <ProfessorConsultations />}>
                             </Route>
-                            <Route path={"/buildings/add"} exact render={()=>
-                                <BuildingAdd onNewBuildingAdded={this.createBuilding} />}>
-                            </Route>
-                            <Route path={"/buildings/:buildingName/edit"} exact render={()=>
-                                <BuildingEdit onBuildingEdited={this.updateBuilding} />}>
-                            </Route>
+                            
                             <Redirect to={"/consultations"} />
                         </div>
                     </div>
