@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface JpaRoomRepository extends JpaRepository<Room, String> {
 
+    List<Room> findByOrderByNameAsc();
+
     @Query("SELECT r " +
             "FROM Room r JOIN r.building b " +
             "WHERE r.name LIKE %:term% OR r.description LIKE %:term% OR b.name LIKE %:term%")

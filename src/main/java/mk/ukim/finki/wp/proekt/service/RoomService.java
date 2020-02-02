@@ -9,7 +9,7 @@ public interface RoomService {
 
     Room createRoom(String name, String buildingName, String description);
 
-    List<Room> getAllRooms();
+    List<Room> getAllRoomsOrdered();
 
     List<Room> searchRooms(String term);
 

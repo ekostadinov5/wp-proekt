@@ -4,12 +4,16 @@ import {loadConsultations} from "../../../repository/consultationsRepository";
 import {Link} from "react-router-dom";
 
 const Rooms = (props) => {
-    
+
+    const getBuilding = (buildingName) => {
+        return props.buildings.find(b => b.name === buildingName);
+    }
+
     const roomsByBuilding = () => {
         const data = props.rooms.reduce((acc, curr) => {
             if(!acc[curr.building.name]) {
                 acc[curr.building.name] = {
-                    building: curr.building,
+                    buildingName: curr.building.name,
                     rooms: []
                 }
             }
@@ -20,9 +24,9 @@ const Rooms = (props) => {
             return acc;
         }, {});
         let i = 0;
-        return Object.values(data).map(building =>
-            <Building key={building.building.name} value={building} index={i++} 
-                      onBuildingDelete={props.onBuildingDelete} onRoomDelete={props.onRoomDelete} />
+        return Object.values(data).sort((b1, b2) => (b1.buildingName > b2.buildingName) ? 1 : -1)
+            .map(b => <Building key={b.buildingName} building={getBuilding(b.buildingName)} rooms={b.rooms}
+                      index={i++} onBuildingDelete={props.onBuildingDelete} onRoomDelete={props.onRoomDelete} />
         );
     }
     
@@ -37,7 +41,7 @@ const Rooms = (props) => {
                     <i className="fa fa-fw fa-plus mr-3"></i>
                     Додади просторија
                 </Link>
-                <div className={"row"}>
+                <div className={"row mt-2"}>
                     {roomsByBuilding()}
                 </div>
             </div>

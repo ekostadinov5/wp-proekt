@@ -22,7 +22,12 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public List<Building> getAllBuildingsSorted() {
+    public List<Building> getAllBuildings() {
+        return this.buildingRepository.findAll();
+    }
+
+    @Override
+    public List<Building> getAllBuildingsOrdered() {
         return this.buildingRepository.findByOrderByNameAsc();
     }
 

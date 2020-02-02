@@ -13,7 +13,9 @@ import Footer from '../Footer/footer';
 import Consultations from '../Consultations/consultations';
 import Rooms from '../Rooms/RoomsByBuilding/rooms';
 import RoomAdd from '../Rooms/RoomAdd/roomAdd';
+import RoomEdit from '../Rooms/RoomEdit/roomEdit';
 import BuildingAdd from '../Buildings/BuildingAdd/buildingAdd';
+import BuildingEdit from '../Buildings/BuildingEdit/buildingEdit'
 import ProfessorConsultations from '../ProfessorConsultations/professorConsultations';
 
 class App extends Component {
@@ -21,10 +23,12 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            forceRerender: 0,
             professors: [],
             page: 0,
             pageSize: 2,
             totalPages: 0,
+            buildings: [],
             rooms: []
         }
     }
@@ -39,9 +43,17 @@ class App extends Component {
             });
         });
     }
+    
+    loadBuildings = () => {
+        BuildingsService.fetchBuildings().then((promise) => {
+            this.setState({
+                buildings: promise.data
+            });
+        });
+    }
 
     loadRooms = () => {
-        RoomsService.fetchRooms().then((promise) => {
+        RoomsService.fetchRoomsOrdered().then((promise) => {
             this.setState({
                 rooms: promise.data
             });
@@ -85,11 +97,19 @@ class App extends Component {
             });
         });
     }
-    
+
     createBuilding = (newBuilding) => {
-        BuildingsService.addBuilding(newBuilding);
+        BuildingsService.addBuilding(newBuilding).then((promise) => {
+            const newBuilding = promise.data;
+            this.setState((prevState) => {
+                const newBuildingsRef = [...prevState.buildings, newBuilding];
+                return {
+                    buildings: newBuildingsRef
+                }
+            });
+        });
     }
-    
+
     createRoom = (newRoom) => {
         RoomsService.addRoom(newRoom).then((promise) => {
             const newRoom = promise.data;
@@ -102,8 +122,34 @@ class App extends Component {
         });
     }
 
+    updateBuilding = (editedBuilding) => {
+        BuildingsService.updateBuilding(editedBuilding).then((promise) => {
+            const newBuilding = promise.data;
+            this.setState((prevState) => {
+                const newBuildingsRef = prevState.buildings
+                    .map(b => (newBuilding.name !== b.name) ? b : newBuilding);
+                return {
+                    buildings: newBuildingsRef
+                }
+            })
+        });
+    }
+
+    updateRoom = (editedRoom) => {
+        RoomsService.updateRoom(editedRoom).then((promise) => {
+            const newRoom = promise.data;
+            this.setState((prevState) => {
+                const newRoomsRef = prevState.rooms.map(r => (newRoom.name !== r.name) ? r : newRoom);
+                return {
+                    rooms: newRoomsRef
+                }
+            });
+        });
+    }
+
     componentDidMount() {
         this.loadProfessors();
+        this.loadBuildings();
         this.loadRooms();
     }
 
@@ -120,17 +166,24 @@ class App extends Component {
                                                totalPages={this.state.totalPages} />}>
                             </Route>
                             <Route path={"/rooms"} exact render={()=>
-                                <Rooms rooms={this.state.rooms} onBuildingDelete={this.deleteBuilding}
-                                       onRoomDelete={this.deleteRoom} />}>
+                                <Rooms key={this.state.forceRerender}
+                                       buildings={this.state.buildings} rooms={this.state.rooms}
+                                       onBuildingDelete={this.deleteBuilding} onRoomDelete={this.deleteRoom} />}>
                             </Route>
                             <Route path={"/rooms/add"} exact render={()=>
                                 <RoomAdd onNewRoomAdded={this.createRoom} />}>
+                            </Route>
+                            <Route path={"/rooms/:roomName/edit"} exact render={()=>
+                                <RoomEdit onRoomEdited={this.updateRoom} />}>
                             </Route>
                             <Route path={"/consultations/professor"} exact render={()=>
                                 <ProfessorConsultations />}>
                             </Route>
                             <Route path={"/buildings/add"} exact render={()=>
                                 <BuildingAdd onNewBuildingAdded={this.createBuilding} />}>
+                            </Route>
+                            <Route path={"/buildings/:buildingName/edit"} exact render={()=>
+                                <BuildingEdit onBuildingEdited={this.updateBuilding} />}>
                             </Route>
                             <Redirect to={"/consultations"} />
                         </div>

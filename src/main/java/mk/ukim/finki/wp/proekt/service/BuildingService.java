@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface BuildingService {
 
-    List<Building> getAllBuildingsSorted();
+    List<Building> getAllBuildings();
+
+    List<Building> getAllBuildingsOrdered();
 
     Building createBuilding(String name, String description);
 

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Modal, Button} from "react-bootstrap";
+import {Link} from "react-router-dom";
 
 const Room = (props) => {
 
@@ -40,9 +41,9 @@ const Room = (props) => {
                         </h5>
                     </div>
                     <div className="col-7 text-right">
-                        <a href="#" className="btn btn-primary" title="Уреди">
+                        <Link className="btn btn-primary" title="Уреди" to={`/rooms/${props.value.name}/edit`}>
                             <i className="fa fa-fw fa-edit"></i>
-                        </a>
+                        </Link>
                         <Button variant="primary" onClick={handleShow} type={"button"}
                                 className="btn btn-danger ml-1" title="Избриши">
                             <i className="fa fa-fw fa-trash"></i>

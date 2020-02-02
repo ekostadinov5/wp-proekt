@@ -22,7 +22,12 @@ public class BuildingApi {
 
     @GetMapping
     public List<Building> getAllBuildings() {
-        return this.buildingService.getAllBuildingsSorted();
+        return this.buildingService.getAllBuildings();
+    }
+
+    @GetMapping("/ordered")
+    public List<Building> getAllBuildingsOrdered() {
+        return this.buildingService.getAllBuildingsOrdered();
     }
 
     @GetMapping("/{name}")

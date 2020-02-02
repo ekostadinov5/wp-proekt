@@ -35,8 +35,8 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> getAllRooms() {
-        return this.roomRepository.findAll();
+    public List<Room> getAllRoomsOrdered() {
+        return this.roomRepository.findByOrderByNameAsc();
     }
 
     @Override

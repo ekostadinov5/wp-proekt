@@ -22,7 +22,7 @@ public class RoomApi {
 
     @GetMapping
     public List<Room> getAllRooms() {
-        return this.roomService.getAllRooms();
+        return this.roomService.getAllRoomsOrdered();
     }
 
     @GetMapping(params = "term")

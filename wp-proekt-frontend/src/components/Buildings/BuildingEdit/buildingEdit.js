@@ -1,14 +1,19 @@
 import React, {useEffect, useState} from 'react';
-import {useHistory} from 'react-router-dom';
-import BuildingService from '../../../repository/axiosBuildingsRepository';
+import {useHistory, useParams} from 'react-router-dom';
+import BuildingService from "../../../repository/axiosBuildingsRepository";
 
-const RoomAdd = (props) => {
+const BuildingEdit = (props) => {
 
-    const [buildings, setBuildings] = useState([]);
+    const [building, setBuilding] = useState({name: '', description: ''});
+
+    const {buildingName} = useParams();
 
     useEffect(() => {
-        BuildingService.fetchBuildingsOrdered().then((promise) => {
-            setBuildings(promise.data);
+        BuildingService.fetchByName(buildingName).then((promise) => {
+            setBuilding({
+                name: promise.data.name,
+                description: promise.data.description
+            });
         });
     }, []);
 
@@ -16,16 +21,18 @@ const RoomAdd = (props) => {
 
     const onFormSubmit = (e) => {
         e.preventDefault();
-        const newRoom = {
-            name: e.target.name.value,
-            buildingName: e.target.buildingName.value,
-            description: e.target.description.value
-        }
-        props.onNewRoomAdded(newRoom);
+        props.onBuildingEdited({
+            name: buildingName,
+            description: building.description
+        });
         history.push("/rooms");
     }
 
-    const options = buildings.map(b => <option key={b.name} value={b.name}>{b.name}</option>);
+    const handleRoomOnChange = (e) => {
+        const paramName = e.target.name;
+        const paramValue = e.target.value;
+        setBuilding({...building, [paramName]:paramValue});
+    }
 
     return (
         <div>
@@ -39,19 +46,14 @@ const RoomAdd = (props) => {
                                 <div className="col-md-6">
                                     <div className="row">
                                         <div className="col-md-5 text-right">
-                                            <input name={"name"} type="text"
+                                            <input disabled={true}
+                                                   name={"name"}
+                                                   type="text"
                                                    className="form-control"
-                                                   title="Име"/>
+                                                   title="Име"
+                                                   value={buildingName}/>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div className="row form-group">
-                                <div className="col-md-6 font-weight-bold text-right">Група на простории:</div>
-                                <div className="col-md-3">
-                                    <select name={"buildingName"} className="form-control">
-                                        {options}
-                                    </select>
                                 </div>
                             </div>
                             <div className="row form-group">
@@ -59,16 +61,18 @@ const RoomAdd = (props) => {
                                 <div className={"col-md-6"}>
                                     <div className="row">
                                         <div className="col-md-5 text-left">
-                                            <textarea name={"description"}
+                                            <textarea onChange={handleRoomOnChange}
+                                                      name={"description"}
                                                       className="form-control"
-                                                      title="Опис"></textarea>
+                                                      title="Опис"
+                                                      value={building.description}></textarea>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="col-md-12 text-right mt-5">
                                 <button type="submit" className="btn btn-primary" title="Додади">
-                                    Додади
+                                    Уреди
                                 </button>
                             </div>
                         </form>
@@ -80,4 +84,4 @@ const RoomAdd = (props) => {
     );
 }
 
-export default RoomAdd;
+export default BuildingEdit;
