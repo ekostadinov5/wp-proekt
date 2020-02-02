@@ -1,6 +1,6 @@
 import React from 'react';
 
-const professorConsultations = () => {
+const ProfessorConsultations = () => {
 
     return (
         <div className={"row"}>
@@ -172,4 +172,4 @@ const professorConsultations = () => {
     );
 }
 
-export default professorConsultations;
+export default ProfessorConsultations;

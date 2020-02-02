@@ -1,7 +1,7 @@
 import React from 'react';
-import Term from '../Consultations/term'
+import Term from '../Consultations/term';
 
-const professor = (props) => {
+const Professor = (props) => {
 
     const termsWeekly = () => {
         return props.value.slots.map(term => {
@@ -36,7 +36,7 @@ const professor = (props) => {
                         </div>
                     </div>
                 </div>
-                <button className="btn btn-dark" type="button" data-toggle="collapse"
+                <button className="btn btn-info" type="button" data-toggle="collapse"
                         data-target={"#collapseProfessor" + props.index} aria-expanded="false"
                         aria-controls={"collapseProfessor" + props.index}>
                     Термини
@@ -58,4 +58,4 @@ const professor = (props) => {
     );
 }
 
-export default professor;
+export default Professor;

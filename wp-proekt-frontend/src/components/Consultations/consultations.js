@@ -2,7 +2,7 @@ import React from 'react';
 import Professor from '../Professor/professor';
 import ReactPaginate from 'react-paginate';
 
-const consultations = (props) => {
+const Consultations = (props) => {
 
     const consultations = () => {
         let i = 0;
@@ -49,4 +49,4 @@ const consultations = (props) => {
     );
 }
 
-export default consultations;
+export default Consultations;

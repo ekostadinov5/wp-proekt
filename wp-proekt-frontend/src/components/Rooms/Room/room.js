@@ -1,23 +1,33 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {Modal, Button} from "react-bootstrap";
 
-import {confirmAlert} from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css';
+const Room = (props) => {
 
-const room = (props) => {
+    const [show, setShow] = useState(false);
 
-    const options = {
-        title: 'Избриши',
-        message: 'Дали сте сигурни? ' +
-                 '( ВАЖНО: Со ова ќе се избришат и сите консултациски термини закажани во дадената просторија! )',
-        buttons: [
-            {
-                label: 'Да',
-                onClick: () => props.onDelete(props.value.name)
-            },
-            {
-                label: 'Не',
-            }
-        ]
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const confirmModal = () => {
+        return (
+            <Modal show={show} onHide={handleClose} animation={false}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{props.value.name}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Дали сте сигурни?! ( ВАЖНО: Со ова ќе се избришат и сите консултациски термини закажани во
+                    дадената просторија! )</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={() => {
+                        handleClose();
+                        props.onNewRoomAdded(props.value.name);}}>
+                        Избриши
+                    </Button>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Откажи
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        );
     }
 
     const cardHeader = () => {
@@ -25,16 +35,19 @@ const room = (props) => {
             <div className="card-header">
                 <div className="row">
                     <div className="col-5">
-                        {props.value.name}
+                        <h5>
+                            {props.value.name}
+                        </h5>
                     </div>
                     <div className="col-7 text-right">
-                        <a href="#" className="btn btn-primary btn-sm" title="Уреди">
+                        <a href="#" className="btn btn-primary" title="Уреди">
                             <i className="fa fa-fw fa-edit"></i>
                         </a>
-                        <a onClick={() => {confirmAlert(options)}} href="#"
-                           className="btn btn-danger btn-sm ml-1" title="Избриши">
+                        <Button variant="primary" onClick={handleShow} type={"button"}
+                                className="btn btn-danger ml-1" title="Избриши">
                             <i className="fa fa-fw fa-trash"></i>
-                        </a>
+                        </Button>
+                        {confirmModal()}
                     </div>
                 </div>
             </div>
@@ -52,7 +65,7 @@ const room = (props) => {
     }
 
     return (
-        <div className="col-md-6 mt-2 col-sm-12">
+        <div className="col-lg-4 col-md-6 col-sm-12 mt-2 col-sm-12">
             <div className="card">
                 {cardHeader()}
                 {cardBody()}
@@ -61,4 +74,4 @@ const room = (props) => {
     );
 }
 
-export default room;
+export default Room;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const footer = () => {
+const Footer = () => {
     
     return (
         <footer className="container mt-5">
@@ -9,4 +9,4 @@ const footer = () => {
     );
 }
 
-export default footer;
+export default Footer;

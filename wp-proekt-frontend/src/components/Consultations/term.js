@@ -1,7 +1,7 @@
 import React from 'react';
 import Moment from 'react-moment';
 
-const term = (props) => {
+const Term = (props) => {
 
     const termDayOrDate = () => {
         if(props.value.dayOfWeek) {
@@ -70,4 +70,4 @@ const term = (props) => {
     );
 }
 
-export default term;
+export default Term;
