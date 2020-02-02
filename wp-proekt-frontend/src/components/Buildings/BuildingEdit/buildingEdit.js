@@ -4,13 +4,14 @@ import BuildingService from "../../../repository/axiosBuildingsRepository";
 
 const BuildingEdit = (props) => {
 
-    const [building, setBuilding] = useState({name: '', description: ''});
+    const [building, setBuilding] = useState({id: '', name: '', description: ''});
 
-    const {buildingName} = useParams();
+    const {buildingId} = useParams();
 
     useEffect(() => {
-        BuildingService.fetchByName(buildingName).then((promise) => {
+        BuildingService.fetchById(buildingId).then((promise) => {
             setBuilding({
+                id: promise.data.id,
                 name: promise.data.name,
                 description: promise.data.description
             });
@@ -22,9 +23,14 @@ const BuildingEdit = (props) => {
     const onFormSubmit = (e) => {
         e.preventDefault();
         props.onBuildingEdited({
-            name: buildingName,
+            id: building.id,
+            name: building.name,
             description: building.description
         });
+        history.push("/rooms");
+    };
+    
+    const onBackClick = () => {
         history.push("/rooms");
     }
 
@@ -32,7 +38,7 @@ const BuildingEdit = (props) => {
         const paramName = e.target.name;
         const paramValue = e.target.value;
         setBuilding({...building, [paramName]:paramValue});
-    }
+    };
 
     return (
         <div>
@@ -46,12 +52,12 @@ const BuildingEdit = (props) => {
                                 <div className="col-md-6">
                                     <div className="row">
                                         <div className="col-md-5 text-right">
-                                            <input disabled={true}
+                                            <input onChange={handleRoomOnChange}
                                                    name={"name"}
                                                    type="text"
                                                    className="form-control"
                                                    title="Име"
-                                                   value={buildingName}/>
+                                                   value={building.name}/>
                                         </div>
                                     </div>
                                 </div>
@@ -65,7 +71,7 @@ const BuildingEdit = (props) => {
                                                       name={"description"}
                                                       className="form-control"
                                                       title="Опис"
-                                                      value={building.description}></textarea>
+                                                      value={building.description}/>
                                         </div>
                                     </div>
                                 </div>
@@ -73,6 +79,10 @@ const BuildingEdit = (props) => {
                             <div className="col-md-12 text-right mt-5">
                                 <button type="submit" className="btn btn-primary" title="Додади">
                                     Уреди
+                                </button>
+                                <button onClick={onBackClick} type="submit"
+                                        className="btn btn-secondary ml-2" title="Назад">
+                                    Назад
                                 </button>
                             </div>
                         </form>
@@ -82,6 +92,6 @@ const BuildingEdit = (props) => {
             </div>
         </div>
     );
-}
+};
 
 export default BuildingEdit;

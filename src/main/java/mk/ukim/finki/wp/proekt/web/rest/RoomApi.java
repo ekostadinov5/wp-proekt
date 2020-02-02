@@ -22,6 +22,11 @@ public class RoomApi {
 
     @GetMapping
     public List<Room> getAllRooms() {
+        return this.roomService.getAllRooms();
+    }
+
+    @GetMapping("/ordered")
+    public List<Room> getAllRoomsOrdered() {
         return this.roomService.getAllRoomsOrdered();
     }
 
@@ -30,36 +35,37 @@ public class RoomApi {
         return this.roomService.searchRooms(term);
     }
 
-    @GetMapping("/{name}")
-    public Room getRoom(@PathVariable String name) {
-        return this.roomService.getRoom(name);
+    @GetMapping("/{id}")
+    public Room getRoom(@PathVariable Long id) {
+        return this.roomService.getRoom(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Room createRoom(@RequestParam String name,
-                           @RequestParam String buildingName,
+                           @RequestParam Long buildingId,
                            @RequestParam String description,
                            HttpServletResponse response,
                            UriComponentsBuilder builder) {
-        Room room = this.roomService.createRoom(name, buildingName, description);
+        Room room = this.roomService.createRoom(name, buildingId, description);
         response.setHeader("Location", builder
-                .path("/api/rooms/{name}")
-                .buildAndExpand(room.getName())
+                .path("/api/rooms/{id}")
+                .buildAndExpand(room.getId())
                 .toUriString());
         return room;
     }
 
-    @PatchMapping("/{name}")
-    public Room updateRoom(@PathVariable String name,
-                           @RequestParam String buildingName,
+    @PatchMapping("/{id}")
+    public Room updateRoom(@PathVariable Long id,
+                           @RequestParam String name,
+                           @RequestParam Long buildingId,
                            @RequestParam String description) {
-        return this.roomService.updateRoom(name, buildingName, description);
+        return this.roomService.updateRoom(id, name, buildingId, description);
     }
 
-    @DeleteMapping("/{name}")
-    public void deleteRoom(@PathVariable String name) {
-        this.roomService.deleteRoom(name);
+    @DeleteMapping("/{id}")
+    public void deleteRoom(@PathVariable Long id) {
+        this.roomService.deleteRoom(id);
     }
 
 }

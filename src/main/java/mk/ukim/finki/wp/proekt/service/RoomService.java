@@ -7,16 +7,18 @@ import java.util.List;
 
 public interface RoomService {
 
-    Room createRoom(String name, String buildingName, String description);
+    Room createRoom(String name, Long buildingId, String description);
+
+    List<Room> getAllRooms();
 
     List<Room> getAllRoomsOrdered();
 
     List<Room> searchRooms(String term);
 
-    Room getRoom(String name);
+    Room getRoom(Long id);
 
-    Room updateRoom(String name, String buildingName, String description);
+    Room updateRoom(Long id, String name, Long buildingId, String description);
 
-    void deleteRoom(String name);
+    void deleteRoom(Long id);
 
 }

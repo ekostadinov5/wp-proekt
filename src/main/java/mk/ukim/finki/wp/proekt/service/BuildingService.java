@@ -12,10 +12,10 @@ public interface BuildingService {
 
     Building createBuilding(String name, String description);
 
-    Building getBuilding(String name);
+    Building getBuilding(Long id);
 
-    Building updateBuilding(String name, String description);
+    Building updateBuilding(Long id, String name, String description);
 
-    void deleteBuilding(String name);
+    void deleteBuilding(Long id);
 
 }

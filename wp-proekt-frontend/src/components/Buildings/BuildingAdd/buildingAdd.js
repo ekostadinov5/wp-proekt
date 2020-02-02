@@ -10,8 +10,12 @@ const BuildingAdd = (props) => {
         const newBuilding = {
             name: e.target.name.value,
             description: e.target.description.value
-        }
+        };
         props.onNewBuildingAdded(newBuilding);
+        history.push("/rooms");
+    };
+
+    const onBackClick = () => {
         history.push("/rooms");
     }
 
@@ -41,7 +45,7 @@ const BuildingAdd = (props) => {
                                         <div className="col-md-5 text-left">
                                             <textarea name={"description"}
                                                       className="form-control"
-                                                      title="Опис"></textarea>
+                                                      title="Опис"/>
                                         </div>
                                     </div>
                                 </div>
@@ -49,6 +53,10 @@ const BuildingAdd = (props) => {
                             <div className="col-md-12 text-right mt-5">
                                 <button type="submit" className="btn btn-primary" title="Додади">
                                     Додади
+                                </button>
+                                <button onClick={onBackClick} type="submit"
+                                        className="btn btn-secondary ml-2" title="Назад">
+                                    Назад
                                 </button>
                             </div>
                         </form>
@@ -58,6 +66,6 @@ const BuildingAdd = (props) => {
             </div>
         </div>
     );
-}
+};
 
 export default BuildingAdd;

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 //import logo from '../../logo.svg';
 import './App.css';
 import {BrowserRouter as Router, Redirect, Route} from 'react-router-dom';
+import {Button, Modal} from "react-bootstrap";
 
 //import * as consultationsRepository  from '../../repository/consultationsRepository';
 import ProfessorsService from '../../repository/axiosProfessorsRepository';
@@ -28,7 +29,8 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            forceRerender: 0,
+            showErrorModal: false,
+            errorMessage: '',
             professors: [],
             page: 0,
             pageSize: 2,
@@ -38,47 +40,8 @@ class App extends Component {
         }
     }
 
-    RoomsApi = {
-        loadRooms: () => {
-            RoomsService.fetchRoomsOrdered().then((promise) => {
-                this.setState({
-                    rooms: promise.data
-                });
-            });
-        },
-        createRoom: (newRoom) => {
-            RoomsService.addRoom(newRoom).then((promise) => {
-                const newRoom = promise.data;
-                this.setState((prevState) => {
-                    const newRoomsRef = [...prevState.rooms, newRoom];
-                    return {
-                        rooms: newRoomsRef
-                    }
-                });
-            });
-        },
-        updateRoom: (editedRoom) => {
-            RoomsService.updateRoom(editedRoom).then((promise) => {
-                const newRoom = promise.data;
-                this.setState((prevState) => {
-                    const newRoomsRef = prevState.rooms.map(r => (newRoom.name !== r.name) ? r : newRoom);
-                    return {
-                        rooms: newRoomsRef
-                    }
-                });
-            });
-        },
-        deleteRoom: (roomName) => {
-            RoomsService.deleteRoom(roomName).then(() => {
-                this.setState((prevState) => {
-                    const newRoomsRef = prevState.rooms.filter(r => roomName !== r.name);
-                    return {
-                        rooms: newRoomsRef
-                    }
-                });
-            });
-        }
-    }
+    handleCloseErrorModal = () => this.setState({showErrorModal: false, errorMessage: ''});
+    handleShowErrorModal = (message) => this.setState({showErrorModal: true, errorMessage: message});
 
     BuildingsApi = {
         loadBuildings: () => {
@@ -97,6 +60,10 @@ class App extends Component {
                         buildings: newBuildingsRef
                     }
                 });
+            }).catch(error => {
+                if(error.response.status === 409) {
+                    this.handleShowErrorModal(`Веќе постои група на простории со име ${newBuilding.name}!`);
+                }
             });
         },
         updateBuilding: (editedBuilding) => {
@@ -104,25 +71,81 @@ class App extends Component {
                 const newBuilding = promise.data;
                 this.setState((prevState) => {
                     const newBuildingsRef = prevState.buildings
-                        .map(b => (newBuilding.name !== b.name) ? b : newBuilding);
+                        .map(b => (newBuilding.id !== b.id) ? b : newBuilding);
                     return {
                         buildings: newBuildingsRef
                     }
                 })
+            }).catch(error => {
+                if(error.response.status === 409) {
+                    this.handleShowErrorModal(`Веќе постои група на простории со име ${editedBuilding.name}!`);
+                }
             });
         },
-        deleteBuilding: (buildingName) => {
-            BuildingsService.deleteBuilding(buildingName).then(() => {
+        deleteBuilding: (buildingId) => {
+            BuildingsService.deleteBuilding(buildingId).then(() => {
                 this.setState((prevState) => {
-                    const newRoomsRef = prevState.rooms.filter(r => buildingName !== r.building.name);
+                    const newBuildingsRef = prevState.buildings.filter(b => buildingId !== b.id);
+                    const newRoomsRef = prevState.rooms.filter(r => buildingId !== r.building.id);
+                    return {
+                        buildings: newBuildingsRef,
+                        rooms: newRoomsRef
+                    }
+                });
+            });
+        }
+    };
+
+    RoomsApi = {
+        loadRooms: () => {
+            RoomsService.fetchRooms().then((promise) => {
+                this.setState({
+                    rooms: promise.data
+                });
+            });
+        },
+        createRoom: (newRoom) => {
+            RoomsService.addRoom(newRoom).then((promise) => {
+                const newRoom = promise.data;
+                this.setState((prevState) => {
+                    const newRoomsRef = [...prevState.rooms, newRoom];
+                    return {
+                        rooms: newRoomsRef
+                    }
+                });
+            }).catch(error => {
+                if(error.response.status === 409) {
+                    this.handleShowErrorModal(`Веќе постои просторија со име ${newRoom.name} во избраната група на простории!`);
+                }
+            });
+        },
+        updateRoom: (editedRoom) => {
+            RoomsService.updateRoom(editedRoom).then((promise) => {
+                const newRoom = promise.data;
+                this.setState((prevState) => {
+                    const newRoomsRef = prevState.rooms.map(r => (newRoom.id !== r.id) ? r : newRoom);
+                    return {
+                        rooms: newRoomsRef
+                    }
+                });
+            }).catch(error => {
+                if(error.response.status === 409) {
+                    this.handleShowErrorModal(`Веќе постои просторија со име ${editedRoom.name} во избраната група на простории!`);
+                }
+            });
+        },
+        deleteRoom: (roomId) => {
+            RoomsService.deleteRoom(roomId).then(() => {
+                this.setState((prevState) => {
+                    const newRoomsRef = prevState.rooms.filter(r => roomId !== r.id);
                     return {
                         rooms: newRoomsRef
                     }
                 });
             });
         }
-    }
-
+    };
+    
     loadProfessors = (page = 0) => {
         ProfessorsService.fetchProfessorsPaged(page, this.state.pageSize).then((promise) => {
             this.setState({
@@ -132,7 +155,7 @@ class App extends Component {
                 totalPages: promise.data.totalPages
             });
         });
-    }
+    };
 
     searchData = (searchTerm) => {
         ProfessorsService.searchProfessors(searchTerm).then((promise) => {
@@ -148,7 +171,7 @@ class App extends Component {
                 rooms: promise.data,
             });
         });
-    }
+    };
 
     componentDidMount() {
         this.loadProfessors();
@@ -170,22 +193,22 @@ class App extends Component {
                             </Route>
 
                             <Route path={"/rooms"} exact render={()=>
-                                <Rooms key={this.state.forceRerender}
-                                       buildings={this.state.buildings} rooms={this.state.rooms}
-                                       onBuildingDelete={this.BuildingsApi.deleteBuilding} onRoomDelete={this.RoomsApi.deleteRoom} />}>
+                                <Rooms buildings={this.state.buildings} rooms={this.state.rooms}
+                                       onBuildingDelete={this.BuildingsApi.deleteBuilding} 
+                                       onRoomDelete={this.RoomsApi.deleteRoom} />}>
                             </Route>
 
                             <Route path={"/rooms/add"} exact render={()=>
                                 <RoomAdd onNewRoomAdded={this.RoomsApi.createRoom} />}>
                             </Route>
-                            <Route path={"/rooms/:roomName/edit"} exact render={()=>
+                            <Route path={"/rooms/:roomId/edit"} exact render={()=>
                                 <RoomEdit onRoomEdited={this.RoomsApi.updateRoom} />}>
                             </Route>
 
                             <Route path={"/buildings/add"} exact render={()=>
                                 <BuildingAdd onNewBuildingAdded={this.BuildingsApi.createBuilding} />}>
                             </Route>
-                            <Route path={"/buildings/:buildingName/edit"} exact render={()=>
+                            <Route path={"/buildings/:buildingId/edit"} exact render={()=>
                                 <BuildingEdit onBuildingEdited={this.BuildingsApi.updateBuilding} />}>
                             </Route>
 
@@ -199,11 +222,30 @@ class App extends Component {
                     <Footer />
                 </Router>
             );
-        }
+        };
+
+        const errorModal = () => {
+            return (
+                <Modal show={this.state.showErrorModal} onHide={this.handleCloseErrorModal} animation={false}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Грешка!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {this.state.errorMessage}
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="danger" onClick={this.handleCloseErrorModal}>
+                            Во ред
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            );
+        };
 
         return (
             <div className="App">
                 {routing()}
+                {errorModal()}
             </div>
         );
     }

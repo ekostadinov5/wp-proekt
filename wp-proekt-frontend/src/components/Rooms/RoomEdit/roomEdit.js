@@ -6,18 +6,19 @@ import RoomService from '../../../repository/axiosRoomsRepository';
 const RoomEdit = (props) => {
 
     const [buildings, setBuildings] = useState([]);
-    const [room, setRoom] = useState({name: '', buildingName: '', description: ''});
+    const [room, setRoom] = useState({id: '', name: '', buildingId: '', description: ''});
 
-    const {roomName} = useParams();
+    const {roomId} = useParams();
 
     useEffect(() => {
         BuildingService.fetchBuildingsOrdered().then((promise) => {
             setBuildings(promise.data);
         });
-        RoomService.fetchByName(roomName).then((promise) => {
+        RoomService.fetchById(roomId).then((promise) => {
             setRoom({
+                id: promise.data.id,
                 name: promise.data.name,
-                buildingName: promise.data.building.name,
+                buildingId: promise.data.building.id,
                 description: promise.data.description
             });
         });
@@ -28,10 +29,15 @@ const RoomEdit = (props) => {
     const onFormSubmit = (e) => {
         e.preventDefault();
         props.onRoomEdited({
-            name: roomName,
-            buildingName: room.buildingName,
+            id: room.id,
+            name: room.name,
+            buildingId: room.buildingId,
             description: room.description
         });
+        history.push("/rooms");
+    };
+
+    const onBackClick = () => {
         history.push("/rooms");
     }
 
@@ -39,9 +45,9 @@ const RoomEdit = (props) => {
         const paramName = e.target.name;
         const paramValue = e.target.value;
         setRoom({...room, [paramName]:paramValue});
-    }
+    };
 
-    const options = buildings.map(b => <option key={b.name} value={b.name}>{b.name}</option>);
+    const options = buildings.map(b => <option key={b.id} value={b.id}>{b.name}</option>);
 
     return (
         <div>
@@ -55,12 +61,12 @@ const RoomEdit = (props) => {
                                 <div className="col-md-6">
                                     <div className="row">
                                         <div className="col-md-5 text-right">
-                                            <input disabled={true}
+                                            <input onChange={handleRoomOnChange}
                                                    name={"name"}
                                                    type="text"
                                                    className="form-control"
                                                    title="Име"
-                                                   value={roomName}/>
+                                                   value={room.name}/>
                                         </div>
                                     </div>
                                 </div>
@@ -69,9 +75,9 @@ const RoomEdit = (props) => {
                                 <div className="col-md-6 font-weight-bold text-right">Група на простории:</div>
                                 <div className="col-md-3">
                                     <select onChange={handleRoomOnChange}
-                                            name={"buildingName"}
+                                            name={"buildingId"}
                                             className="form-control"
-                                            value={room.buildingName}>
+                                            value={room.buildingId}>
                                         {options}
                                     </select>
                                 </div>
@@ -85,7 +91,7 @@ const RoomEdit = (props) => {
                                                       name={"description"}
                                                       className="form-control"
                                                       title="Опис"
-                                                      value={room.description}></textarea>
+                                                      value={room.description}/>
                                         </div>
                                     </div>
                                 </div>
@@ -93,6 +99,10 @@ const RoomEdit = (props) => {
                             <div className="col-md-12 text-right mt-5">
                                 <button type="submit" className="btn btn-primary" title="Додади">
                                     Уреди
+                                </button>
+                                <button onClick={onBackClick} type="submit"
+                                        className="btn btn-secondary ml-2" title="Назад">
+                                    Назад
                                 </button>
                             </div>
                         </form>
@@ -102,6 +112,6 @@ const RoomEdit = (props) => {
             </div>
         </div>
     );
-}
+};
 
 export default RoomEdit;

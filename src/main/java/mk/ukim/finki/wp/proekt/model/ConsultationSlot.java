@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -22,18 +23,21 @@ public class ConsultationSlot {
     private Long id;
     @ManyToOne
     @JsonBackReference
+    @NotNull
     private Professor professor;
     @ManyToOne
-    @JsonBackReference
+    @NotNull
     private Room room;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JsonBackReference
     private List<Student> students;
     private LocalDate date;
     private DayOfWeek dayOfWeek;
     @Column(name = "from_time")
+    @NotNull
     private LocalTime from;
     @Column(name = "to_time")
+    @NotNull
     private LocalTime to;
 
     private ConsultationSlot() {

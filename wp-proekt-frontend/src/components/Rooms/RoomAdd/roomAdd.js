@@ -18,14 +18,18 @@ const RoomAdd = (props) => {
         e.preventDefault();
         const newRoom = {
             name: e.target.name.value,
-            buildingName: e.target.buildingName.value,
+            buildingId: e.target.buildingId.value,
             description: e.target.description.value
-        }
+        };
         props.onNewRoomAdded(newRoom);
+        history.push("/rooms");
+    };
+
+    const onBackClick = () => {
         history.push("/rooms");
     }
 
-    const options = buildings.map(b => <option key={b.name} value={b.name}>{b.name}</option>);
+    const options = buildings.map(b => <option key={b.id} value={b.id}>{b.name}</option>);
 
     return (
         <div>
@@ -49,7 +53,7 @@ const RoomAdd = (props) => {
                             <div className="row form-group">
                                 <div className="col-md-6 font-weight-bold text-right">Група на простории:</div>
                                 <div className="col-md-3">
-                                    <select name={"buildingName"} className="form-control">
+                                    <select name={"buildingId"} className="form-control">
                                         {options}
                                     </select>
                                 </div>
@@ -61,7 +65,7 @@ const RoomAdd = (props) => {
                                         <div className="col-md-5 text-left">
                                             <textarea name={"description"}
                                                       className="form-control"
-                                                      title="Опис"></textarea>
+                                                      title="Опис"/>
                                         </div>
                                     </div>
                                 </div>
@@ -69,6 +73,10 @@ const RoomAdd = (props) => {
                             <div className="col-md-12 text-right mt-5">
                                 <button type="submit" className="btn btn-primary" title="Додади">
                                     Додади
+                                </button>
+                                <button onClick={onBackClick} type="submit"
+                                        className="btn btn-secondary ml-2" title="Назад">
+                                    Назад
                                 </button>
                             </div>
                         </form>
@@ -78,6 +86,6 @@ const RoomAdd = (props) => {
             </div>
         </div>
     );
-}
+};
 
 export default RoomAdd;

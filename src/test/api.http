@@ -27,29 +27,33 @@ GET http://localhost:8080/api/rooms
 
 ###
 
+GET http://localhost:8080/api/rooms/ordered
+
+###
+
 GET http://localhost:8080/api/rooms?term=11
 
 ###
 
-GET http://localhost:8080/api/rooms/007
+GET http://localhost:8080/api/rooms/1
 
 ###
 
 POST http://localhost:8080/api/rooms
 Content-Type: application/x-www-form-urlencoded
 
-name=007&buildingName=TMF&description=Спроти%20студентски%20прашања
+name=007&buildingId=1&description=Спроти%20студентски%20прашања
 
 ###
 
-PATCH http://localhost:8080/api/rooms/007
+PATCH http://localhost:8080/api/rooms/20
 Content-Type: application/x-www-form-urlencoded
 
-buildingName=MF&description=На%20трети%20кат
+name=008&buildingId=2&description=На%20трети%20кат
 
 ###
 
-DELETE http://localhost:8080/api/rooms/114
+DELETE http://localhost:8080/api/rooms/20
 
 ###
 
@@ -60,7 +64,11 @@ GET http://localhost:8080/api/buildings
 
 ###
 
-GET http://localhost:8080/api/buildings/TMF
+GET http://localhost:8080/api/buildings/ordered
+
+###
+
+GET http://localhost:8080/api/buildings/1
 
 ###
 
@@ -71,13 +79,13 @@ name=DEK&description=Спроти%20ТМФ
 
 ###
 
-PATCH http://localhost:8080/api/buildings/DEK
+PATCH http://localhost:8080/api/buildings/5
 Content-Type: application/x-www-form-urlencoded
 
-description=Деканат%20-%20Зградата%20спроти%20ТМФ
+name=DEKANAT&description=Деканат%20-%20Зградата%20спроти%20ТМФ
 
 ###
 
-DELETE http://localhost:8080/api/buildings/TMF
+DELETE http://localhost:8080/api/buildings/5
 
 ###

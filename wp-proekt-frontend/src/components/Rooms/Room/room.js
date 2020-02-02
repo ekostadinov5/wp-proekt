@@ -20,7 +20,7 @@ const Room = (props) => {
                 <Modal.Footer>
                     <Button variant="danger" onClick={() => {
                         handleClose();
-                        props.onDelete(props.value.name);}}>
+                        props.onDelete(props.id);}}>
                         Избриши
                     </Button>
                     <Button variant="secondary" onClick={handleClose}>
@@ -29,7 +29,7 @@ const Room = (props) => {
                 </Modal.Footer>
             </Modal>
         );
-    }
+    };
 
     const cardHeader = () => {
         return (
@@ -41,19 +41,19 @@ const Room = (props) => {
                         </h5>
                     </div>
                     <div className="col-7 text-right">
-                        <Link className="btn btn-primary" title="Уреди" to={`/rooms/${props.value.name}/edit`}>
-                            <i className="fa fa-fw fa-edit"></i>
+                        <Link className="btn btn-primary" title="Уреди" to={`/rooms/${props.id}/edit`}>
+                            <i className="fa fa-fw fa-edit"/>
                         </Link>
                         <Button variant="primary" onClick={handleShow} type={"button"}
                                 className="btn btn-danger ml-1" title="Избриши">
-                            <i className="fa fa-fw fa-trash"></i>
+                            <i className="fa fa-fw fa-trash"/>
                         </Button>
                         {confirmModal()}
                     </div>
                 </div>
             </div>
         );
-    }
+    };
 
     const cardBody = () => {
         return (
@@ -63,7 +63,7 @@ const Room = (props) => {
                 </div>
             </div>
         );
-    }
+    };
 
     return (
         <div className="col-lg-4 col-md-6 col-sm-12 mt-2 col-sm-12">
@@ -73,6 +73,6 @@ const Room = (props) => {
             </div>
         </div>
     );
-}
+};
 
 export default Room;

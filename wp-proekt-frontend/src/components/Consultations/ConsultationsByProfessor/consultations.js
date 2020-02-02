@@ -6,14 +6,14 @@ const Consultations = (props) => {
 
     const handlePageClick = (e) => {
         props.onPageClick(e.selected);
-    }
+    };
 
     const consultations = () => {
         let i = 0;
         return props.consultations.map(professor =>
             <Professor key={professor.id} value={professor} index={i++} />
         );
-    }
+    };
 
     const pagination = () => {
         if (props.totalPages !== 0) {
@@ -37,7 +37,7 @@ const Consultations = (props) => {
                                activeClassName={"active"}/>
             )
         }
-    }
+    };
 
     return (
         <div>
@@ -47,6 +47,6 @@ const Consultations = (props) => {
             {pagination()}
         </div>
     );
-}
+};
 
 export default Consultations;

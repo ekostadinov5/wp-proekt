@@ -47,35 +47,35 @@ public class DataHolder {
     @PostConstruct
     public void init() {
 
-        Building tmf = new Building("TMF", "Простории за држење на настава на ТМФ");
-        Building mf = new Building("MF", "Простории за држење настава во зградата на МФ и ФЕИТ");
-        Building b = new Building("B", "Бараки - простории на западната страна на кампусот");
-        Building l = new Building("L", "Компјутерски училници");
+        Building tmf = new Building(null, "TMF", "Простории за држење на настава на ТМФ");
+        Building mf = new Building(null, "MF", "Простории за држење настава во зградата на МФ и ФЕИТ");
+        Building b = new Building(null, "B", "Бараки - простории на западната страна на кампусот");
+        Building l = new Building(null, "L", "Компјутерски училници");
 
         buildings.add(tmf);
         buildings.add(mf);
         buildings.add(b);
         buildings.add(l);
 
-        rooms.add(new Room("117", tmf, new ArrayList<>(), "на приземје, ходник десно од главниот влез, последна врата од лево (просторијата каде се вршеше запишувањето на ФИНКИ)"));
-        rooms.add(new Room("114", tmf, new ArrayList<>(), "на приземје, ходник десно од главниот влез, простории од десна страна"));
-        rooms.add(new Room("115", tmf, new ArrayList<>(), "на приземје, ходник десно од главниот влез, простории од десна страна"));
-        rooms.add(new Room("116", tmf, new ArrayList<>(), "на приземје, ходник десно од главниот влез, простории од десна страна"));
-        rooms.add(new Room("201", tmf, new ArrayList<>(), "први спрат, десно од скалите, па повторно десно"));
-        rooms.add(new Room("203", tmf, new ArrayList<>(), "први спрат, десно од скалите, па повторно десно"));
-        rooms.add(new Room("2xx", tmf, new ArrayList<>(), "први спрат, лево од скалите, па повторно лево"));
-        rooms.add(new Room("315", tmf, new ArrayList<>(), "втори спрат, лево од скалите, па повторно лево"));
-        rooms.add(new Room("301", tmf, new ArrayList<>(), "втори кат, десно од скалите, па повторно десно"));
-        rooms.add(new Room("302", tmf, new ArrayList<>(), "втори кат, десно од скалите, па повторно десно"));
-        rooms.add(new Room("123(Ф)", mf, new ArrayList<>(), "прв спрат, десно од скалите"));
-        rooms.add(new Room("112(Ф)", mf, new ArrayList<>(), "прв спрат, десно од скалите"));
-        rooms.add(new Room("223(М)", mf, new ArrayList<>(), "втор спрат, лево од скалите"));
-        rooms.add(new Room("225(М)", mf, new ArrayList<>(), "втор спрат, десно од скалите"));
-        rooms.add(new Room("B1", b, new ArrayList<>(), ""));
-        rooms.add(new Room("B2.1", b, new ArrayList<>(), ""));
-        rooms.add(new Room("B2.2", b, new ArrayList<>(), ""));
-        rooms.add(new Room("B3.1", b, new ArrayList<>(), ""));
-        rooms.add(new Room("B3.2", b, new ArrayList<>(), ""));
+        rooms.add(new Room(null, "117", tmf, new ArrayList<>(), "на приземје, ходник десно од главниот влез, последна врата од лево (просторијата каде се вршеше запишувањето на ФИНКИ)"));
+        rooms.add(new Room(null, "114", tmf, new ArrayList<>(), "на приземје, ходник десно од главниот влез, простории од десна страна"));
+        rooms.add(new Room(null, "115", tmf, new ArrayList<>(), "на приземје, ходник десно од главниот влез, простории од десна страна"));
+        rooms.add(new Room(null, "116", tmf, new ArrayList<>(), "на приземје, ходник десно од главниот влез, простории од десна страна"));
+        rooms.add(new Room(null, "201", tmf, new ArrayList<>(), "први спрат, десно од скалите, па повторно десно"));
+        rooms.add(new Room(null, "203", tmf, new ArrayList<>(), "први спрат, десно од скалите, па повторно десно"));
+        rooms.add(new Room(null, "2xx", tmf, new ArrayList<>(), "први спрат, лево од скалите, па повторно лево"));
+        rooms.add(new Room(null, "315", tmf, new ArrayList<>(), "втори спрат, лево од скалите, па повторно лево"));
+        rooms.add(new Room(null, "301", tmf, new ArrayList<>(), "втори кат, десно од скалите, па повторно десно"));
+        rooms.add(new Room(null, "302", tmf, new ArrayList<>(), "втори кат, десно од скалите, па повторно десно"));
+        rooms.add(new Room(null, "123(Ф)", mf, new ArrayList<>(), "прв спрат, десно од скалите"));
+        rooms.add(new Room(null, "112(Ф)", mf, new ArrayList<>(), "прв спрат, десно од скалите"));
+        rooms.add(new Room(null, "223(М)", mf, new ArrayList<>(), "втор спрат, лево од скалите"));
+        rooms.add(new Room(null, "225(М)", mf, new ArrayList<>(), "втор спрат, десно од скалите"));
+        rooms.add(new Room(null, "B1", b, new ArrayList<>(), ""));
+        rooms.add(new Room(null, "B2.1", b, new ArrayList<>(), ""));
+        rooms.add(new Room(null, "B2.2", b, new ArrayList<>(), ""));
+        rooms.add(new Room(null, "B3.1", b, new ArrayList<>(), ""));
+        rooms.add(new Room(null, "B3.2", b, new ArrayList<>(), ""));
 
         students.add(new Student("170001", "Petko", "Petkovski", new ArrayList<>()));
         students.add(new Student("170002", "Petko", "Petkovski", new ArrayList<>()));

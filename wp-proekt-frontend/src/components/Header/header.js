@@ -7,13 +7,12 @@ const Header = (props) => {
         let clicked = e.target.parentElement;
         clicked.parentElement.childNodes.forEach(child => child.classList.remove("active"));
         clicked.classList.add("active");
-    }
+    };
 
     const onSearch = (e) => {
         e.preventDefault();
-        let searchTerm = e.target.searchTerm.value;
         props.onSearch(e.target.searchTerm.value);
-    }
+    };
 
     const menuItems = () => {
         return (
@@ -29,7 +28,7 @@ const Header = (props) => {
                 </li>
             </ul>
         );
-    }
+    };
 
     const searchForm = () => {
         return (
@@ -41,7 +40,7 @@ const Header = (props) => {
                 </div>
             </form>
         );
-    }
+    };
 
     return (
         <header>
@@ -50,7 +49,7 @@ const Header = (props) => {
                 <button className="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarCollapse"
                         aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
+                    <span className="navbar-toggler-icon"/>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarCollapse">
                     {menuItems()}
@@ -61,6 +60,6 @@ const Header = (props) => {
             </nav>
         </header>
     );
-}
+};
 
 export default Header;

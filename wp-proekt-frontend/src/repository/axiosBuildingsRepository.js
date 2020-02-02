@@ -8,8 +8,8 @@ const BuildingsService = {
     fetchBuildingsOrdered: () => {
         return axios.get("/api/buildings/ordered");
     },
-    fetchByName: (name) => {
-        return axios.get(`/api/buildings/${name}`);
+    fetchById: (id) => {
+        return axios.get(`/api/buildings/${id}`);
     },
     addBuilding: (building) => {
         const formParams = qs.stringify(building);
@@ -20,16 +20,16 @@ const BuildingsService = {
         });
     },
     updateBuilding: (building) => {
-        const name = building.name;
+        const id = building.id;
         const formParams = qs.stringify(building);
-        return axios.patch(`/api/buildings/${name}`, formParams, {
+        return axios.patch(`/api/buildings/${id}`, formParams, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         });
     },
-    deleteBuilding: (name) => {
-        return axios.delete(`/api/buildings/${name}`);
+    deleteBuilding: (id) => {
+        return axios.delete(`/api/buildings/${id}`);
     }
 }
 

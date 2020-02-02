@@ -21,7 +21,7 @@ const Building = (props) => {
                 <Modal.Footer>
                     <Button variant="danger" onClick={() => {
                         handleClose();
-                        props.onBuildingDelete(props.building.name);}}>
+                        props.onBuildingDelete(props.id);}}>
                         Избриши
                     </Button>
                     <Button variant="secondary" onClick={handleClose}>
@@ -30,13 +30,13 @@ const Building = (props) => {
                 </Modal.Footer>
             </Modal>
         );
-    }
+    };
 
     const rooms = () => {
-        return props.rooms.map(room =>
-            <Room key={room.name} value={room} onDelete={props.onRoomDelete} />
+        return props.rooms.sort((r1, r2) => (r1.name > r2.name) ? 1 : -1)
+            .map(room => <Room key={room.id} id={room.id} value={room} onDelete={props.onRoomDelete} />
         );
-    }
+    };
 
     return (
         <div className="card room col-12 mt-3 mb-5">
@@ -44,21 +44,21 @@ const Building = (props) => {
                 <h2>
                     {props.building.name}
                     <button className="btn btn-outline-info btn-lg ml-3" type="button" data-toggle="collapse"
-                            data-target={"#collapseBuilding" + props.index} aria-expanded="false"
-                            aria-controls={"collapseBuilding" + props.index}>
-                        <i className="fa fa-angle-down"></i>
+                            data-target={"#collapseBuilding" + props.id} aria-expanded="false"
+                            aria-controls={"collapseBuilding" + props.id}>
+                        <i className="fa fa-angle-down" />
                     </button>
                     <Link className="btn btn-primary btn-lg ml-2" title="Уреди"
-                          to={`/buildings/${props.building.name}/edit`}>
-                        <i className="fa fa-fw fa-edit"></i>
+                          to={`/buildings/${props.id}/edit`}>
+                        <i className="fa fa-fw fa-edit" />
                     </Link>
                     <Button variant="primary" onClick={handleShow} type={"button"}
                             className="btn btn-danger btn-lg ml-2" title="Избриши">
-                        <i className="fa fa-fw fa-trash"></i>
+                        <i className="fa fa-fw fa-trash" />
                     </Button>
                     {confirmModal()}
                 </h2>
-                <div className="collapse" id={"collapseBuilding" + props.index}>
+                <div className="collapse" id={"collapseBuilding" + props.id}>
                     {props.building.description}
                 </div>
             </div>
@@ -67,6 +67,6 @@ const Building = (props) => {
             </div>
         </div>
     );
-}
+};
 
 export default Building;

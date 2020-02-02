@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface JpaRoomRepository extends JpaRepository<Room, String> {
+public interface JpaRoomRepository extends JpaRepository<Room, Long> {
 
     List<Room> findByOrderByNameAsc();
 
@@ -16,6 +17,10 @@ public interface JpaRoomRepository extends JpaRepository<Room, String> {
             "WHERE r.name LIKE %:term% OR r.description LIKE %:term% OR b.name LIKE %:term%")
     List<Room> searchRooms(@Param("term") String term);
 
-    List<Room> deleteAllByBuilding_Name(String name);
+    Optional<Room> findByName(String name);
+
+    Optional<Room> findByNameAndBuilding_Id(String name, Long buildingId);
+
+    List<Room> deleteAllByBuilding_Id(Long id);
 
 }

@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -18,8 +19,11 @@ import java.util.List;
 public class Professor {
     @Id
     private String id;
+    @NotNull
     private String title;
+    @NotNull
     private String firstName;
+    @NotNull
     private String lastName;
 
     @OneToMany(mappedBy = "professor", fetch = FetchType.EAGER)

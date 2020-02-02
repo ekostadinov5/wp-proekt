@@ -2,14 +2,17 @@ import axios from '../custom-axios/axios';
 import qs from 'qs';
 
 const RoomsService = {
-    fetchRoomsOrdered: () => {
+    fetchRooms: () => {
         return axios.get("/api/rooms");
+    },
+    fetchRoomsOrdered: () => {
+        return axios.get("/api/rooms/ordered");
     },
     searchRooms: (searchTerm) => {
         return axios.get(`/api/rooms?term=${searchTerm}`);
     },
-    fetchByName: (name) => {
-        return axios.get(`/api/rooms/${name}`);
+    fetchById: (id) => {
+        return axios.get(`/api/rooms/${id}`);
     },
     addRoom: (room) => {
         const formParams = qs.stringify(room);
@@ -20,16 +23,16 @@ const RoomsService = {
         });
     },
     updateRoom: (room) => {
-        const name = room.name;
+        const id = room.id;
         const formParam = qs.stringify(room);
-        return axios.patch(`/api/rooms/${name}`, formParam, {
+        return axios.patch(`/api/rooms/${id}`, formParam, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         });
     },
-    deleteRoom: (name) => {
-        return axios.delete(`/api/rooms/${name}`);
+    deleteRoom: (id) => {
+        return axios.delete(`/api/rooms/${id}`);
     }
 }
 

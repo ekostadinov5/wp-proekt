@@ -1,6 +1,7 @@
 package mk.ukim.finki.wp.proekt.service.impl;
 
 import mk.ukim.finki.wp.proekt.model.Building;
+import mk.ukim.finki.wp.proekt.model.exceptions.DuplicateBuildingNameException;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidBuildingNameException;
 import mk.ukim.finki.wp.proekt.repository.jpa.JpaBuildingRepository;
 import mk.ukim.finki.wp.proekt.repository.jpa.JpaConsultationSlotRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BuildingServiceImpl implements BuildingService {
@@ -33,6 +35,9 @@ public class BuildingServiceImpl implements BuildingService {
 
     @Override
     public Building createBuilding(String name, String description) {
+        if(this.buildingRepository.findByName(name).isPresent()) {
+            throw new DuplicateBuildingNameException();
+        }
         Building building = new Building();
         building.setName(name);
         building.setDescription(description);
@@ -40,22 +45,27 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public Building getBuilding(String name) {
-        return this.buildingRepository.findById(name).orElseThrow(InvalidBuildingNameException::new);
+    public Building getBuilding(Long id) {
+        return this.buildingRepository.findById(id).orElseThrow(InvalidBuildingNameException::new);
     }
 
     @Override
-    public Building updateBuilding(String name, String description) {
-        Building building = this.buildingRepository.findById(name).orElseThrow(InvalidBuildingNameException::new);
+    public Building updateBuilding(Long id, String name, String description) {
+        Optional<Building> temp;
+        if((temp = this.buildingRepository.findByName(name)).isPresent() && temp.get().getId() != id) {
+            throw new DuplicateBuildingNameException();
+        }
+        Building building = this.buildingRepository.findById(id).orElseThrow(InvalidBuildingNameException::new);
+        building.setName(name);
         building.setDescription(description);
         return this.buildingRepository.save(building);
     }
 
     @Override
     @Transactional
-    public void deleteBuilding(String name) {
-        this.roomRepository.deleteAllByBuilding_Name(name);
-        this.buildingRepository.deleteById(name);
+    public void deleteBuilding(Long id) {
+        this.roomRepository.deleteAllByBuilding_Id(id);
+        this.buildingRepository.deleteById(id);
     }
 
 }

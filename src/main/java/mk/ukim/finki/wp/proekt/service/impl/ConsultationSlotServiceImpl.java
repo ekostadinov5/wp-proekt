@@ -30,14 +30,14 @@ public class ConsultationSlotServiceImpl implements ConsultationSlotService {
     }
 
     @Override
-    public ConsultationSlot createSlot(String professorId, String roomName, DayOfWeek dayOfWeek, LocalDate date,
+    public ConsultationSlot createSlot(String professorId, Long roomId, DayOfWeek dayOfWeek, LocalDate date,
                                        LocalTime from, LocalTime to) {
         if(dayOfWeek == null && date == null) {
             throw new IllegalArgumentException();
         }
         ConsultationSlot slot;
         Professor professor = professorRepository.findById(professorId).orElseThrow(InvalidProfessorIdException::new);
-        Room room = roomRepository.findById(roomName).orElseThrow(InvalidRoomNameException::new);
+        Room room = roomRepository.findById(roomId).orElseThrow(InvalidRoomNameException::new);
         if(dayOfWeek != null) {
             slot = ConsultationSlot.createRecurringSlot(professor, room, dayOfWeek, from, to);
         } else {
@@ -52,13 +52,13 @@ public class ConsultationSlotServiceImpl implements ConsultationSlotService {
     }
 
     @Override
-    public ConsultationSlot updateSlot(Long slotId, String professorId, String roomName, DayOfWeek dayOfWeek,
+    public ConsultationSlot updateSlot(Long slotId, String professorId, Long roomId, DayOfWeek dayOfWeek,
                                        LocalDate date, LocalTime from, LocalTime to) {
         ConsultationSlot slot = this.consultationSlotRepository.findById(slotId)
                 .orElseThrow(InvalidConsultationSlotIdException::new);
         Professor professor = this.professorRepository.findById(professorId)
                 .orElseThrow(InvalidProfessorIdException::new);
-        Room room = this.roomRepository.findById(roomName).orElseThrow(InvalidRoomNameException::new);
+        Room room = this.roomRepository.findById(roomId).orElseThrow(InvalidRoomNameException::new);
         slot.setProfessor(professor);
         slot.setRoom(room);
         slot.setDayOfWeek(dayOfWeek);

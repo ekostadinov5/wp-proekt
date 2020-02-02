@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -21,7 +22,9 @@ public class Student {
     @Id
     @Column(name = "student_index")
     private String index;
+    @NotNull
     private String firstName;
+    @NotNull
     private String lastName;
     @ManyToMany(mappedBy = "students")
     @NotFound(action = NotFoundAction.IGNORE)

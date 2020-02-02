@@ -2,6 +2,7 @@ package mk.ukim.finki.wp.proekt.service.impl;
 
 import mk.ukim.finki.wp.proekt.model.Building;
 import mk.ukim.finki.wp.proekt.model.Room;
+import mk.ukim.finki.wp.proekt.model.exceptions.DuplicateRoomNameException;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidBuildingNameException;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidRoomNameException;
 import mk.ukim.finki.wp.proekt.repository.jpa.JpaBuildingRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -24,15 +26,24 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Room createRoom(String name, String buildingName, String description) {
-        Room room = new Room();
-        Building building = this.buildingRepository.findById(buildingName)
+    public Room createRoom(String name, Long buildingId, String description) {
+        Building building = this.buildingRepository.findById(buildingId)
                 .orElseThrow(InvalidBuildingNameException::new);
+        if(this.roomRepository.findByNameAndBuilding_Id(name, buildingId).isPresent()) {
+            throw new DuplicateRoomNameException();
+        }
+        Room room = new Room();
         room.setName(name);
         room.setBuilding(building);
         room.setDescription(description);
         return this.roomRepository.save(room);
     }
+
+    @Override
+    public List<Room> getAllRooms() {
+        return this.roomRepository.findAll();
+    }
+
 
     @Override
     public List<Room> getAllRoomsOrdered() {
@@ -45,15 +56,20 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Room getRoom(String name) {
-        return this.roomRepository.findById(name).orElseThrow(InvalidRoomNameException::new);
+    public Room getRoom(Long id) {
+        return this.roomRepository.findById(id).orElseThrow(InvalidRoomNameException::new);
     }
 
     @Override
-    public Room updateRoom(String name, String buildingName, String description) {
-        Room room = this.roomRepository.findById(name).orElseThrow(InvalidRoomNameException::new);
-        Building building = this.buildingRepository.findById(buildingName)
+    public Room updateRoom(Long id, String name, Long buildingId, String description) {
+        Building building = this.buildingRepository.findById(buildingId)
                 .orElseThrow(InvalidBuildingNameException::new);
+        Optional<Room> temp;
+        if((temp = this.roomRepository.findByNameAndBuilding_Id(name, buildingId)).isPresent()
+                && temp.get().getId() != id) {
+            throw new DuplicateRoomNameException();
+        }
+        Room room = this.roomRepository.findById(id).orElseThrow(InvalidRoomNameException::new);
         room.setName(name);
         room.setBuilding(building);
         room.setDescription(description);
@@ -61,8 +77,8 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void deleteRoom(String name) {
-        this.roomRepository.deleteById(name);
+    public void deleteRoom(Long id) {
+        this.roomRepository.deleteById(id);
     }
 
 }

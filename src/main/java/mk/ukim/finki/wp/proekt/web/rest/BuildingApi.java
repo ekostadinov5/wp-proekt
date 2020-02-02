@@ -30,9 +30,9 @@ public class BuildingApi {
         return this.buildingService.getAllBuildingsOrdered();
     }
 
-    @GetMapping("/{name}")
-    public Building getBuilding(@PathVariable String name) {
-        return this.buildingService.getBuilding(name);
+    @GetMapping("/{id}")
+    public Building getBuilding(@PathVariable Long id) {
+        return this.buildingService.getBuilding(id);
     }
 
     @PostMapping
@@ -43,21 +43,22 @@ public class BuildingApi {
                                    UriComponentsBuilder builder) {
         Building building = this.buildingService.createBuilding(name, description);
         response.setHeader("Location", builder
-                .path("/api/buildings/{name}")
-                .buildAndExpand(building.getName())
+                .path("/api/buildings/{id}")
+                .buildAndExpand(building.getId())
                 .toUriString());
         return building;
     }
 
-    @PatchMapping("/{name}")
-    public Building updateBuilding(@PathVariable String name,
+    @PatchMapping("/{id}")
+    public Building updateBuilding(@PathVariable Long id,
+                                   @RequestParam String name,
                                    @RequestParam String description) {
-        return this.buildingService.updateBuilding(name, description);
+        return this.buildingService.updateBuilding(id, name, description);
     }
 
-    @DeleteMapping("/{name}")
-    public void deleteBuilding(@PathVariable String name) {
-        this.buildingService.deleteBuilding(name);
+    @DeleteMapping("/{id}")
+    public void deleteBuilding(@PathVariable Long id) {
+        this.buildingService.deleteBuilding(id);
     }
 
 }

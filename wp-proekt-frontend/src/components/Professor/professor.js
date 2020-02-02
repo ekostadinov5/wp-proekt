@@ -4,22 +4,12 @@ import Term from '../Consultations/ConsultationTerm/term';
 const Professor = (props) => {
 
     const termsWeekly = () => {
-        return props.value.slots.map(term => {
-                if(term.dayOfWeek) {
-                    return <Term key={term.id} value={term} />
-                }
-            }
-        );
-    }
+        return props.value.slots.map(term => (term.dayOfWeek) ? <Term key={term.id} value={term} /> : null);
+    };
 
     const termsDay = () => {
-        return props.value.slots.map(term => {
-                if(term.date) {
-                    return <Term key={term.id} value={term} />
-                }
-            }
-        );
-    }
+        return props.value.slots.map(term => (term.date) ? <Term key={term.id} value={term} /> : null);
+    };
 
     const cardHeader = () => {
         return (
@@ -30,13 +20,13 @@ const Professor = (props) => {
                     </div>
                     <div className="col-4 text-right">
                         <a href="#" className="btn btn-light" title="Следи">
-                            <i className="fa fa-fw fa-star"></i>
+                            <i className="fa fa-fw fa-star"/>
                         </a>
                     </div>
                 </div>
             </div>
         );
-    }
+    };
 
     const cardBody = () => {
         return (
@@ -60,7 +50,7 @@ const Professor = (props) => {
                 </div>
             </>
         );
-    }
+    };
 
     return (
         <div className="col-lg-4 col-md-6 mt-4 col-sm-12">
@@ -70,6 +60,6 @@ const Professor = (props) => {
             </div>
         </div>
     );
-}
+};
 
 export default Professor;
