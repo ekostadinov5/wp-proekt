@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class SlotsStudentsServiceImpl implements SlotsStudentsService {
     private final JpaConsultationSlotRepository consultationSlotRepository;
@@ -23,6 +25,7 @@ public class SlotsStudentsServiceImpl implements SlotsStudentsService {
     }
 
     @Override
+    @Transactional
     public void add(Long slotId, String studentIndex) {
         ConsultationSlot slot = this.consultationSlotRepository.findById(slotId)
                 .orElseThrow(InvalidConsultationSlotIdException::new);
@@ -33,6 +36,7 @@ public class SlotsStudentsServiceImpl implements SlotsStudentsService {
     }
 
     @Override
+    @Transactional
     public void remove(Long slotId, String studentIndex) {
         ConsultationSlot slot = this.consultationSlotRepository.findById(slotId)
                 .orElseThrow(InvalidConsultationSlotIdException::new);

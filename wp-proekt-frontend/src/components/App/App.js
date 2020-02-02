@@ -31,12 +31,17 @@ class App extends Component {
         this.state = {
             showErrorModal: false,
             errorMessage: '',
+            
             professors: [],
             page: 0,
             pageSize: 2,
             totalPages: 0,
+            
             buildings: [],
-            rooms: []
+            
+            rooms: [],
+            
+            student: null,
         }
     }
 

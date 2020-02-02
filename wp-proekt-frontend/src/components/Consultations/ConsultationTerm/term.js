@@ -67,6 +67,7 @@ const Term = (props) => {
             {termDayOrDate()}
             {termTime()}
             {termRoom()}
+
             <a href="#" className="btn btn-outline-success mt-3" title="Додади се">
                 <i className="fa fa-plus"/>
             </a>
