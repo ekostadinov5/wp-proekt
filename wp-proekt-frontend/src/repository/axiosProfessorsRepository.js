@@ -15,6 +15,9 @@ const ProfessorsService = {
     },
     searchProfessors: (searchTerm) => {
         return axios.get(`/api/professors?term=${searchTerm}`);
+    },
+    fetchById : (id) => {
+        return axios.get(`/api/professors/${id}`);
     }
 };
 

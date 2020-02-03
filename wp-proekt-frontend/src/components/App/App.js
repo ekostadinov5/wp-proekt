@@ -8,7 +8,8 @@ import {Button, Modal} from "react-bootstrap";
 import ProfessorsService from '../../repository/axiosProfessorsRepository';
 import RoomsService from '../../repository/axiosRoomsRepository';
 import BuildingsService from "../../repository/axiosBuildingsRepository";
-import StudentsService from "../../repository/axiosStudentsRepository"
+import StudentsService from "../../repository/axiosStudentsRepository";
+import ConsultationsService from "../../repository/axiosConsultationsRepository";
 
 import Header from '../Header/header';
 import Footer from '../Footer/footer';
@@ -23,7 +24,10 @@ import RoomEdit from '../Rooms/RoomEdit/roomEdit';
 import BuildingAdd from '../Buildings/BuildingAdd/buildingAdd';
 import BuildingEdit from '../Buildings/BuildingEdit/buildingEdit';
 
-import ProfessorConsultations from '../ProfessorConsultations/professorConsultations';
+import ProfessorConsultations from '../ProfessorConsultations/ProfessorConsultationsList/professorConsultations';
+
+import ConsultationAdd from '../Consultations/ConsultationAdd/consultationAdd';
+import ConsultationEdit from '../Consultations/ConsultationEdit/consultationEdit';
 
 class App extends Component {
 
@@ -43,7 +47,9 @@ class App extends Component {
             rooms: [],
             
             student: null,
-            studentSlotIds: []
+            studentSlotIds: [],
+
+            professor: null
         }
     }
 
@@ -183,16 +189,37 @@ class App extends Component {
             });
         }
     };
-    
-    loadProfessors = (page = 0) => {
-        ProfessorsService.fetchProfessorsPaged(page, this.state.pageSize).then((promise) => {
-            this.setState({
-                professors: promise.data.content,
-                page: promise.data.number,
-                pageSize: promise.data.size,
-                totalPages: promise.data.totalPages
+
+    ProfessorsApi = {
+        loadProfessor: () => {
+            ProfessorsService.fetchById("kostadin.mishev").then((promise) => {
+                this.setState({
+                    professor: promise.data
+                });
             });
-        });
+        },
+        loadProfessors: (page = 0) => {
+            ProfessorsService.fetchProfessorsPaged(page, this.state.pageSize).then((promise) => {
+                this.setState({
+                    professors: promise.data.content,
+                    page: promise.data.number,
+                    pageSize: promise.data.size,
+                    totalPages: promise.data.totalPages
+                });
+            });
+        }
+    };
+
+    ConsultationsApi = {
+        createConsultationSlot: (newSlot) => {
+            ConsultationsService.addConsultationSlot(newSlot);
+        },
+        updateConsultationSlot: (editedSlot) => {
+            ConsultationsService.updateConsultationSlot(editedSlot);
+        },
+        deleteConsultationSlot: (slotId) => {
+            ConsultationsService.deleteConsultationSlot(slotId);
+        }
     };
 
     searchData = (searchTerm) => {
@@ -212,10 +239,11 @@ class App extends Component {
     };
 
     componentDidMount() {
-        this.loadProfessors();
+        this.ProfessorsApi.loadProfessors();
         this.BuildingsApi.loadBuildings();
         this.RoomsApi.loadRooms();
         this.StudentsApi.loadStudent();
+        this.ProfessorsApi.loadProfessor();
     }
 
     render() {
@@ -227,9 +255,10 @@ class App extends Component {
                     <div role="main" className="mt-3">
                         <div className="container">
                             <Route path={"/consultations"} exact render={()=>
-                                <Consultations consultations={this.state.professors} onPageClick={this.loadProfessors}
-                                               totalPages={this.state.totalPages} student={this.state.student}
-                                               studentSlotIds={this.state.studentSlotIds}
+                                <Consultations consultations={this.state.professors} 
+                                               onPageClick={this.ProfessorsApi.loadProfessors}
+                                               page={this.state.page} totalPages={this.state.totalPages}
+                                               student={this.state.student} studentSlotIds={this.state.studentSlotIds}
                                                onStudentAddedToSlot={this.StudentsApi.addStudentToSlot}
                                                onStudentRemovedFromSlot={this.StudentsApi.removeStudentFromSlot} />}>
                             </Route>
@@ -254,11 +283,23 @@ class App extends Component {
                                 <BuildingEdit onBuildingEdited={this.BuildingsApi.updateBuilding} />}>
                             </Route>
 
-                            <Route path={"/consultations/professor"} exact render={()=>
-                                <ProfessorConsultations />}>
+                            <Route path={"/professor"} exact render={()=>
+                                <ProfessorConsultations professor={this.state.professor} />}>
+                            </Route>
+                            <Route path={"/consultations/add"} exact render={() =>
+                                <ConsultationAdd buildings={this.state.buildings}
+                                                 rooms={this.state.rooms}
+                                                 professor={this.state.professor}
+                                                 onConsultationSlotAdded={this.ConsultationsApi.createConsultationSlot} />}>
+                            </Route>
+                            <Route path={"/consultations/:slotId/edit"} exact render={() =>
+                                <ConsultationEdit buildings={this.state.buildings}
+                                                  rooms={this.state.rooms}
+                                                  professor={this.state.professor}
+                                                  onConsultationSlotEdited={this.ConsultationsApi.updateConsultationSlot()} />}>
                             </Route>
                             
-                            <Redirect to={"/consultations"} />
+                            <Redirect to={"/professor"} />
                         </div>
                     </div>
                     <Footer />
@@ -286,7 +327,8 @@ class App extends Component {
 
         if(false) {
             return (
-                <></>
+                <>
+                </>
             );
         } else {
             return (

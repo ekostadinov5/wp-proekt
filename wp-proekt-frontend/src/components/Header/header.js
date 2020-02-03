@@ -24,7 +24,7 @@ const Header = (props) => {
                     <Link onClick={linkChange} className="nav-link" to={"/rooms"}>Простории</Link>
                 </li>
                 <li className="nav-item">
-                    <Link onClick={linkChange} className="nav-link" to={"/consultations/professor"}>Мои термини</Link>
+                    <Link onClick={linkChange} className="nav-link" to={"/professor"}>Мои термини</Link>
                 </li>
             </ul>
         );

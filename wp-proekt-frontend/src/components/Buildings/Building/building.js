@@ -39,7 +39,7 @@ const Building = (props) => {
     };
 
     return (
-        <div className="card room col-12 mt-3 mb-5">
+        <div className="card room col-12 mt-5 mb-3">
             <div className="card-body">
                 <h2>
                     {props.building.name}

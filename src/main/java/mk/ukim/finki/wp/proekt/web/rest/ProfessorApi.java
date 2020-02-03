@@ -30,4 +30,9 @@ public class ProfessorApi {
         return this.professorService.searchProfessors(term);
     }
 
+    @GetMapping("/{id}")
+    public Professor getProfessor(@PathVariable String id) {
+        return this.professorService.getProfessor(id);
+    }
+
 }

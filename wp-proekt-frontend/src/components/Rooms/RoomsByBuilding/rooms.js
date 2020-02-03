@@ -14,11 +14,11 @@ const Rooms = (props) => {
     return (
         <div role="main" className="mt-3">
             <div className="container">
-                <Link className={"btn btn-primary btn-lg rounded mt-2"} to={"/buildings/add"}>
+                <Link className={"btn btn-success btn-lg rounded mt-2"} to={"/buildings/add"}>
                     <i className="fa fa-fw fa-plus mr-3"/>
                     Додади група на простории
                 </Link>
-                <Link className={"btn btn-primary btn-lg rounded ml-5 mt-2"} to={"/rooms/add"}>
+                <Link className={"btn btn-success btn-lg rounded ml-5 mt-2"} to={"/rooms/add"}>
                     <i className="fa fa-fw fa-plus mr-3"/>
                     Додади просторија
                 </Link>
