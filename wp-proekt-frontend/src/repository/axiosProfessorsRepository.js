@@ -1,5 +1,5 @@
 import axios from '../custom-axios/axios';
-import qs from 'qs';
+//import qs from 'qs';
 
 const ProfessorsService = {
     fetchProfessors: () => {
@@ -16,6 +16,6 @@ const ProfessorsService = {
     searchProfessors: (searchTerm) => {
         return axios.get(`/api/professors?term=${searchTerm}`);
     }
-}
+};
 
 export default ProfessorsService;

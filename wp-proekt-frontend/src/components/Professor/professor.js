@@ -4,11 +4,19 @@ import Term from '../Consultations/ConsultationTerm/term';
 const Professor = (props) => {
 
     const termsWeekly = () => {
-        return props.value.slots.map(term => (term.dayOfWeek) ? <Term key={term.id} value={term} /> : null);
+        return props.value.slots.map(term =>
+            (term.dayOfWeek) ? <Term key={term.id} value={term} student={props.student}
+                                     studentSlotIds={props.studentSlotIds}
+                                     onStudentAdded={props.onStudentAddedToSlot}
+                                     onStudentRemoved={props.onStudentRemovedFromSlot} /> : null);
     };
 
     const termsDay = () => {
-        return props.value.slots.map(term => (term.date) ? <Term key={term.id} value={term} /> : null);
+        return props.value.slots.map(term =>
+            (term.date) ? <Term key={term.id} value={term} student={props.student}
+                                studentSlotIds={props.studentSlotIds}
+                                onStudentAdded={props.onStudentAddedToSlot}
+                                onStudentRemoved={props.onStudentRemovedFromSlot} /> : null);
     };
 
     const cardHeader = () => {

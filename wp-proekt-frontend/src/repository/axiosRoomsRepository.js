@@ -34,6 +34,6 @@ const RoomsService = {
     deleteRoom: (id) => {
         return axios.delete(`/api/rooms/${id}`);
     }
-}
+};
 
 export default RoomsService;

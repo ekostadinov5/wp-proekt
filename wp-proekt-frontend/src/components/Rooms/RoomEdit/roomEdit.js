@@ -22,7 +22,7 @@ const RoomEdit = (props) => {
                 description: promise.data.description
             });
         });
-    }, []);
+    }, [roomId]);
 
     const history = useHistory();
 

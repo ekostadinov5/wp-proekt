@@ -4,6 +4,24 @@ import {Link} from "react-router-dom";
 
 const Term = (props) => {
 
+    const isAddedInStudentsList = () => {
+        let exists = false;
+        props.studentSlotIds.forEach(id => {
+            if(id === props.value.id) {
+                exists = true;
+            }
+        });
+        return exists;
+    };
+
+    const addRemoveButtonClick = () => {
+        if(!isAddedInStudentsList()) {
+            props.onStudentAdded(props.value.id, props.student.index);
+        } else {
+            props.onStudentRemoved(props.value.id, props.student.index)
+        }
+    };
+
     const termDayOrDate = () => {
         if(props.value.dayOfWeek) {
             return (
@@ -62,16 +80,28 @@ const Term = (props) => {
         );
     };
 
+    const addRemoveButton = () => {
+        if(!isAddedInStudentsList()) {
+            return (
+                <button onClick={addRemoveButtonClick} className="btn btn-outline-success mt-3" title="Пријави се">
+                    <i className="fa fa-plus"/>
+                </button>
+            );
+        } else {
+            return (
+                <button onClick={addRemoveButtonClick} className="btn btn-danger mt-3" title="Откажи се">
+                    <i className="fa fa-times"/>
+                </button>
+            );
+        }
+    };
+
     return (
         <div className="consultations">
             {termDayOrDate()}
             {termTime()}
             {termRoom()}
-
-            <a href="#" className="btn btn-outline-success mt-3" title="Додади се">
-                <i className="fa fa-plus"/>
-            </a>
-
+            {addRemoveButton()}
             <hr />
         </div>
     );

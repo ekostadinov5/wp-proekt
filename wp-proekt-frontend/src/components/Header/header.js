@@ -60,6 +60,6 @@ const Header = (props) => {
             </nav>
         </header>
     );
-};
+}
 
 export default Header;

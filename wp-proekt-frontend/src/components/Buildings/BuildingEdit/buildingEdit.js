@@ -16,7 +16,7 @@ const BuildingEdit = (props) => {
                 description: promise.data.description
             });
         });
-    }, []);
+    }, [buildingId]);
 
     const history = useHistory();
 

@@ -11,7 +11,9 @@ const Consultations = (props) => {
     const consultations = () => {
         let i = 0;
         return props.consultations.map(professor =>
-            <Professor key={professor.id} value={professor} index={i++} />
+            <Professor key={professor.id} value={professor} index={i++} student={props.student}
+                       studentSlotIds={props.studentSlotIds} onStudentAddedToSlot={props.onStudentAddedToSlot}
+                       onStudentRemovedFromSlot={props.onStudentRemovedFromSlot} />
         );
     };
 

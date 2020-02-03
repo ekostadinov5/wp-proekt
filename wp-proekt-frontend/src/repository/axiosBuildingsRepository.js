@@ -31,6 +31,6 @@ const BuildingsService = {
     deleteBuilding: (id) => {
         return axios.delete(`/api/buildings/${id}`);
     }
-}
+};
 
 export default BuildingsService;

@@ -8,6 +8,7 @@ import {Button, Modal} from "react-bootstrap";
 import ProfessorsService from '../../repository/axiosProfessorsRepository';
 import RoomsService from '../../repository/axiosRoomsRepository';
 import BuildingsService from "../../repository/axiosBuildingsRepository";
+import StudentsService from "../../repository/axiosStudentsRepository"
 
 import Header from '../Header/header';
 import Footer from '../Footer/footer';
@@ -42,6 +43,7 @@ class App extends Component {
             rooms: [],
             
             student: null,
+            studentSlotIds: []
         }
     }
 
@@ -150,6 +152,37 @@ class App extends Component {
             });
         }
     };
+
+    StudentsApi = {
+        loadStudent: () => {
+            StudentsService.fetchByIndex(170005).then((promise) => {
+                this.setState({
+                    student: {
+                        index: promise.data.index,
+                        firstName: promise.data.firstName,
+                        lastName: promise.data.lastName
+                    },
+                    studentSlotIds: promise.data.slots.map(s => s.id)
+                });
+            });
+        },
+        addStudentToSlot: (slotId, index) => {
+            StudentsService.addToSlot(slotId, index).then(() => {
+                const newStudentSlotIdsRef = [...this.state.studentSlotIds, slotId];
+                this.setState({
+                    studentSlotIds: newStudentSlotIdsRef
+                });
+            });
+        },
+        removeStudentFromSlot: (slotId, index) => {
+            StudentsService.removeFromSlot(slotId, index).then(() => {
+                const newStudentSlotIdsRef = this.state.studentSlotIds.filter(id => id !== slotId);
+                this.setState({
+                    studentSlotIds: newStudentSlotIdsRef
+                });
+            });
+        }
+    };
     
     loadProfessors = (page = 0) => {
         ProfessorsService.fetchProfessorsPaged(page, this.state.pageSize).then((promise) => {
@@ -182,6 +215,7 @@ class App extends Component {
         this.loadProfessors();
         this.BuildingsApi.loadBuildings();
         this.RoomsApi.loadRooms();
+        this.StudentsApi.loadStudent();
     }
 
     render() {
@@ -194,7 +228,10 @@ class App extends Component {
                         <div className="container">
                             <Route path={"/consultations"} exact render={()=>
                                 <Consultations consultations={this.state.professors} onPageClick={this.loadProfessors}
-                                               totalPages={this.state.totalPages} />}>
+                                               totalPages={this.state.totalPages} student={this.state.student}
+                                               studentSlotIds={this.state.studentSlotIds}
+                                               onStudentAddedToSlot={this.StudentsApi.addStudentToSlot}
+                                               onStudentRemovedFromSlot={this.StudentsApi.removeStudentFromSlot} />}>
                             </Route>
 
                             <Route path={"/rooms"} exact render={()=>
@@ -247,12 +284,18 @@ class App extends Component {
             );
         };
 
-        return (
-            <div className="App">
-                {routing()}
-                {errorModal()}
-            </div>
-        );
+        if(false) {
+            return (
+                <></>
+            );
+        } else {
+            return (
+                <div className="App">
+                    {routing()}
+                    {errorModal()}
+                </div>
+            );
+        }
     }
 }
 
