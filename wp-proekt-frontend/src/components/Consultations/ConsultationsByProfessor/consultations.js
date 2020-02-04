@@ -4,17 +4,18 @@ import ReactPaginate from 'react-paginate';
 
 const Consultations = (props) => {
 
-    const handlePageClick = (e) => {
-        props.onPageClick(e.selected);
-    };
-
     const consultations = () => {
         let i = 0;
         return props.consultations.map(professor =>
-            <Professor key={professor.id} value={professor} index={i++} student={props.student}
-                       studentSlotIds={props.studentSlotIds} onStudentAddedToSlot={props.onStudentAddedToSlot}
+            <Professor key={professor.id} value={professor} index={i++} student={props.student} 
+                       studentSlotIds={props.studentSlotIds} convertDay={props.convertDay}
+                       onStudentAddedToSlot={props.onStudentAddedToSlot} 
                        onStudentRemovedFromSlot={props.onStudentRemovedFromSlot} />
         );
+    };
+
+    const handlePageClick = (e) => {
+        props.onPageClick(e.selected);
     };
 
     const pagination = () => {
@@ -28,11 +29,11 @@ const Consultations = (props) => {
                                marginPagesDisplayed={2}
                                pageRangeDisplayed={5}
                                pageClassName={"page-item"}
-                               pageLinkClassName={"page-link"}
+                               pageLinkClassName={"btn page-link"}
                                previousClassName={"page-item"}
                                nextClassName={"page-item"}
-                               previousLinkClassName={"page-link"}
-                               nextLinkClassName={"page-link"}
+                               previousLinkClassName={"btn page-link"}
+                               nextLinkClassName={"btn page-link"}
                                forcePage={props.page}
                                onPageChange={handlePageClick}
                                containerClassName={"pagination justify-content-center"}

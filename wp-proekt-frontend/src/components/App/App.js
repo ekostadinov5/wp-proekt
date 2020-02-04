@@ -39,7 +39,7 @@ class App extends Component {
             
             professors: [],
             page: 0,
-            pageSize: 2,
+            pageSize: 2, // 18 ili 24
             totalPages: 0,
             
             buildings: [],
@@ -52,9 +52,6 @@ class App extends Component {
             professor: null
         }
     }
-
-    handleCloseErrorModal = () => this.setState({showErrorModal: false, errorMessage: ''});
-    handleShowErrorModal = (message) => this.setState({showErrorModal: true, errorMessage: message});
 
     BuildingsApi = {
         loadBuildings: () => {
@@ -191,13 +188,6 @@ class App extends Component {
     };
 
     ProfessorsApi = {
-        loadProfessor: () => {
-            ProfessorsService.fetchById("kostadin.mishev").then((promise) => {
-                this.setState({
-                    professor: promise.data
-                });
-            });
-        },
         loadProfessors: (page = 0) => {
             ProfessorsService.fetchProfessorsPaged(page, this.state.pageSize).then((promise) => {
                 this.setState({
@@ -205,6 +195,13 @@ class App extends Component {
                     page: promise.data.number,
                     pageSize: promise.data.size,
                     totalPages: promise.data.totalPages
+                });
+            });
+        },
+        loadProfessor: () => {
+            ProfessorsService.fetchById("kostadin.mishev").then((promise) => {
+                this.setState({
+                    professor: promise.data
                 });
             });
         }
@@ -248,6 +245,29 @@ class App extends Component {
         }
     };
 
+    convertDay = (day) => {
+        if(day === 'MONDAY') {
+            return 'Понеделник';
+        } else if(day === 'TUESDAY') {
+            return 'Вторник';
+        } else if(day === 'WEDNESDAY') {
+            return 'Среда';
+        } else if(day === 'THURSDAY') {
+            return 'Четврток';
+        } else if(day === 'FRIDAY') {
+            return 'Петок';
+        } else if(day === 'SATURDAY') {
+            return 'Сабота';
+        } else if(day === 'SUNDAY') {
+            return 'Недела';
+        } else {
+            return null;
+        }
+    };
+
+    handleCloseErrorModal = () => this.setState({showErrorModal: false, errorMessage: ''});
+    handleShowErrorModal = (message) => this.setState({showErrorModal: true, errorMessage: message});
+
     componentDidMount() {
         this.ProfessorsApi.loadProfessors();
         this.BuildingsApi.loadBuildings();
@@ -266,7 +286,7 @@ class App extends Component {
                     <div role="main" className="mt-3">
                         <div className="container">
                             <Route path={"/consultations"} exact render={()=>
-                                <Consultations consultations={this.state.professors} 
+                                <Consultations consultations={this.state.professors} convertDay={this.convertDay}
                                                onPageClick={this.ProfessorsApi.loadProfessors}
                                                page={this.state.page} totalPages={this.state.totalPages}
                                                student={this.state.student} studentSlotIds={this.state.studentSlotIds}
@@ -295,7 +315,7 @@ class App extends Component {
                             </Route>
 
                             <Route path={"/professor"} exact render={()=>
-                                <ProfessorConsultations professor={this.state.professor}
+                                <ProfessorConsultations professor={this.state.professor} convertDay={this.convertDay}
                                                         onConsultationSlotDeleted={this.ConsultationsApi.deleteConsultationSlot} />}>
                             </Route>
                             <Route path={"/consultations/add"} exact render={() =>
@@ -311,7 +331,7 @@ class App extends Component {
                                                   onConsultationSlotEdited={this.ConsultationsApi.updateConsultationSlot} />}>
                             </Route>
                             
-                            <Redirect to={"/professor"} />
+                            <Redirect to={"/consultations"} />
                         </div>
                     </div>
                     <Footer />

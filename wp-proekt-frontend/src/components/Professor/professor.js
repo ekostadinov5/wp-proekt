@@ -6,7 +6,7 @@ const Professor = (props) => {
     const termsWeekly = () => {
         return props.value.slots.map(term =>
             (term.dayOfWeek) ? <Term key={term.id} value={term} student={props.student}
-                                     studentSlotIds={props.studentSlotIds}
+                                     studentSlotIds={props.studentSlotIds} convertDay={props.convertDay}
                                      onStudentAdded={props.onStudentAddedToSlot}
                                      onStudentRemoved={props.onStudentRemovedFromSlot} /> : null);
     };
@@ -27,9 +27,9 @@ const Professor = (props) => {
                         {props.value.title} {props.value.firstName} {props.value.lastName}
                     </div>
                     <div className="col-4 text-right">
-                        <a href="#" className="btn btn-light" title="Следи">
+                        <button className="btn btn-light" title="Следи">
                             <i className="fa fa-fw fa-star"/>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>

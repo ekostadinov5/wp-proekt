@@ -26,6 +26,14 @@ const StudentsService = {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         })
+    },
+    fetchStudentsBySlotId: (slotId, page, pageSize) => {
+        return axios.get(`/api/students/bySlotId/${slotId}`, {
+            headers : {
+                page: page,
+                pageSize: pageSize
+            }
+        });
     }
 };
 

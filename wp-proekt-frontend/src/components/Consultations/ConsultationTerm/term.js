@@ -4,30 +4,12 @@ import {Link} from "react-router-dom";
 
 const Term = (props) => {
 
-    const isAddedInStudentsList = () => {
-        let exists = false;
-        props.studentSlotIds.forEach(id => {
-            if(id === props.value.id) {
-                exists = true;
-            }
-        });
-        return exists;
-    };
-
-    const addRemoveButtonClick = () => {
-        if(!isAddedInStudentsList()) {
-            props.onStudentAdded(props.value.id, props.student.index);
-        } else {
-            props.onStudentRemoved(props.value.id, props.student.index)
-        }
-    };
-
     const termDayOrDate = () => {
         if(props.value.dayOfWeek) {
             return (
                 <div className="row">
                     <div className="col-md-6 font-weight-bold">Ден:</div>
-                    <div className="col-md-6">{props.value.dayOfWeek}</div>
+                    <div className="col-md-6">{props.convertDay(props.value.dayOfWeek)}</div>
                 </div>
             );
         } else if(props.value.date) {
@@ -78,6 +60,24 @@ const Term = (props) => {
                 </div>
             </div>
         );
+    };
+
+    const isAddedInStudentsList = () => {
+        let exists = false;
+        props.studentSlotIds.forEach(id => {
+            if(id === props.value.id) {
+                exists = true;
+            }
+        });
+        return exists;
+    };
+
+    const addRemoveButtonClick = () => {
+        if(!isAddedInStudentsList()) {
+            props.onStudentAdded(props.value.id, props.student.index);
+        } else {
+            props.onStudentRemoved(props.value.id, props.student.index)
+        }
     };
 
     const addRemoveButton = () => {

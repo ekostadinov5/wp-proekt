@@ -48,8 +48,8 @@ const Header = (props) => {
         return (
             <form onSubmit={onSearch} className="nav-item form-inline mt-2">
                 <div className={"form-group m-auto"}>
-                    <input id={"searchTerm"} name={"searchTerm"} className="form-control my-2 mr-2" type="search" placeholder="Пребарај..."
-                           aria-label="Search"/>
+                    <input id={"searchTerm"} name={"searchTerm"} className="form-control my-2 mr-2" type="search" 
+                           placeholder="Пребарај..." aria-label="Search"/>
                     <button className="btn btn-outline-success my-2" type="submit">Пребарај</button>
                 </div>
             </form>
@@ -59,7 +59,7 @@ const Header = (props) => {
     return (
         <header>
             <nav className="navbar navbar-expand-lg navbar-dark navbar-fixed bg-dark">
-                <a className="navbar-brand" href="#">Консултации</a>
+                <span className="btn navbar-brand">Консултации</span>
                 <button className="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarCollapse"
                         aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,12 +68,15 @@ const Header = (props) => {
                 <div className="collapse navbar-collapse" id="navbarCollapse">
                     {menuItems()}
                     {searchForm()}
-                    <Link onClick={() => {document.getElementById("menu").childNodes.forEach(c => c.classList.remove("active"))}}
+                    <Link onClick={() => {
+                        document.getElementById("menu").childNodes
+                            .forEach(c => c.classList.remove("active"))
+                    }}
                           className="nav-item btn btn-outline-info mt-2 ml-3" to={"/login"}>Најава</Link>
                 </div>
             </nav>
         </header>
     );
-}
+};
 
 export default Header;

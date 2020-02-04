@@ -7,8 +7,10 @@ const ProfessorConsultations = (props) => {
     const consultationTerms = () => {
         return (props.professor) ?
             props.professor.slots
-                .sort((s1, s2) => (s1.dayOfWeek === null) - (s2.dayOfWeek === null)) // Date.parse(`01/01/2020 ${s1.from}`) > Date.parse(`01/01/2020 ${s2.from}
-                .map(s => <ProfessorConsultationTerm key={s.id} value={s} onTermDeleted={props.onConsultationSlotDeleted} />)
+                .sort((s1, s2) => (s1.dayOfWeek === null) - (s2.dayOfWeek === null))
+                .map(s => <ProfessorConsultationTerm key={s.id} value={s}
+                                                     convertDay={props.convertDay}
+                                                     onTermDeleted={props.onConsultationSlotDeleted} />)
             :
             null;
     }

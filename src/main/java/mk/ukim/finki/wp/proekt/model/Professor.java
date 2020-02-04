@@ -19,10 +19,13 @@ import java.util.List;
 public class Professor {
     @Id
     private String id;
+
     @NotNull
     private String title;
+
     @NotNull
     private String firstName;
+
     @NotNull
     private String lastName;
 

@@ -73,48 +73,52 @@ const ConsultationAdd = (props) => {
         });
     };
 
-    return (
-        <div>
-            <hr/>
-            <form onSubmit={onFormSubmit} className={"mt-5"}>
-                <div className="row form-group">
-                    <div className="col-md-4 text-right">
-                        <select name={"dayDateSelect"} onChange={onDayDateChange}
-                                className="form-control-sm border-0 font-weight-bold">
-                            <option className={"font-weight-bold"} value={1}>Ден:</option>
-                            <option className={"font-weight-bold"} value={2}>Датум:</option>
-                        </select>
-                    </div>
-                    <div className="col-lg-6 col-md-8">
-                        <div className={"row"}>
-                            <div className={"col-md-8"}>
-                                <select name={"dayOfWeek"}
-                                        className="form-control"
-                                        title={"Ден"}>
-                                    <option value={"MONDAY"}>Понеделник</option>
-                                    <option value={"TUESDAY"}>Вторник</option>
-                                    <option value={"WEDNESDAY"}>Среда</option>
-                                    <option value={"THURSDAY"}>Четврток</option>
-                                    <option value={"FRIDAY"}>Петок</option>
-                                    <option value={"SATURDAY"}>Сабота</option>
-                                    <option value={"SUNDAY"}>Недела</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div style={{display: "none"}} className="col-lg-6 col-md-8">
-                        <div className={"row"}>
-                            <div className={"col-md-8"}>
-                                <DatePicker name={"date"}
-                                            className={"form-control"}
-                                            selected={date}
-                                            onChange={(date) => setDate(date)}
-                                            dateFormat={"dd/MM/yyyy"}
-                                            title={"Датум"} />
-                            </div>
+    const termDayOrDate = () => {
+        return (
+            <div className="row form-group">
+                <div className="col-md-4 text-right">
+                    <select name={"dayDateSelect"} onChange={onDayDateChange}
+                            className="form-control-sm border-0 font-weight-bold">
+                        <option className={"font-weight-bold"} value={1}>Ден:</option>
+                        <option className={"font-weight-bold"} value={2}>Датум:</option>
+                    </select>
+                </div>
+                <div className="col-lg-6 col-md-8">
+                    <div className={"row"}>
+                        <div className={"col-md-8"}>
+                            <select name={"dayOfWeek"}
+                                    className="form-control"
+                                    title={"Ден"}>
+                                <option value={"MONDAY"}>Понеделник</option>
+                                <option value={"TUESDAY"}>Вторник</option>
+                                <option value={"WEDNESDAY"}>Среда</option>
+                                <option value={"THURSDAY"}>Четврток</option>
+                                <option value={"FRIDAY"}>Петок</option>
+                                <option value={"SATURDAY"}>Сабота</option>
+                                <option value={"SUNDAY"}>Недела</option>
+                            </select>
                         </div>
                     </div>
                 </div>
+                <div style={{display: "none"}} className="col-lg-6 col-md-8">
+                    <div className={"row"}>
+                        <div className={"col-md-8"}>
+                            <DatePicker name={"date"}
+                                        className={"form-control"}
+                                        selected={date}
+                                        onChange={(date) => setDate(date)}
+                                        dateFormat={"dd/MM/yyyy"}
+                                        title={"Датум"} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    const termFromAndTo = () => {
+        return (
+            <>
                 <div className="row form-group">
                     <div className="col-md-4 font-weight-bold text-right">Почеток:</div>
                     <div className="col-lg-6 col-md-8">
@@ -153,31 +157,53 @@ const ConsultationAdd = (props) => {
                         </div>
                     </div>
                 </div>
-                <div className="row form-group">
-                    <div className="col-md-4 font-weight-bold text-right">Група на простории:</div>
-                    <div className="col-lg-6 col-md-8">
-                        <div className={"row"}>
-                            <div className={"col-md-8"}>
-                                <select name={"building"}
-                                        onChange={listRooms}
-                                        className="form-control"
-                                        title={"Просторија"}>
-                                    {optionsBuildings()}
-                                </select>
-                            </div>
+            </>
+        );
+    };
+
+    const termBuilding = () => {
+        return (
+            <div className="row form-group">
+                <div className="col-md-4 font-weight-bold text-right">Група на простории:</div>
+                <div className="col-lg-6 col-md-8">
+                    <div className={"row"}>
+                        <div className={"col-md-8"}>
+                            <select name={"building"}
+                                    onChange={listRooms}
+                                    className="form-control"
+                                    title={"Просторија"}>
+                                {optionsBuildings()}
+                            </select>
                         </div>
                     </div>
                 </div>
-                <div className="row form-group">
-                    <div className="col-md-4 font-weight-bold text-right">Просторија:</div>
-                    <div className="col-lg-6 col-md-8">
-                        <div className={"row"}>
-                            <div id={"roomsContainer"} className={"col-md-8"}>
-                                {optionsRooms()}
-                            </div>
+            </div>
+        );
+    };
+
+    const termRoom = () => {
+        return (
+            <div className="row form-group">
+                <div className="col-md-4 font-weight-bold text-right">Просторија:</div>
+                <div className="col-lg-6 col-md-8">
+                    <div className={"row"}>
+                        <div id={"roomsContainer"} className={"col-md-8"}>
+                            {optionsRooms()}
                         </div>
                     </div>
                 </div>
+            </div>
+        );
+    };
+
+    return (
+        <div>
+            <hr/>
+            <form onSubmit={onFormSubmit} className={"mt-5"}>
+                {termDayOrDate()}
+                {termFromAndTo()}
+                {termBuilding()}
+                {termRoom()}
                 <div className="col-md-12 text-right mt-5">
                     <button type="submit" className="btn btn-primary" title="Додади">
                         Додади

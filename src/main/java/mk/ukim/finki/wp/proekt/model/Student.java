@@ -19,10 +19,13 @@ public class Student {
     @Id
     @Column(name = "student_index")
     private String index;
+
     @NotNull
     private String firstName;
+
     @NotNull
     private String lastName;
+
     @ManyToMany(mappedBy = "students", fetch = FetchType.EAGER)
     @NotFound(action = NotFoundAction.IGNORE)
     @JsonManagedReference

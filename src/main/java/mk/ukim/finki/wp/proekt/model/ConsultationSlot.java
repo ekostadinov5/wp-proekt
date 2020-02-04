@@ -21,21 +21,28 @@ public class ConsultationSlot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne
     @JsonBackReference
     @NotNull
     private Professor professor;
+
     @ManyToOne
     @NotNull
     private Room room;
+
     @ManyToMany
     @JsonBackReference
     private List<Student> students;
+
     private LocalDate date;
+
     private DayOfWeek dayOfWeek;
+
     @Column(name = "from_time")
     @NotNull
     private LocalTime from;
+
     @Column(name = "to_time")
     @NotNull
     private LocalTime to;
