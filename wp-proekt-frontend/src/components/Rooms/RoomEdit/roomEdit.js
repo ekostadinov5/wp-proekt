@@ -44,7 +44,7 @@ const RoomEdit = (props) => {
     const handleRoomOnChange = (e) => {
         const paramName = e.target.name;
         const paramValue = e.target.value;
-        setRoom({...room, [paramName]:paramValue});
+        setRoom({...room, [paramName]: paramValue});
     };
 
     const options = buildings.map(b => <option key={b.id} value={b.id}>{b.name}</option>);

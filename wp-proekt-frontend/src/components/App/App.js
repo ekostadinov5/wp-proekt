@@ -212,30 +212,40 @@ class App extends Component {
 
     ConsultationsApi = {
         createConsultationSlot: (newSlot) => {
-            ConsultationsService.addConsultationSlot(newSlot);
+            ConsultationsService.addConsultationSlot(newSlot).then(() => {
+                this.ProfessorsApi.loadProfessor();
+            });
         },
         updateConsultationSlot: (editedSlot) => {
-            ConsultationsService.updateConsultationSlot(editedSlot);
+            ConsultationsService.updateConsultationSlot(editedSlot).then(() => {
+                this.ProfessorsApi.loadProfessor();
+            });
         },
         deleteConsultationSlot: (slotId) => {
-            ConsultationsService.deleteConsultationSlot(slotId);
+            ConsultationsService.deleteConsultationSlot(slotId).then(() => {
+                this.ProfessorsApi.loadProfessor();
+            });
         }
     };
 
-    searchData = (searchTerm) => {
-        ProfessorsService.searchProfessors(searchTerm).then((promise) => {
-            this.setState({
-                professors: promise.data,
-                page: 0,
-                pageSize: 2,
-                totalPages: 0
+    SearchApi = {
+        searchProfessors: (searchTerm) => {
+            ProfessorsService.searchProfessors(searchTerm).then((promise) => {
+                this.setState({
+                    professors: promise.data,
+                    page: 0,
+                    pageSize: 2,
+                    totalPages: 0
+                });
             });
-        });
-        RoomsService.searchRooms(searchTerm).then((promise) => {
-            this.setState({
-                rooms: promise.data,
+        },
+        searchRooms: (searchTerm) => {
+            RoomsService.searchRooms(searchTerm).then((promise) => {
+                this.setState({
+                    rooms: promise.data,
+                });
             });
-        });
+        }
     };
 
     componentDidMount() {
@@ -251,7 +261,8 @@ class App extends Component {
         const routing = () => {
             return (
                 <Router>
-                    <Header onSearch={this.searchData} />
+                    <Header onSearch={this.SearchApi} onTermsLinkClicked={this.ProfessorsApi.loadProfessors}
+                            onRoomsLinkClicked={this.RoomsApi.loadRooms} />
                     <div role="main" className="mt-3">
                         <div className="container">
                             <Route path={"/consultations"} exact render={()=>
@@ -284,7 +295,8 @@ class App extends Component {
                             </Route>
 
                             <Route path={"/professor"} exact render={()=>
-                                <ProfessorConsultations professor={this.state.professor} />}>
+                                <ProfessorConsultations professor={this.state.professor}
+                                                        onConsultationSlotDeleted={this.ConsultationsApi.deleteConsultationSlot} />}>
                             </Route>
                             <Route path={"/consultations/add"} exact render={() =>
                                 <ConsultationAdd buildings={this.state.buildings}
@@ -296,7 +308,7 @@ class App extends Component {
                                 <ConsultationEdit buildings={this.state.buildings}
                                                   rooms={this.state.rooms}
                                                   professor={this.state.professor}
-                                                  onConsultationSlotEdited={this.ConsultationsApi.updateConsultationSlot()} />}>
+                                                  onConsultationSlotEdited={this.ConsultationsApi.updateConsultationSlot} />}>
                             </Route>
                             
                             <Redirect to={"/professor"} />

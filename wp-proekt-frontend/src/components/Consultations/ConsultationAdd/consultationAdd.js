@@ -18,7 +18,6 @@ const ConsultationAdd = (props) => {
             from: e.target.from.value,
             to: e.target.to.value,
         };
-        debugger;
         if(e.target.dayDateSelect.value === '1') {
             consultationSlot.dayOfWeek = e.target.dayOfWeek.value
         } else {
@@ -30,6 +29,12 @@ const ConsultationAdd = (props) => {
 
     const onClickBack = () => {
         history.push("/professor");
+    };
+
+    const onDayDateChange = (e) => {
+        const index = e.target.value;
+        e.target.parentElement.parentElement.childNodes[index].style.display='block';
+        e.target.parentElement.parentElement.childNodes[(index === '1') ? 2 : 1].style.display='none';
     };
 
     const optionsBuildings = () => props.buildings.sort((b1, b2) => (b1.name > b2.name) ? 1 : -1)
@@ -66,12 +71,6 @@ const ConsultationAdd = (props) => {
                 c.style.display = 'none';
             }
         });
-    };
-
-    const onDayDateChange = (e) => {
-        const index = e.target.value;
-        e.target.parentElement.parentElement.childNodes[index].style.display='block';
-        e.target.parentElement.parentElement.childNodes[(index === '1') ? 2 : 1].style.display='none';
     };
 
     return (

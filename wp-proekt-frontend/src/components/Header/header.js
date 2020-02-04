@@ -1,26 +1,40 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Link} from "react-router-dom";
 
 const Header = (props) => {
 
+    const [lastClickedLink, setLastClickedLink] = useState(0);
+
     const linkChange = (e) => {
         let clicked = e.target.parentElement;
+        if(clicked.id === 'termsMenuLink') {
+            props.onTermsLinkClicked();
+            setLastClickedLink(0);
+        }
+        if(clicked.id === 'roomsMenuLink') {
+            props.onRoomsLinkClicked();
+            setLastClickedLink(1);
+        }
         clicked.parentElement.childNodes.forEach(child => child.classList.remove("active"));
         clicked.classList.add("active");
     };
 
     const onSearch = (e) => {
         e.preventDefault();
-        props.onSearch(e.target.searchTerm.value);
+        if(lastClickedLink === 0) {
+            props.onSearch.searchProfessors(e.target.searchTerm.value);
+        } else if(lastClickedLink === 1) {
+            props.onSearch.searchRooms(e.target.searchTerm.value);
+        }
     };
 
     const menuItems = () => {
         return (
             <ul id={"menu"} className="navbar-nav mr-auto">
-                <li className="nav-item active">
+                <li id={"termsMenuLink"} className="nav-item active">
                     <Link onClick={linkChange} className="nav-link" to={"/consultations"}>Термини</Link>
                 </li>
-                <li className="nav-item">
+                <li id={"roomsMenuLink"} className="nav-item">
                     <Link onClick={linkChange} className="nav-link" to={"/rooms"}>Простории</Link>
                 </li>
                 <li className="nav-item">
