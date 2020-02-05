@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ConsultationSlotServiceImpl implements ConsultationSlotService {
@@ -71,6 +74,28 @@ public class ConsultationSlotServiceImpl implements ConsultationSlotService {
     @Override
     public void deleteSlot(Long slotId) {
         this.consultationSlotRepository.deleteById(slotId);
+    }
+
+    @Override
+    public void cleanFinishedDateSlots(LocalDate date, LocalTime time) {
+        List<ConsultationSlot> consultationSlotsForDeleting = this.consultationSlotRepository.findAll().stream()
+                .filter(cs -> (cs.getDate() != null &&
+                        (cs.getDate().isBefore(date) ||
+                                (cs.getDate().isEqual(date) && cs.getTo().isBefore(LocalTime.now().plusMinutes(7)))
+                        )
+                ))
+                .collect(Collectors.toList());
+        this.consultationSlotRepository.deleteAll(consultationSlotsForDeleting);
+    }
+
+    @Override
+    public void cleanStudentsFromWeeklySlots(DayOfWeek dayOfWeek, LocalTime time) {
+        List<ConsultationSlot> consultationSlotsForClearing = this.consultationSlotRepository.findAll().stream()
+                .filter(cs -> (cs.getDayOfWeek() != null && cs.getDayOfWeek() == dayOfWeek
+                        && cs.getTo().minusMinutes(7).isBefore(time) && cs.getTo().isAfter(time)))
+                .collect(Collectors.toList());
+        consultationSlotsForClearing.forEach(cs -> cs.setStudents(new ArrayList<>()));
+        this.consultationSlotRepository.saveAll(consultationSlotsForClearing);
     }
 
 }

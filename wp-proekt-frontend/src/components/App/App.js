@@ -175,6 +175,10 @@ class App extends Component {
                 this.setState({
                     studentSlotIds: newStudentSlotIdsRef
                 });
+            }).catch(error => {
+                if(error.response.status === 403) {
+                    this.handleShowErrorModal('Консултациите се моментално во тек!');
+                }
             });
         },
         removeStudentFromSlot: (slotId, index) => {
@@ -183,6 +187,10 @@ class App extends Component {
                 this.setState({
                     studentSlotIds: newStudentSlotIdsRef
                 });
+            }).catch(error => {
+                if(error.response.status === 403) {
+                    this.handleShowErrorModal('Консултациите се моментално во тек!');
+                }
             });
         }
     };
@@ -357,19 +365,12 @@ class App extends Component {
             );
         };
 
-        if(false) {
-            return (
-                <>
-                </>
-            );
-        } else {
-            return (
-                <div className="App">
-                    {routing()}
-                    {errorModal()}
-                </div>
-            );
-        }
+        return (
+            <div className="App">
+                {routing()}
+                {errorModal()}
+            </div>
+        );
     }
 }
 

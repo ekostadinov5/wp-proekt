@@ -20,4 +20,8 @@ public interface ConsultationSlotService {
 
     void deleteSlot(Long slotId);
 
+    void cleanFinishedDateSlots(LocalDate date, LocalTime time);
+
+    void cleanStudentsFromWeeklySlots(DayOfWeek dayOfWeek, LocalTime time);
+
 }
