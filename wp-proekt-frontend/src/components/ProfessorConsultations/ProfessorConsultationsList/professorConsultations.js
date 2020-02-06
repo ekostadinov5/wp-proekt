@@ -4,16 +4,26 @@ import ProfessorConsultationTerm from '../ProfessorConsultationTerm/professorCon
 
 const ProfessorConsultations = (props) => {
 
-    const consultationTerms = () => {
-        return (props.professor) ?
-            props.professor.slots
-                .sort((s1, s2) => (s1.dayOfWeek === null) - (s2.dayOfWeek === null))
-                .map(s => <ProfessorConsultationTerm key={s.id} value={s}
-                                                     convertDay={props.convertDay}
-                                                     onTermDeleted={props.onConsultationSlotDeleted} />)
-            :
-            null;
-    }
+    const consultationTermsWeekly = () => {
+        return props.professor ? props.professor.slots
+            .filter(t => t.dayOfWeek)
+            .sort((t1, t2) => (props.getDayOfWeekIntValue(t1.dayOfWeek) - props.getDayOfWeekIntValue(t2.dayOfWeek))
+                || props.compareTimeVars(t1.from, t2.from))
+            .map(term =>
+                <ProfessorConsultationTerm key={term.id} value={term}
+                                           convertDay={props.convertDay}
+                                           onTermDeleted={props.onConsultationSlotDeleted} />) : null;
+    };
+
+    const consultationTermsDay = () => {
+        return props.professor ? props.professor.slots
+            .filter(t => t.date)
+            .sort((t1, t2) => (new Date(t1.date) - new Date(t2.date)) || props.compareTimeVars(t1.from, t2.from))
+            .map(term =>
+                <ProfessorConsultationTerm key={term.id} value={term}
+                                           convertDay={props.convertDay}
+                                           onTermDeleted={props.onConsultationSlotDeleted} />) : null;
+    };
 
     return (
         <>
@@ -22,10 +32,11 @@ const ProfessorConsultations = (props) => {
                 Додади консултациски термин
             </Link>
             <div className={"row"}>
-                {consultationTerms()}
+                {consultationTermsWeekly()}
+                {consultationTermsDay()}
             </div>
         </>
     );
-}
+};
 
 export default ProfessorConsultations;

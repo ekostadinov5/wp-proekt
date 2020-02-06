@@ -9,6 +9,7 @@ const Consultations = (props) => {
         return props.consultations.map(professor =>
             <Professor key={professor.id} value={professor} index={i++} student={props.student} 
                        studentSlotIds={props.studentSlotIds} convertDay={props.convertDay}
+                       getDayOfWeekIntValue={props.getDayOfWeekIntValue} compareTimeVars={props.compareTimeVars}
                        onStudentAddedToSlot={props.onStudentAddedToSlot} 
                        onStudentRemovedFromSlot={props.onStudentRemovedFromSlot} />
         );
@@ -37,13 +38,13 @@ const Consultations = (props) => {
                                forcePage={props.page}
                                onPageChange={handlePageClick}
                                containerClassName={"pagination justify-content-center"}
-                               activeClassName={"active"}/>
+                               activeClassName={"active"} />
             )
         }
     };
 
     return (
-        <div>
+        <div className={"mt-5"}>
             <div className="row mb-5">
                 {consultations()}
             </div>

@@ -185,12 +185,14 @@ const ProfessorConsultationTerm = (props) => {
     };
 
     return (
-        <div className="col-lg-6 col-md-12 col-sm-12 mt-5">
-            <div className="card">
-                {cardHeader()}
-                {cardBody()}
+        totalStudentsCount ?
+            <div className="col-lg-6 col-md-12 col-sm-12 mt-5">
+                <div className="card">
+                    {cardHeader()}
+                    {cardBody()}
+                </div>
             </div>
-        </div>
+            : null
     );
 };
 

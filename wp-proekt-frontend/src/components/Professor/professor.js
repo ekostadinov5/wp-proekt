@@ -4,19 +4,26 @@ import Term from '../Consultations/ConsultationTerm/term';
 const Professor = (props) => {
 
     const termsWeekly = () => {
-        return props.value.slots.map(term =>
-            (term.dayOfWeek) ? <Term key={term.id} value={term} student={props.student}
-                                     studentSlotIds={props.studentSlotIds} convertDay={props.convertDay}
-                                     onStudentAdded={props.onStudentAddedToSlot}
-                                     onStudentRemoved={props.onStudentRemovedFromSlot} /> : null);
+        return props.value.slots
+            .filter(cs => cs.dayOfWeek)
+            .sort((cs1, cs2) => (props.getDayOfWeekIntValue(cs1.dayOfWeek) - props.getDayOfWeekIntValue(cs2.dayOfWeek))
+                || props.compareTimeVars(cs1.from, cs2.from))
+            .map(term =>
+                <Term key={term.id} value={term} student={props.student}
+                      studentSlotIds={props.studentSlotIds} convertDay={props.convertDay}
+                      onStudentAdded={props.onStudentAddedToSlot}
+                      onStudentRemoved={props.onStudentRemovedFromSlot} />);
     };
 
     const termsDay = () => {
-        return props.value.slots.map(term =>
-            (term.date) ? <Term key={term.id} value={term} student={props.student}
-                                studentSlotIds={props.studentSlotIds}
-                                onStudentAdded={props.onStudentAddedToSlot}
-                                onStudentRemoved={props.onStudentRemovedFromSlot} /> : null);
+        return props.value.slots
+            .filter(cs => cs.date)
+            .sort((cs1, cs2) => (new Date(cs1.date) - new Date(cs2.date)) || props.compareTimeVars(cs1.from, cs2.from))
+            .map(term =>
+                <Term key={term.id} value={term} student={props.student}
+                      studentSlotIds={props.studentSlotIds} convertDay={props.convertDay}
+                      onStudentAdded={props.onStudentAddedToSlot}
+                      onStudentRemoved={props.onStudentRemovedFromSlot} />);
     };
 
     const cardHeader = () => {

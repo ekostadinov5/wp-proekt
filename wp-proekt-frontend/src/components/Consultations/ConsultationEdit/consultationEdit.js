@@ -37,7 +37,6 @@ const ConsultationEdit = (props) => {
             from: e.target.from.value,
             to: e.target.to.value,
         };
-        console.log(consultationSlot);
         props.onConsultationSlotEdited(consultationSlot);
         history.push("/professor");
     };

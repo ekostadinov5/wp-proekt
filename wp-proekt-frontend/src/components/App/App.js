@@ -273,6 +273,48 @@ class App extends Component {
         }
     };
 
+    getDayOfWeekIntValue = (dayOfWeek) => {
+        if(dayOfWeek === 'MONDAY') {
+            return 1;
+        } else if(dayOfWeek === 'TUESDAY') {
+            return 2;
+        } else if(dayOfWeek === 'WEDNESDAY') {
+            return 3;
+        } else if(dayOfWeek === 'THURSDAY') {
+            return 4;
+        } else if(dayOfWeek === 'FRIDAY') {
+            return 5;
+        } else if(dayOfWeek === 'SATURDAY') {
+            return 6;
+        } else if(dayOfWeek === 'SUNDAY') {
+            return 7;
+        } else {
+            return null;
+        }
+    };
+
+    compareTimeVars = (time1, time2) => {
+        let t1 = time1.split(':');
+        let t2 = time2.split(':');
+        let h1 = parseInt(t1[0]);
+        let m1 = parseInt(t1[1]);
+        let h2 = parseInt(t2[0]);
+        let m2 = parseInt(t2[1]);
+        if(h1 > h2) {
+            return 1;
+        } else if (h1 < h2) {
+            return -1;
+        } else {
+            if(m1 > m2) {
+                return 1;
+            } else if(m1 < m2) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+    };
+
     handleCloseErrorModal = () => this.setState({showErrorModal: false, errorMessage: ''});
     handleShowErrorModal = (message) => this.setState({showErrorModal: true, errorMessage: message});
 
@@ -295,6 +337,8 @@ class App extends Component {
                         <div className="container">
                             <Route path={"/consultations"} exact render={()=>
                                 <Consultations consultations={this.state.professors} convertDay={this.convertDay}
+                                               getDayOfWeekIntValue={this.getDayOfWeekIntValue}
+                                               compareTimeVars={this.compareTimeVars}
                                                onPageClick={this.ProfessorsApi.loadProfessors}
                                                page={this.state.page} totalPages={this.state.totalPages}
                                                student={this.state.student} studentSlotIds={this.state.studentSlotIds}
@@ -324,6 +368,8 @@ class App extends Component {
 
                             <Route path={"/professor"} exact render={()=>
                                 <ProfessorConsultations professor={this.state.professor} convertDay={this.convertDay}
+                                                        getDayOfWeekIntValue={this.getDayOfWeekIntValue}
+                                                        compareTimeVars={this.compareTimeVars}
                                                         onConsultationSlotDeleted={this.ConsultationsApi.deleteConsultationSlot} />}>
                             </Route>
                             <Route path={"/consultations/add"} exact render={() =>

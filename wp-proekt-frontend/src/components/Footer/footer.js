@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Footer = () => {
-    
+
     return (
         <footer className="container mt-5">
             <p className="float-right">
