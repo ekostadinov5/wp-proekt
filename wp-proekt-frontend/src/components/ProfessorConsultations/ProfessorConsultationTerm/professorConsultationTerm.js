@@ -5,12 +5,14 @@ import Moment from "react-moment";
 import StudentsService from '../../../repository/axiosStudentsRepository';
 import ReactPaginate from "react-paginate";
 
+import AppContext from '../../../context/AppContext';
+
 const ProfessorConsultationTerm = (props) => {
 
     const [students, setStudents] = useState([]);
-    const [totalStudentsCount, setTotalStudentsCount] = useState(0);
+    const [totalStudentsCount, setTotalStudentsCount] = useState(null);
     const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(1); // 7
+    const [pageSize, setPageSize] = useState(7); // 5 ili 7
     const [totalPages, setTotalPages] = useState(0);
 
     const fetchStudents = useCallback((page = 0) => {
@@ -51,7 +53,8 @@ const ProfessorConsultationTerm = (props) => {
                                forcePage={page}
                                onPageChange={handlePageClick}
                                containerClassName={"pagination justify-content-center"}
-                               activeClassName={"active"}/>
+                               activeClassName={"active"}
+                               className={"d-block"}/>
             )
         }
     };
@@ -88,10 +91,14 @@ const ProfessorConsultationTerm = (props) => {
     const termDayOrDate = () => {
         if(props.value.dayOfWeek) {
             return (
-                <div className="row">
-                    <div className="col-md-6 font-weight-bold">Ден:</div>
-                    <div className="col-md-6">{props.convertDay(props.value.dayOfWeek)}</div>
-                </div>
+                <AppContext.Consumer>
+                    {context => (
+                        <div className="row">
+                            <div className="col-md-6 font-weight-bold">Ден:</div>
+                            <div className="col-md-6">{context.convertDay(props.value.dayOfWeek)}</div>
+                        </div>
+                    )}
+                </AppContext.Consumer>
             );
         } else if(props.value.date) {
             return (
@@ -177,7 +184,9 @@ const ProfessorConsultationTerm = (props) => {
                         <ul className={"mt-4 mb-4"}>
                             {students.map(s => <li key={s.index}>{s.firstName} {s.lastName} ({s.index})</li>)}
                         </ul>
-                        {pagination()}
+                        <div className={"studentsPagination"}>
+                            {pagination()}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -185,9 +194,9 @@ const ProfessorConsultationTerm = (props) => {
     };
 
     return (
-        totalStudentsCount ?
+        (totalStudentsCount !== null) ?
             <div className="col-lg-6 col-md-12 col-sm-12 mt-5">
-                <div className="card">
+                <div className="professorTerms card">
                     {cardHeader()}
                     {cardBody()}
                 </div>

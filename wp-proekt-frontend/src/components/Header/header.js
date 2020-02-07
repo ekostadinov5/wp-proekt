@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {Link} from "react-router-dom";
 
+import AppContext from '../../context/AppContext';
+
 const Header = (props) => {
 
     const [lastClickedLink, setLastClickedLink] = useState(0);
@@ -30,17 +32,27 @@ const Header = (props) => {
 
     const menuItems = () => {
         return (
-            <ul id={"menu"} className="navbar-nav mr-auto">
-                <li id={"termsMenuLink"} className="nav-item active">
-                    <Link onClick={linkChange} className="nav-link" to={"/consultations"}>Термини</Link>
-                </li>
-                <li id={"roomsMenuLink"} className="nav-item">
-                    <Link onClick={linkChange} className="nav-link" to={"/rooms"}>Простории</Link>
-                </li>
-                <li className="nav-item">
-                    <Link onClick={linkChange} className="nav-link" to={"/professor"}>Мои термини</Link>
-                </li>
-            </ul>
+            <AppContext.Consumer>
+                {context => (
+                    <ul id={"menu"} className="navbar-nav mr-auto">
+                        <li id={"termsMenuLink"} className="nav-item active">
+                            <Link onClick={linkChange} className="nav-link" to={"/consultations"}>Термини</Link>
+                        </li>
+                        <li id={"roomsMenuLink"} className="nav-item">
+                            <Link onClick={linkChange} className="nav-link" to={"/rooms"}>Простории</Link>
+                        </li>
+                        {(() => {
+                            if(context.role === 'professor') {
+                                return (
+                                    <li className="nav-item">
+                                        <Link onClick={linkChange} className="nav-link" to={"/professor"}>Мои термини</Link>
+                                    </li>
+                                );
+                            }
+                        })()}
+                    </ul>
+                )}
+            </AppContext.Consumer>
         );
     };
 

@@ -2,15 +2,21 @@ import React from 'react';
 import Moment from 'react-moment';
 import {Link} from "react-router-dom";
 
+import AppContext from '../../../context/AppContext';
+
 const Term = (props) => {
 
     const termDayOrDate = () => {
         if(props.value.dayOfWeek) {
             return (
-                <div className="row">
-                    <div className="col-md-6 font-weight-bold">Ден:</div>
-                    <div className="col-md-6">{props.convertDay(props.value.dayOfWeek)}</div>
-                </div>
+                <AppContext.Consumer>
+                    {context => (
+                        <div className="row">
+                            <div className="col-md-6 font-weight-bold">Ден:</div>
+                            <div className="col-md-6">{context.convertDay(props.value.dayOfWeek)}</div>
+                        </div>
+                    )}
+                </AppContext.Consumer>
             );
         } else if(props.value.date) {
             return (
@@ -97,13 +103,21 @@ const Term = (props) => {
     };
 
     return (
-        <div className="consultations">
-            {termDayOrDate()}
-            {termTime()}
-            {termRoom()}
-            {addRemoveButton()}
-            <hr />
-        </div>
+        <AppContext.Consumer>
+            {context => (
+                <div>
+                    {termDayOrDate()}
+                    {termTime()}
+                    {termRoom()}
+                    {(() => {
+                        if(context.role === 'student') {
+                            return addRemoveButton();
+                        }
+                    })()}
+                    <hr />
+                </div>
+            )}
+        </AppContext.Consumer>
     );
 };
 

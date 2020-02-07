@@ -11,7 +11,8 @@ public interface JpaProfessorRepository extends JpaRepository<Professor, String>
 
     @Query("SELECT p " +
             "FROM Professor p " +
-            "WHERE p.firstName LIKE %:term% OR p.lastName LIKE %:term% OR p.title LIKE %:term%")
+            "WHERE p.firstName LIKE %:term% OR p.lastName LIKE %:term% OR p.title LIKE %:term% " +
+            "ORDER BY p.lastName")
     List<Professor> searchProfessors(@Param("term") String term);
 
 }

@@ -4,6 +4,9 @@ import './App.css';
 import {BrowserRouter as Router, Redirect, Route} from 'react-router-dom';
 import {Button, Modal} from "react-bootstrap";
 
+import AppContext from '../../context/AppContext';
+import AppProvider from '../../context/AppProvider';
+
 //import * as consultationsRepository  from '../../repository/consultationsRepository';
 import ProfessorsService from '../../repository/axiosProfessorsRepository';
 import RoomsService from '../../repository/axiosRoomsRepository';
@@ -29,6 +32,8 @@ import ProfessorConsultations from '../ProfessorConsultations/ProfessorConsultat
 import ConsultationAdd from '../Consultations/ConsultationAdd/consultationAdd';
 import ConsultationEdit from '../Consultations/ConsultationEdit/consultationEdit';
 
+import Login from '../Login/login';
+
 class App extends Component {
 
     constructor(props) {
@@ -39,7 +44,7 @@ class App extends Component {
             
             professors: [],
             page: 0,
-            pageSize: 2, // 18 ili 24
+            pageSize: 18, // 18 ili 24
             totalPages: 0,
             
             buildings: [],
@@ -49,7 +54,7 @@ class App extends Component {
             student: null,
             studentSlotIds: [],
 
-            professor: null
+            professor: null,
         }
     }
 
@@ -239,7 +244,7 @@ class App extends Component {
                 this.setState({
                     professors: promise.data,
                     page: 0,
-                    pageSize: 2,
+                    pageSize: 18, // 18 ili 24
                     totalPages: 0
                 });
             });
@@ -250,68 +255,6 @@ class App extends Component {
                     rooms: promise.data,
                 });
             });
-        }
-    };
-
-    convertDay = (day) => {
-        if(day === 'MONDAY') {
-            return 'Понеделник';
-        } else if(day === 'TUESDAY') {
-            return 'Вторник';
-        } else if(day === 'WEDNESDAY') {
-            return 'Среда';
-        } else if(day === 'THURSDAY') {
-            return 'Четврток';
-        } else if(day === 'FRIDAY') {
-            return 'Петок';
-        } else if(day === 'SATURDAY') {
-            return 'Сабота';
-        } else if(day === 'SUNDAY') {
-            return 'Недела';
-        } else {
-            return null;
-        }
-    };
-
-    getDayOfWeekIntValue = (dayOfWeek) => {
-        if(dayOfWeek === 'MONDAY') {
-            return 1;
-        } else if(dayOfWeek === 'TUESDAY') {
-            return 2;
-        } else if(dayOfWeek === 'WEDNESDAY') {
-            return 3;
-        } else if(dayOfWeek === 'THURSDAY') {
-            return 4;
-        } else if(dayOfWeek === 'FRIDAY') {
-            return 5;
-        } else if(dayOfWeek === 'SATURDAY') {
-            return 6;
-        } else if(dayOfWeek === 'SUNDAY') {
-            return 7;
-        } else {
-            return null;
-        }
-    };
-
-    compareTimeVars = (time1, time2) => {
-        let t1 = time1.split(':');
-        let t2 = time2.split(':');
-        let h1 = parseInt(t1[0]);
-        let m1 = parseInt(t1[1]);
-        let h2 = parseInt(t2[0]);
-        let m2 = parseInt(t2[1]);
-        if(h1 > h2) {
-            return 1;
-        } else if (h1 < h2) {
-            return -1;
-        } else {
-            if(m1 > m2) {
-                return 1;
-            } else if(m1 < m2) {
-                return -1;
-            } else {
-                return 0;
-            }
         }
     };
 
@@ -329,67 +272,97 @@ class App extends Component {
     render() {
 
         const routing = () => {
-            return (
-                <Router>
-                    <Header onSearch={this.SearchApi} onTermsLinkClicked={this.ProfessorsApi.loadProfessors}
-                            onRoomsLinkClicked={this.RoomsApi.loadRooms} />
-                    <div role="main" className="mt-3">
-                        <div className="container">
-                            <Route path={"/consultations"} exact render={()=>
-                                <Consultations consultations={this.state.professors} convertDay={this.convertDay}
-                                               getDayOfWeekIntValue={this.getDayOfWeekIntValue}
-                                               compareTimeVars={this.compareTimeVars}
-                                               onPageClick={this.ProfessorsApi.loadProfessors}
-                                               page={this.state.page} totalPages={this.state.totalPages}
-                                               student={this.state.student} studentSlotIds={this.state.studentSlotIds}
-                                               onStudentAddedToSlot={this.StudentsApi.addStudentToSlot}
-                                               onStudentRemovedFromSlot={this.StudentsApi.removeStudentFromSlot} />}>
-                            </Route>
 
-                            <Route path={"/rooms"} exact render={()=>
-                                <Rooms buildings={this.state.buildings} rooms={this.state.rooms}
-                                       onBuildingDelete={this.BuildingsApi.deleteBuilding} 
-                                       onRoomDelete={this.RoomsApi.deleteRoom} />}>
-                            </Route>
+            const adminRoutes = () => {
+                return (
+                    <div className="container">
+                        <Route path={"/rooms/add"} exact render={()=>
+                            <RoomAdd onNewRoomAdded={this.RoomsApi.createRoom} />}>
+                        </Route>
+                        <Route path={"/rooms/:roomId/edit"} exact render={()=>
+                            <RoomEdit onRoomEdited={this.RoomsApi.updateRoom} />}>
+                        </Route>
 
-                            <Route path={"/rooms/add"} exact render={()=>
-                                <RoomAdd onNewRoomAdded={this.RoomsApi.createRoom} />}>
-                            </Route>
-                            <Route path={"/rooms/:roomId/edit"} exact render={()=>
-                                <RoomEdit onRoomEdited={this.RoomsApi.updateRoom} />}>
-                            </Route>
-
-                            <Route path={"/buildings/add"} exact render={()=>
-                                <BuildingAdd onNewBuildingAdded={this.BuildingsApi.createBuilding} />}>
-                            </Route>
-                            <Route path={"/buildings/:buildingId/edit"} exact render={()=>
-                                <BuildingEdit onBuildingEdited={this.BuildingsApi.updateBuilding} />}>
-                            </Route>
-
-                            <Route path={"/professor"} exact render={()=>
-                                <ProfessorConsultations professor={this.state.professor} convertDay={this.convertDay}
-                                                        getDayOfWeekIntValue={this.getDayOfWeekIntValue}
-                                                        compareTimeVars={this.compareTimeVars}
-                                                        onConsultationSlotDeleted={this.ConsultationsApi.deleteConsultationSlot} />}>
-                            </Route>
-                            <Route path={"/consultations/add"} exact render={() =>
-                                <ConsultationAdd buildings={this.state.buildings}
-                                                 rooms={this.state.rooms}
-                                                 professor={this.state.professor}
-                                                 onConsultationSlotAdded={this.ConsultationsApi.createConsultationSlot} />}>
-                            </Route>
-                            <Route path={"/consultations/:slotId/edit"} exact render={() =>
-                                <ConsultationEdit buildings={this.state.buildings}
-                                                  rooms={this.state.rooms}
-                                                  professor={this.state.professor}
-                                                  onConsultationSlotEdited={this.ConsultationsApi.updateConsultationSlot} />}>
-                            </Route>
-                            
-                            <Redirect to={"/consultations"} />
-                        </div>
+                        <Route path={"/buildings/add"} exact render={()=>
+                            <BuildingAdd onNewBuildingAdded={this.BuildingsApi.createBuilding} />}>
+                        </Route>
+                        <Route path={"/buildings/:buildingId/edit"} exact render={()=>
+                            <BuildingEdit onBuildingEdited={this.BuildingsApi.updateBuilding} />}>
+                        </Route>
                     </div>
-                    <Footer />
-                </Router>
+                );
+            };
+
+            const professorRoutes = () => {
+                return (
+                    <div className="container">
+                        <Route path={"/professor"} exact render={()=>
+                            <ProfessorConsultations professor={this.state.professor}
+                                                    onConsultationSlotDeleted={this.ConsultationsApi.deleteConsultationSlot} />}>
+                        </Route>
+                        <Route path={"/consultations/add"} exact render={() =>
+                            <ConsultationAdd buildings={this.state.buildings}
+                                             rooms={this.state.rooms}
+                                             professor={this.state.professor}
+                                             onConsultationSlotAdded={this.ConsultationsApi.createConsultationSlot} />}>
+                        </Route>
+                        <Route path={"/consultations/:slotId/edit"} exact render={() =>
+                            <ConsultationEdit buildings={this.state.buildings}
+                                              rooms={this.state.rooms}
+                                              professor={this.state.professor}
+                                              onConsultationSlotEdited={this.ConsultationsApi.updateConsultationSlot} />}>
+                        </Route>
+                    </div>
+                );
+            };
+
+            const routes = () => {
+                return (
+                    <div className="container">
+                        <Route path={"/consultations"} exact render={()=>
+                            <Consultations consultations={this.state.professors}
+                                           onPageClick={this.ProfessorsApi.loadProfessors}
+                                           page={this.state.page} totalPages={this.state.totalPages}
+                                           student={this.state.student} studentSlotIds={this.state.studentSlotIds}
+                                           onStudentAddedToSlot={this.StudentsApi.addStudentToSlot}
+                                           onStudentRemovedFromSlot={this.StudentsApi.removeStudentFromSlot} />}>
+                        </Route>
+
+                        <Route path={"/rooms"} exact render={()=>
+                            <Rooms buildings={this.state.buildings} rooms={this.state.rooms}
+                                   onBuildingDelete={this.BuildingsApi.deleteBuilding}
+                                   onRoomDelete={this.RoomsApi.deleteRoom} />}>
+                        </Route>
+
+                        <Route path={"/login"} exact render={() =>
+                            <Login />}>
+                        </Route>
+
+                        <Redirect to={"/consultations"} />
+                    </div>
+                );
+            };
+
+            return (
+                <AppContext.Consumer>
+                    {context => (
+                        <Router>
+                            <Header onSearch={this.SearchApi} onTermsLinkClicked={this.ProfessorsApi.loadProfessors}
+                                    onRoomsLinkClicked={this.RoomsApi.loadRooms} />
+                            <div role="main" className="mt-3">
+                                {routes()}
+                                {(() => {
+                                    if(context.role === 'admin') {
+                                        return adminRoutes();
+                                    } else if(context.role === 'professor') {
+                                        return professorRoutes();
+                                    }
+                                })()}
+                            </div>
+                            <Footer />
+                        </Router>
+                    )}
+                </AppContext.Consumer>
             );
         };
 
@@ -412,10 +385,12 @@ class App extends Component {
         };
 
         return (
-            <div className="App">
-                {routing()}
-                {errorModal()}
-            </div>
+            <AppProvider>
+                <div className="App">
+                    {routing()}
+                    {errorModal()}
+                </div>
+            </AppProvider>
         );
     }
 }

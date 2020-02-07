@@ -12,6 +12,7 @@ const ConsultationAdd = (props) => {
 
     const onFormSubmit = (e) => {
         e.preventDefault();
+        debugger;
         let consultationSlot = {
             professorId: props.professor.id,
             roomId: e.target[`building${e.target.building.value}`].value,

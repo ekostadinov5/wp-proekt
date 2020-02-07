@@ -6,6 +6,7 @@ import mk.ukim.finki.wp.proekt.repository.jpa.JpaProfessorRepository;
 import mk.ukim.finki.wp.proekt.service.ProfessorService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Override
     public Page<Professor> getAllProfessors(int page, int pageSize) {
-        return this.professorRepository.findAll(PageRequest.of(page, pageSize));
+        return this.professorRepository.findAll(PageRequest.of(page, pageSize, Sort.by("lastName")));
     }
 
     @Override

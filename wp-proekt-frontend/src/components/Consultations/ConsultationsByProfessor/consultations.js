@@ -8,8 +8,7 @@ const Consultations = (props) => {
         let i = 0;
         return props.consultations.map(professor =>
             <Professor key={professor.id} value={professor} index={i++} student={props.student} 
-                       studentSlotIds={props.studentSlotIds} convertDay={props.convertDay}
-                       getDayOfWeekIntValue={props.getDayOfWeekIntValue} compareTimeVars={props.compareTimeVars}
+                       studentSlotIds={props.studentSlotIds}
                        onStudentAddedToSlot={props.onStudentAddedToSlot} 
                        onStudentRemovedFromSlot={props.onStudentRemovedFromSlot} />
         );
@@ -27,8 +26,8 @@ const Consultations = (props) => {
                                breakLabel={<span className="gap">...</span>}
                                breakClassName={"break-me"}
                                pageCount={props.totalPages}
-                               marginPagesDisplayed={2}
-                               pageRangeDisplayed={5}
+                               marginPagesDisplayed={1}
+                               pageRangeDisplayed={2}
                                pageClassName={"page-item"}
                                pageLinkClassName={"btn page-link"}
                                previousClassName={"page-item"}

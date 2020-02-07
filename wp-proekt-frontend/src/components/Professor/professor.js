@@ -1,40 +1,51 @@
 import React from 'react';
 import Term from '../Consultations/ConsultationTerm/term';
 
+import AppContext from '../../context/AppContext';
+
 const Professor = (props) => {
 
     const termsWeekly = () => {
-        return props.value.slots
-            .filter(cs => cs.dayOfWeek)
-            .sort((cs1, cs2) => (props.getDayOfWeekIntValue(cs1.dayOfWeek) - props.getDayOfWeekIntValue(cs2.dayOfWeek))
-                || props.compareTimeVars(cs1.from, cs2.from))
-            .map(term =>
-                <Term key={term.id} value={term} student={props.student}
-                      studentSlotIds={props.studentSlotIds} convertDay={props.convertDay}
-                      onStudentAdded={props.onStudentAddedToSlot}
-                      onStudentRemoved={props.onStudentRemovedFromSlot} />);
+        return (
+            <AppContext.Consumer>
+                {context => props.value.slots
+                    .filter(cs => cs.dayOfWeek)
+                    .sort((cs1, cs2) => (context.getDayOfWeekIntValue(cs1.dayOfWeek) - context.getDayOfWeekIntValue(cs2.dayOfWeek))
+                    || context.compareTimeVars(cs1.from, cs2.from))
+                    .map(term => <Term key={term.id} value={term} student={props.student} 
+                                       studentSlotIds={props.studentSlotIds} 
+                                       onStudentAdded={props.onStudentAddedToSlot} 
+                                       onStudentRemoved={props.onStudentRemovedFromSlot} />)
+                }
+            </AppContext.Consumer>
+        );
     };
 
     const termsDay = () => {
-        return props.value.slots
-            .filter(cs => cs.date)
-            .sort((cs1, cs2) => (new Date(cs1.date) - new Date(cs2.date)) || props.compareTimeVars(cs1.from, cs2.from))
-            .map(term =>
-                <Term key={term.id} value={term} student={props.student}
-                      studentSlotIds={props.studentSlotIds} convertDay={props.convertDay}
-                      onStudentAdded={props.onStudentAddedToSlot}
-                      onStudentRemoved={props.onStudentRemovedFromSlot} />);
+        return (
+            <AppContext.Consumer>
+                {context => props.value.slots
+                    .filter(cs => cs.date)
+                    .sort((cs1, cs2) => (new Date(cs1.date) - new Date(cs2.date)) || context.compareTimeVars(cs1.from, cs2.from))
+                    .map(term =>
+                        <Term key={term.id} value={term} student={props.student}
+                              studentSlotIds={props.studentSlotIds}
+                              onStudentAdded={props.onStudentAddedToSlot}
+                              onStudentRemoved={props.onStudentRemovedFromSlot} />)
+                }
+            </AppContext.Consumer>
+        );
     };
 
     const cardHeader = () => {
         return (
-            <div className="card-header">
+            <div className="professors card-header">
                 <div className="row">
                     <div className="col-8">
                         {props.value.title} {props.value.firstName} {props.value.lastName}
                     </div>
                     <div className="col-4 text-right">
-                        <button className="btn btn-light" title="Следи">
+                        <button onClick={() => console.log("NOT IMPLEMENTED!")} className="btn btn-light" title="Следи">
                             <i className="fa fa-fw fa-star"/>
                         </button>
                     </div>
@@ -68,7 +79,7 @@ const Professor = (props) => {
     };
 
     return (
-        <div className="col-lg-4 col-md-6 mt-4 col-sm-12">
+        <div className="col-lg-4 col-md-6 mt-5 col-sm-12">
             <div className="card">
                 {cardHeader()}
                 {cardBody()}

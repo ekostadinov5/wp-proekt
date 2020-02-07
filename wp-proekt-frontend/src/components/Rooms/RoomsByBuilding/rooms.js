@@ -3,6 +3,8 @@ import Building from '../../Buildings/Building/building';
 //import {loadConsultations} from "../../../repository/consultationsRepository";
 import {Link} from "react-router-dom";
 
+import AppContext from '../../../context/AppContext';
+
 const Rooms = (props) => {
     
     const roomsByBuilding = () => {
@@ -12,21 +14,33 @@ const Rooms = (props) => {
     };
     
     return (
-        <div role="main" className="mt-3">
-            <div className="container">
-                <Link className={"btn btn-success btn-lg rounded mt-2"} to={"/buildings/add"}>
-                    <i className="fa fa-fw fa-plus mr-3"/>
-                    Додади група на простории
-                </Link>
-                <Link className={"btn btn-success btn-lg rounded ml-5 mt-2"} to={"/rooms/add"}>
-                    <i className="fa fa-fw fa-plus mr-3"/>
-                    Додади просторија
-                </Link>
-                <div className={"row mt-2"}>
-                    {roomsByBuilding()}
+        <AppContext.Consumer>
+            {context => (
+                <div role="main" className="mt-3">
+                    <div className="container">
+                        {(() => {
+                            if(context.role === 'admin') {
+                                return (
+                                    <>
+                                        <Link className={"btn btn-success btn-lg rounded mt-2"} to={"/buildings/add"}>
+                                            <i className="fa fa-fw fa-plus mr-3"/>
+                                            Додади група на простории
+                                        </Link>
+                                        <Link className={"btn btn-success btn-lg rounded ml-5 mt-2"} to={"/rooms/add"}>
+                                            <i className="fa fa-fw fa-plus mr-3"/>
+                                            Додади просторија
+                                        </Link>
+                                    </>
+                                );
+                            }
+                        })()}
+                        <div className={"row mt-2"}>
+                            {roomsByBuilding()}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            )}
+        </AppContext.Consumer>
     );
 };
 
