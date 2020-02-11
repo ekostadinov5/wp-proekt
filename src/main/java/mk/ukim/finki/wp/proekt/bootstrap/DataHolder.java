@@ -64,11 +64,11 @@ public class DataHolder {
         rooms.add(new Room(null, "302", tmf, new ArrayList<>(), loremIpsum));
         rooms.add(new Room(null, "АМФ", tmf, new ArrayList<>(), loremIpsum));
 
-        rooms.add(new Room(null, "123(Ф)", mf, new ArrayList<>(), loremIpsum));
-        rooms.add(new Room(null, "112(Ф)", mf, new ArrayList<>(), loremIpsum));
-        rooms.add(new Room(null, "223(М)", mf, new ArrayList<>(), loremIpsum));
-        rooms.add(new Room(null, "225(М)", mf, new ArrayList<>(), loremIpsum));
-        rooms.add(new Room(null, "АМФ(М)", mf, new ArrayList<>(), loremIpsum));
+        rooms.add(new Room(null, "123 (Ф)", mf, new ArrayList<>(), loremIpsum));
+        rooms.add(new Room(null, "112 (Ф)", mf, new ArrayList<>(), loremIpsum));
+        rooms.add(new Room(null, "223 (М)", mf, new ArrayList<>(), loremIpsum));
+        rooms.add(new Room(null, "225 (М)", mf, new ArrayList<>(), loremIpsum));
+        rooms.add(new Room(null, "АМФ (М)", mf, new ArrayList<>(), loremIpsum));
 
         rooms.add(new Room(null, "B1", b, new ArrayList<>(), loremIpsum));
         rooms.add(new Room(null, "B2.1", b, new ArrayList<>(), loremIpsum));

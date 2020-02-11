@@ -39,7 +39,7 @@ const RoomEdit = (props) => {
 
     const onBackClick = () => {
         history.push("/rooms");
-    }
+    };
 
     const handleRoomOnChange = (e) => {
         const paramName = e.target.name;

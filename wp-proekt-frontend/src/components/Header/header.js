@@ -80,11 +80,31 @@ const Header = (props) => {
                 <div className="collapse navbar-collapse" id="navbarCollapse">
                     {menuItems()}
                     {searchForm()}
-                    <Link onClick={() => {
-                        document.getElementById("menu").childNodes
-                            .forEach(c => c.classList.remove("active"))
-                    }}
-                          className="nav-item btn btn-outline-info mt-2 ml-3" to={"/login"}>Најава</Link>
+                    <AppContext.Consumer>
+                        {context => (
+                            <>
+                                {(() => {
+                                    if(context.role) {
+                                        return (
+                                            <button className={"nav-item btn btn-outline-danger mt-2 ml-3"}>
+                                                Одјави се
+                                            </button>
+                                        );
+                                    } else {
+                                        return (
+                                            <Link onClick={() => {
+                                                document.getElementById("menu").childNodes
+                                                    .forEach(c => c.classList.remove("active"))
+                                            }}
+                                                  className="nav-item btn btn-outline-info mt-2 ml-3" to={"/login"}>
+                                                Најава
+                                            </Link>
+                                        );
+                                    }
+                                })()}
+                            </>
+                        )}
+                    </AppContext.Consumer>
                 </div>
             </nav>
         </header>

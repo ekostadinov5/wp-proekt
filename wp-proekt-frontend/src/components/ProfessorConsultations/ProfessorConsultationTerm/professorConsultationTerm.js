@@ -35,7 +35,7 @@ const ProfessorConsultationTerm = (props) => {
     };
 
     const pagination = () => {
-        if (true || totalPages !== 0) {
+        if (totalPages !== 0) {
             return (
                 <ReactPaginate previousLabel={"претходна"}
                                nextLabel={"следна"}
