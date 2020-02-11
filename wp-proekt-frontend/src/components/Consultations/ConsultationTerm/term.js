@@ -1,10 +1,48 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Moment from 'react-moment';
 import {Link} from "react-router-dom";
 
 import AppContext from '../../../context/AppContext';
+import {Button, Modal} from "react-bootstrap";
 
 const Term = (props) => {
+
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const selectModal = () => {
+        return (
+            <Modal show={show} onHide={handleClose} animation={false}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Избери предмет</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="form-group">
+                        <label htmlFor={"subject"} className="font-weight-bold">Предмет:</label>
+                        <select className="form-control" id="subject">
+                            {props.professor.subjects.map(s => <option key={s.id}>{s.name}</option>)}
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor={"note"} className="font-weight-bold">Забелешка:</label>
+                        <textarea className="form-control" rows={7} id="note"/>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="success" onClick={() => {
+                        handleClose();
+                        props.onStudentAdded(props.value.id, props.student.index);}}>
+                        Избери
+                    </Button>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Откажи
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        );
+    };
 
     const termDayOrDate = () => {
         if(props.value.dayOfWeek) {
@@ -80,7 +118,7 @@ const Term = (props) => {
 
     const addRemoveButtonClick = () => {
         if(!isAddedInStudentsList()) {
-            props.onStudentAdded(props.value.id, props.student.index);
+            handleShow();
         } else {
             props.onStudentRemoved(props.value.id, props.student.index)
         }
@@ -111,7 +149,12 @@ const Term = (props) => {
                     {termRoom()}
                     {(() => {
                         if(context.role === 'student') {
-                            return addRemoveButton();
+                            return (
+                                <>
+                                    {addRemoveButton()}
+                                    {selectModal()}
+                                </>
+                            );
                         }
                     })()}
                     <hr />

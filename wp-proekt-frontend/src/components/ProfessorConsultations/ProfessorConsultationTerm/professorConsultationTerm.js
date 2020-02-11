@@ -12,7 +12,7 @@ const ProfessorConsultationTerm = (props) => {
     const [students, setStudents] = useState([]);
     const [totalStudentsCount, setTotalStudentsCount] = useState(null);
     const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(7); // 5 ili 7
+    const [pageSize, setPageSize] = useState(7); // 7?
     const [totalPages, setTotalPages] = useState(0);
 
     const fetchStudents = useCallback((page = 0) => {
@@ -37,13 +37,13 @@ const ProfessorConsultationTerm = (props) => {
     const pagination = () => {
         if (totalPages !== 0) {
             return (
-                <ReactPaginate previousLabel={"претходна"}
-                               nextLabel={"следна"}
+                <ReactPaginate previousLabel={"<"}
+                               nextLabel={">"}
                                breakLabel={<span className="gap">...</span>}
                                breakClassName={"break-me"}
                                pageCount={totalPages}
-                               marginPagesDisplayed={2}
-                               pageRangeDisplayed={5}
+                               marginPagesDisplayed={1}
+                               pageRangeDisplayed={2}
                                pageClassName={"page-item"}
                                pageLinkClassName={"btn page-link"}
                                previousClassName={"page-item"}
@@ -171,6 +171,8 @@ const ProfessorConsultationTerm = (props) => {
                         {confirmModal()}
                     </div>
                 </div>
+                <hr />
+                <h5>Студенти ({totalStudentsCount})</h5>
             </div>
         );
     };
@@ -180,10 +182,15 @@ const ProfessorConsultationTerm = (props) => {
             <div className="card-body">
                 <div className="card-text">
                     <div className="students">
-                        <h5>Студенти ({totalStudentsCount})</h5>
-                        <ul className={"mt-4 mb-4"}>
-                            {students.map(s => <li key={s.index}>{s.firstName} {s.lastName} ({s.index})</li>)}
-                        </ul>
+                        <div className={"mt-4 mb-4"}>
+                            {students.map(s => {
+                                return (
+                                    <div key={s.index}>
+                                        {s.firstName} {s.lastName} ({s.index}) - Предмет
+                                    </div>
+                                );
+                            })}
+                        </div>
                         <div className={"studentsPagination"}>
                             {pagination()}
                         </div>

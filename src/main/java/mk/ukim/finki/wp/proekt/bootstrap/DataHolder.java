@@ -15,19 +15,27 @@ import java.util.List;
 @Component
 @Getter
 public class DataHolder {
+    private final JpaSubjectRepository subjectRepository;
     private final JpaBuildingRepository buildingRepository;
     private final JpaRoomRepository roomRepository;
     private final JpaStudentRepository studentRepository;
     private final JpaProfessorRepository professorRepository;
     private final JpaConsultationSlotRepository consultationSlotRepository;
 
+    public static final List<Subject> subjects = new ArrayList<>();
     public static final List<Building> buildings = new ArrayList<>();
     public static final List<Room> rooms = new ArrayList<>();
     public static final List<Student> students = new ArrayList<>();
     public static final List<Professor> professors = new ArrayList<>();
     public static final List<ConsultationSlot> slots = new ArrayList<>();
 
-    public DataHolder(JpaBuildingRepository buildingRepository, JpaRoomRepository roomRepository, JpaStudentRepository studentRepository, JpaProfessorRepository professorRepository, JpaConsultationSlotRepository consultationSlotRepository) {
+    public DataHolder(JpaSubjectRepository subjectRepository,
+                      JpaBuildingRepository buildingRepository,
+                      JpaRoomRepository roomRepository,
+                      JpaStudentRepository studentRepository,
+                      JpaProfessorRepository professorRepository,
+                      JpaConsultationSlotRepository consultationSlotRepository) {
+        this.subjectRepository = subjectRepository;
         this.buildingRepository = buildingRepository;
         this.roomRepository = roomRepository;
         this.studentRepository = studentRepository;
@@ -102,103 +110,117 @@ public class DataHolder {
         students.add(new Student("170015", "Елена", "Младеновска", new ArrayList<>(), new ArrayList<>()));
 
 
-        Professor dt = new Professor("dimitar.trajanov", "проф. д-р", "Димитар", "Трајанов", new ArrayList<>());
-        Professor rs = new Professor("riste.stojanov", "доц. д-р", "Ристе", "Стојанов", new ArrayList<>());
-        Professor km = new Professor("kostadin.mishev", "м-р", "Костадин", "Мишев", new ArrayList<>());
+        Professor dt = new Professor("dimitar.trajanov", "проф. д-р", "Димитар", "Трајанов", new ArrayList<>(), new ArrayList<>());
+        Professor rs = new Professor("riste.stojanov", "доц. д-р", "Ристе", "Стојанов", new ArrayList<>(), new ArrayList<>());
+        Professor km = new Professor("kostadin.mishev", "м-р", "Костадин", "Мишев", new ArrayList<>(), new ArrayList<>());
 
         professors.add(dt);
         professors.add(rs);
         professors.add(km);
 
-        professors.add(new Professor("ljupcho.kocarev", "Академик д-р", "Љупчо", "Коцарев", new ArrayList<>()));
-        professors.add(new Professor("marijan.gushev", "д-р", "Маријан", "Гушев", new ArrayList<>()));
-        professors.add(new Professor("dancho.davchev", "д-р", "Данчо", "Давчев", new ArrayList<>()));
-        professors.add(new Professor("katerina.zdravkova", "д-р", "Катерина", "Здравкова", new ArrayList<>()));
-        professors.add(new Professor("suzana.loshkovska", "д-р", "Сузана", "Лошковска", new ArrayList<>()));
-        professors.add(new Professor("zhaneta.popeska", "д-р", "Жанета", "Попеска", new ArrayList<>()));
-        professors.add(new Professor("kosta.mitreski", "д-р", "Коста", "Митрески", new ArrayList<>()));
-        professors.add(new Professor("verica.bakjeva", "д-р", "Љупчо", "Коцарев", new ArrayList<>()));
-        professors.add(new Professor("vladimir.trajkovikj", "д-р", "Владимир", "Трајковиќ", new ArrayList<>()));
-        professors.add(new Professor("ana.madevska.bogdanova", "д-р", "Ана", "Мадевска Богданова", new ArrayList<>()));
-        professors.add(new Professor("dejan.gjorgjevikj", "д-р", "Дејан", "Ѓорѓевиќ", new ArrayList<>()));
-        professors.add(new Professor("andrea.kulakov", "д-р", "Андреа", "Кулаков", new ArrayList<>()));
-        professors.add(new Professor("ljupcho.antovski", "д-р", "Љупчо", "Антовски", new ArrayList<>()));
-        professors.add(new Professor("marija.mihova", "д-р", "Марија", "Михова", new ArrayList<>()));
-        professors.add(new Professor("slobodan.kalajdziski", "д-р", "Слободан", "Калајџиски", new ArrayList<>()));
-        professors.add(new Professor("nevena.ackovska", "д-р", "Невена", "Ацковска", new ArrayList<>()));
-        professors.add(new Professor("goran.velinov", "д-р", "Горан", "Велинов", new ArrayList<>()));
-        professors.add(new Professor("anastas.mishev", "д-р", "Анастас", "Мишев", new ArrayList<>()));
-        professors.add(new Professor("sonja.filiposka", "д-р", "Соња", "Филипоска", new ArrayList<>()));
-        professors.add(new Professor("ivan.chorbev", "д-р", "Иван", "Чорбев", new ArrayList<>()));
-        professors.add(new Professor("lasko.basnarkov", "д-р", "Ласко", "Баснарков", new ArrayList<>()));
-        professors.add(new Professor("boro.jakimovski", "д-р", "Боро", "Јакимовски", new ArrayList<>()));
-        professors.add(new Professor("vesna.dimitrova", "д-р", "Весна", "Димитрова", new ArrayList<>()));
-        professors.add(new Professor("goce.armenski", "д-р", "Гоце", "Арменски", new ArrayList<>()));
-        professors.add(new Professor("danilo.gligoroski", "д-р", "Данило", "Глигороски", new ArrayList<>()));
-        professors.add(new Professor("gjorgji.filipov", "д-р", "Ѓорѓи", "Филипов", new ArrayList<>()));
-        professors.add(new Professor("stevo.bozhinovski", "д-р", "Стево", "Божиновски", new ArrayList<>()));
-        professors.add(new Professor("sonja.gievska", "д-р", "Соња", "Гиевска", new ArrayList<>()));
-        professors.add(new Professor("dejan.spasov", "д-р", "Дејан", "Спасов", new ArrayList<>()));
-        professors.add(new Professor("ivica.dimitrovski", "д-р", "Ивица", "Димитровски", new ArrayList<>()));
-        professors.add(new Professor("igor.mishkovski", "д-р", "Игор", "Мишковски", new ArrayList<>()));
-        professors.add(new Professor("gjorgji.madzarov", "д-р", "Ѓорѓи", "Маџаров", new ArrayList<>()));
-        professors.add(new Professor("smilka.janeska.sarkanjac", "д-р", "Смилка", "Јанеска-Саркањац", new ArrayList<>()));
-        professors.add(new Professor("sashko.ristov", "д-р", "Сашко", "Ристов", new ArrayList<>()));
-        professors.add(new Professor("vangel.ajanovski", "д-р", "Вангел", "Ајановски", new ArrayList<>()));
-        professors.add(new Professor("vesna.dimitrievska.ristovska", "д-р", "Весна", "Димитриевска Ристовска", new ArrayList<>()));
-        professors.add(new Professor("mile.jovanov", "д-р", "Миле", "Јованов", new ArrayList<>()));
-        professors.add(new Professor("biljana.stojkoska", "д-р", "Билјана", "Стојкоска", new ArrayList<>()));
-        professors.add(new Professor("kire.trivodaliev", "д-р", "Кире", "Триводалиев", new ArrayList<>()));
-        professors.add(new Professor("sasho.gramatikov", "д-р", "Сашо", "Граматиков", new ArrayList<>()));
-        professors.add(new Professor("miroslav.mircev", "д-р", "Мирослав", "Мирчев", new ArrayList<>()));
-        professors.add(new Professor("georgina.mirceva", "д-р", "Георгина", "Мирчева", new ArrayList<>()));
-        professors.add(new Professor("magdalena.kostoska", "д-р", "Магдалена", "Костоска", new ArrayList<>()));
-        professors.add(new Professor("aleksandra.popovska.mitrovikj", "д-р", "Александра", "Поповска Митровиќ", new ArrayList<>()));
-        professors.add(new Professor("biljana.tojtovska", "д-р", "Билјана", "Тојтовска", new ArrayList<>()));
-        professors.add(new Professor("natasha.ilievska", "д-р", "Наташа", "Илиевска", new ArrayList<>()));
-        professors.add(new Professor("simona.samardziska", "д-р", "Симона", "Самарџиска", new ArrayList<>()));
-        professors.add(new Professor("milosh.jovanovikj", "д-р", "Милош", "Јовановиќ", new ArrayList<>()));
-        professors.add(new Professor("jasen.markovski", "д-р", "Јасен", "Марковски", new ArrayList<>()));
-        professors.add(new Professor("ana.sokolova", "д-р", "Ана", "Соколова", new ArrayList<>()));
-        professors.add(new Professor("andreja.naumoski", "д-р", "Андреја", "Наумоски", new ArrayList<>()));
-        professors.add(new Professor("panche.ribarski", "д-р", "Панче", "Рибарски", new ArrayList<>()));
-        professors.add(new Professor("hristina.mihajloska", "д-р", "Христина", "Михајлоска", new ArrayList<>()));
-        professors.add(new Professor("ivan.kitanovski", "д-р", "Иван", "Китановски", new ArrayList<>()));
-        professors.add(new Professor("eftim.zdravevski", "д-р", "Ефтим", "Здравевски", new ArrayList<>()));
-        professors.add(new Professor("petre.lameski", "д-р", "Петре", "Ламески", new ArrayList<>()));
-        professors.add(new Professor("katerina.trojachanec.dineva", "д-р", "Катерина", "Тројачанец Динева", new ArrayList<>()));
-        professors.add(new Professor("vladimir.zdraveski", "д-р", "Владимир", "Здравески", new ArrayList<>()));
-        professors.add(new Professor("bojana.koteska", "д-р", "Бојана", "Котеска", new ArrayList<>()));
-        professors.add(new Professor("metodija.jancheski", "д-р", "Методија", "Јанчески", new ArrayList<>()));
-        professors.add(new Professor("aleksandra.kanevche", "д-р", "Александра", "Каневче", new ArrayList<>()));
-        professors.add(new Professor("aleksandra.dedinec", "д-р", "Александра", "Дединец", new ArrayList<>()));
-        professors.add(new Professor("igor.kulev", "д-р", "Игор", "Кулев", new ArrayList<>()));
-        professors.add(new Professor("igor.trajkovski", "д-р", "Игор", "Трајковски", new ArrayList<>()));
-        professors.add(new Professor("vancho.kusakatov", "д-р", "Ванчо", "Кусакатов", new ArrayList<>()));
-        professors.add(new Professor("dragan.mihajlov", "д-р", "Драган", "Михајлов", new ArrayList<>()));
-        professors.add(new Professor("emil.stankov", "м-р", "Емил", "Станков", new ArrayList<>()));
-        professors.add(new Professor("boban.joksimoski", "м-р", "Бобан", "Јоксимоски", new ArrayList<>()));
-        professors.add(new Professor("ilinka.ivanoska", "м-р", "Илинка", "Иваноска", new ArrayList<>()));
-        professors.add(new Professor("aleksandar.tenev", "м-р", "Александар", "Тенев", new ArrayList<>()));
-        professors.add(new Professor("vesna.kirandziska", "м-р", "Весна", "Киранџиска", new ArrayList<>()));
-        professors.add(new Professor("bojan.ilijoski", "м-р", "Бојан", "Илијоски", new ArrayList<>()));
-        professors.add(new Professor("monika.simjanoska", "м-р", "Моника", "Симјаноска", new ArrayList<>()));
-        professors.add(new Professor("aleksandar.stojmenski", "м-р", "Александар", "Стојменски", new ArrayList<>()));
-        professors.add(new Professor("aleksandra.bogojeska", "м-р", "Александра", "Богојеска", new ArrayList<>()));
-        professors.add(new Professor("goran.velkoski", "м-р", "Горан", "Велкоски", new ArrayList<>()));
-        professors.add(new Professor("tomche.delev", "м-р", "Томче", "Делев", new ArrayList<>()));
-        professors.add(new Professor("vlatko.nikolovski", "спец.", "Влатко", "Николовски", new ArrayList<>()));        professors.add(new Professor("ljupcho.kocarev", "Академик д-р", "Љупчо", "Коцарев", new ArrayList<>()));
-        professors.add(new Professor("stefan.andonov", "спец.", "Стефан", "Андонов", new ArrayList<>()));
-        professors.add(new Professor("nenad.anchev", "спец.", "Ненад", "Анчев", new ArrayList<>()));
-        professors.add(new Professor("jovan.davchev", "спец.", "Јован", "Давчев", new ArrayList<>()));
-        professors.add(new Professor("nasi.jofce", "спец.", "Наси", "Јофче", new ArrayList<>()));
-        professors.add(new Professor("jovan.kalajdzieski", "спец.", "Јован", "Калајџиески", new ArrayList<>()));
-        professors.add(new Professor("sasho.najdov", "спец.", "Сашо", "Најдов", new ArrayList<>()));
-        professors.add(new Professor("petar.sekuloski", "спец.", "Петар", "Секулоски", new ArrayList<>()));
-        professors.add(new Professor("vlatko.spasev", "спец.", "Влатко", "Спасев", new ArrayList<>()));
-        professors.add(new Professor("frosina.stojanovska", "спец.", "Фросина", "Стојановска", new ArrayList<>()));
-        professors.add(new Professor("martina.toshevska", "спец.", "Мартина", "Тошевска", new ArrayList<>()));
-        professors.add(new Professor("vojdan.kjorvezirovski", "спец.", "Војдан", "Ќорвезировски", new ArrayList<>()));
+        professors.add(new Professor("ljupcho.kocarev", "Академик д-р", "Љупчо", "Коцарев", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("marijan.gushev", "д-р", "Маријан", "Гушев", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("dancho.davchev", "д-р", "Данчо", "Давчев", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("katerina.zdravkova", "д-р", "Катерина", "Здравкова", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("suzana.loshkovska", "д-р", "Сузана", "Лошковска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("zhaneta.popeska", "д-р", "Жанета", "Попеска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("kosta.mitreski", "д-р", "Коста", "Митрески", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("verica.bakjeva", "д-р", "Љупчо", "Коцарев", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("vladimir.trajkovikj", "д-р", "Владимир", "Трајковиќ", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("ana.madevska.bogdanova", "д-р", "Ана", "Мадевска Богданова", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("dejan.gjorgjevikj", "д-р", "Дејан", "Ѓорѓевиќ", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("andrea.kulakov", "д-р", "Андреа", "Кулаков", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("ljupcho.antovski", "д-р", "Љупчо", "Антовски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("marija.mihova", "д-р", "Марија", "Михова", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("slobodan.kalajdziski", "д-р", "Слободан", "Калајџиски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("nevena.ackovska", "д-р", "Невена", "Ацковска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("goran.velinov", "д-р", "Горан", "Велинов", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("anastas.mishev", "д-р", "Анастас", "Мишев", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("sonja.filiposka", "д-р", "Соња", "Филипоска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("ivan.chorbev", "д-р", "Иван", "Чорбев", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("lasko.basnarkov", "д-р", "Ласко", "Баснарков", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("boro.jakimovski", "д-р", "Боро", "Јакимовски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("vesna.dimitrova", "д-р", "Весна", "Димитрова", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("goce.armenski", "д-р", "Гоце", "Арменски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("danilo.gligoroski", "д-р", "Данило", "Глигороски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("gjorgji.filipov", "д-р", "Ѓорѓи", "Филипов", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("stevo.bozhinovski", "д-р", "Стево", "Божиновски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("sonja.gievska", "д-р", "Соња", "Гиевска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("dejan.spasov", "д-р", "Дејан", "Спасов", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("ivica.dimitrovski", "д-р", "Ивица", "Димитровски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("igor.mishkovski", "д-р", "Игор", "Мишковски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("gjorgji.madzarov", "д-р", "Ѓорѓи", "Маџаров", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("smilka.janeska.sarkanjac", "д-р", "Смилка", "Јанеска-Саркањац", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("sashko.ristov", "д-р", "Сашко", "Ристов", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("vangel.ajanovski", "д-р", "Вангел", "Ајановски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("vesna.dimitrievska.ristovska", "д-р", "Весна", "Димитриевска Ристовска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("mile.jovanov", "д-р", "Миле", "Јованов", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("biljana.stojkoska", "д-р", "Билјана", "Стојкоска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("kire.trivodaliev", "д-р", "Кире", "Триводалиев", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("sasho.gramatikov", "д-р", "Сашо", "Граматиков", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("miroslav.mircev", "д-р", "Мирослав", "Мирчев", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("georgina.mirceva", "д-р", "Георгина", "Мирчева", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("magdalena.kostoska", "д-р", "Магдалена", "Костоска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("aleksandra.popovska.mitrovikj", "д-р", "Александра", "Поповска Митровиќ", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("biljana.tojtovska", "д-р", "Билјана", "Тојтовска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("natasha.ilievska", "д-р", "Наташа", "Илиевска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("simona.samardziska", "д-р", "Симона", "Самарџиска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("milosh.jovanovikj", "д-р", "Милош", "Јовановиќ", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("jasen.markovski", "д-р", "Јасен", "Марковски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("ana.sokolova", "д-р", "Ана", "Соколова", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("andreja.naumoski", "д-р", "Андреја", "Наумоски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("panche.ribarski", "д-р", "Панче", "Рибарски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("hristina.mihajloska", "д-р", "Христина", "Михајлоска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("ivan.kitanovski", "д-р", "Иван", "Китановски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("eftim.zdravevski", "д-р", "Ефтим", "Здравевски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("petre.lameski", "д-р", "Петре", "Ламески", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("katerina.trojachanec.dineva", "д-р", "Катерина", "Тројачанец Динева", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("vladimir.zdraveski", "д-р", "Владимир", "Здравески", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("bojana.koteska", "д-р", "Бојана", "Котеска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("metodija.jancheski", "д-р", "Методија", "Јанчески", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("aleksandra.kanevche", "д-р", "Александра", "Каневче", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("aleksandra.dedinec", "д-р", "Александра", "Дединец", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("igor.kulev", "д-р", "Игор", "Кулев", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("igor.trajkovski", "д-р", "Игор", "Трајковски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("vancho.kusakatov", "д-р", "Ванчо", "Кусакатов", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("dragan.mihajlov", "д-р", "Драган", "Михајлов", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("emil.stankov", "м-р", "Емил", "Станков", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("boban.joksimoski", "м-р", "Бобан", "Јоксимоски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("ilinka.ivanoska", "м-р", "Илинка", "Иваноска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("aleksandar.tenev", "м-р", "Александар", "Тенев", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("vesna.kirandziska", "м-р", "Весна", "Киранџиска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("bojan.ilijoski", "м-р", "Бојан", "Илијоски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("monika.simjanoska", "м-р", "Моника", "Симјаноска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("aleksandar.stojmenski", "м-р", "Александар", "Стојменски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("aleksandra.bogojeska", "м-р", "Александра", "Богојеска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("goran.velkoski", "м-р", "Горан", "Велкоски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("tomche.delev", "м-р", "Томче", "Делев", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("vlatko.nikolovski", "спец.", "Влатко", "Николовски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("stefan.andonov", "спец.", "Стефан", "Андонов", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("nenad.anchev", "спец.", "Ненад", "Анчев", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("jovan.davchev", "спец.", "Јован", "Давчев", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("nasi.jofce", "спец.", "Наси", "Јофче", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("jovan.kalajdzieski", "спец.", "Јован", "Калајџиески", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("sasho.najdov", "спец.", "Сашо", "Најдов", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("petar.sekuloski", "спец.", "Петар", "Секулоски", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("vlatko.spasev", "спец.", "Влатко", "Спасев", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("frosina.stojanovska", "спец.", "Фросина", "Стојановска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("martina.toshevska", "спец.", "Мартина", "Тошевска", new ArrayList<>(), new ArrayList<>()));
+        professors.add(new Professor("vojdan.kjorvezirovski", "спец.", "Војдан", "Ќорвезировски", new ArrayList<>(), new ArrayList<>()));
+
+
+        Subject wp = new Subject(null, "Веб програмирање", "ВП");
+        Subject eimt = new Subject(null, "Електронска и мобилна трговија", "ЕиМТ");
+
+        subjects.add(wp);
+        subjects.add(eimt);
+
+        professors.get(0).getSubjects().add(wp);
+        professors.get(1).getSubjects().add(wp);
+        professors.get(2).getSubjects().add(wp);
+        professors.get(0).getSubjects().add(eimt);
+        professors.get(1).getSubjects().add(eimt);
+        professors.get(2).getSubjects().add(eimt);
 
 
         ConsultationSlot s1 = ConsultationSlot.createRecurringSlot(dt, rooms.get(1), DayOfWeek.TUESDAY, LocalTime.parse("10:00"), LocalTime.parse("12:00"));
@@ -275,6 +297,7 @@ public class DataHolder {
 
         // Initial save of all objects in relational database
         if (this.consultationSlotRepository.count() == 0) {
+            this.subjectRepository.saveAll(subjects);
             this.buildingRepository.saveAll(buildings);
             this.roomRepository.saveAll(rooms);
             this.professorRepository.saveAll(professors);

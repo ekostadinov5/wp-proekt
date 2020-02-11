@@ -49,7 +49,8 @@ const Professor = (props) => {
                     .map(term => <Term key={term.id} value={term} student={props.student} 
                                        studentSlotIds={props.studentSlotIds} 
                                        onStudentAdded={props.onStudentAddedToSlot} 
-                                       onStudentRemoved={props.onStudentRemovedFromSlot} />)
+                                       onStudentRemoved={props.onStudentRemovedFromSlot}
+                                       professor={props.value} />)
                 }
             </AppContext.Consumer>
         );
@@ -65,7 +66,8 @@ const Professor = (props) => {
                         <Term key={term.id} value={term} student={props.student}
                               studentSlotIds={props.studentSlotIds}
                               onStudentAdded={props.onStudentAddedToSlot}
-                              onStudentRemoved={props.onStudentRemovedFromSlot} />)
+                              onStudentRemoved={props.onStudentRemovedFromSlot}
+                              professor={props.value} />)
                 }
             </AppContext.Consumer>
         );
