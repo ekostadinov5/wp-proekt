@@ -6,7 +6,7 @@ class AppProvider extends Component {
     state = {
         // role: 'admin'
         // role: 'professor'
-        // role: 'student'
+         role: 'student'
     };
 
     convertDay = (day) => {

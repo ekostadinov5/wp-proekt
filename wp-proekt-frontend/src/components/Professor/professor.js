@@ -5,6 +5,40 @@ import AppContext from '../../context/AppContext';
 
 const Professor = (props) => {
 
+    const isFollowingProfessor = () => {
+        let exists = false;
+        props.studentFollowingIds.forEach(id => {
+            if(id === props.value.id){
+                exists = true;
+            }
+        });
+        return exists;
+    };
+
+    const followUnfollowButtonClick = () => {
+        if(!isFollowingProfessor()) {
+            props.followProfessor(props.student.index, props.value.id);
+        } else {
+            props.unfollowProfessor(props.student.index, props.value.id);
+        }
+    };
+
+    const followUnfollowButton = () => {
+        if(!isFollowingProfessor()) {
+            return (
+                <button onClick={followUnfollowButtonClick} className="btn btn-light" title="Следи">
+                    <i className="fa fa-fw fa-star-o"/>
+                </button>
+            );
+        } else {
+            return (
+                <button onClick={followUnfollowButtonClick} className="btn btn-light" title="Следи">
+                    <i className="fa fa-fw fa-star"/>
+                </button>
+            );
+        }
+    };
+
     const termsWeekly = () => {
         return (
             <AppContext.Consumer>
@@ -45,9 +79,7 @@ const Professor = (props) => {
                         {props.value.title} {props.value.firstName} {props.value.lastName}
                     </div>
                     <div className="col-4 text-right">
-                        <button onClick={() => console.log("NOT IMPLEMENTED!")} className="btn btn-light" title="Следи">
-                            <i className="fa fa-fw fa-star"/>
-                        </button>
+                        {followUnfollowButton()}
                     </div>
                 </div>
             </div>

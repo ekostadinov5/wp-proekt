@@ -53,6 +53,7 @@ class App extends Component {
             
             student: null,
             studentSlotIds: [],
+            studentFollowingIds: [],
 
             professor: null,
         }
@@ -170,15 +171,18 @@ class App extends Component {
                         firstName: promise.data.firstName,
                         lastName: promise.data.lastName
                     },
-                    studentSlotIds: promise.data.slots.map(s => s.id)
+                    studentSlotIds: promise.data.slots.map(s => s.id),
+                    studentFollowingIds: promise.data.following.map(p => p.id)
                 });
             });
         },
         addStudentToSlot: (slotId, index) => {
             StudentsService.addToSlot(slotId, index).then(() => {
-                const newStudentSlotIdsRef = [...this.state.studentSlotIds, slotId];
-                this.setState({
-                    studentSlotIds: newStudentSlotIdsRef
+                this.setState((prevState) => {
+                    const newStudentSlotIdsRef = [...prevState.studentSlotIds, slotId];
+                    return {
+                        studentSlotIds: newStudentSlotIdsRef
+                    };
                 });
             }).catch(error => {
                 if(error.response.status === 403) {
@@ -188,14 +192,36 @@ class App extends Component {
         },
         removeStudentFromSlot: (slotId, index) => {
             StudentsService.removeFromSlot(slotId, index).then(() => {
-                const newStudentSlotIdsRef = this.state.studentSlotIds.filter(id => id !== slotId);
-                this.setState({
-                    studentSlotIds: newStudentSlotIdsRef
+                this.setState((prevState) => {
+                    const newStudentSlotIdsRef = prevState.studentSlotIds.filter(id => id !== slotId);
+                    return {
+                        studentSlotIds: newStudentSlotIdsRef
+                    };
                 });
             }).catch(error => {
                 if(error.response.status === 403) {
                     this.handleShowErrorModal('Консултациите се моментално во тек!');
                 }
+            });
+        },
+        followProfessor: (index, professorId) => {
+            StudentsService.followProfessor(index, professorId).then(() => {
+                this.setState((prevState) => {
+                    const newStudentFollowingIdsRef = [...prevState.studentFollowingIds, professorId];
+                    return {
+                        studentFollowingIds: newStudentFollowingIdsRef
+                    }
+                });
+            });
+        },
+        unfollowProfessor: (index, professorId) => {
+            StudentsService.unfollowProfessor(index, professorId).then(() => {
+                this.setState((prevState) => {
+                    const newStudentFollowingIdsRef = prevState.studentFollowingIds.filter(id => id !== professorId);
+                    return {
+                        studentFollowingIds: newStudentFollowingIdsRef
+                    }
+                });
             });
         }
     };
@@ -325,7 +351,10 @@ class App extends Component {
                                            page={this.state.page} totalPages={this.state.totalPages}
                                            student={this.state.student} studentSlotIds={this.state.studentSlotIds}
                                            onStudentAddedToSlot={this.StudentsApi.addStudentToSlot}
-                                           onStudentRemovedFromSlot={this.StudentsApi.removeStudentFromSlot} />}>
+                                           onStudentRemovedFromSlot={this.StudentsApi.removeStudentFromSlot}
+                                           studentFollowingIds={this.state.studentFollowingIds}
+                                           followProfessor={this.StudentsApi.followProfessor}
+                                           unfollowProfessor={this.StudentsApi.unfollowProfessor} />}>
                         </Route>
 
                         <Route path={"/rooms"} exact render={()=>

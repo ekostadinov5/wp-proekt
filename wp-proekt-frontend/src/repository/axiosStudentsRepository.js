@@ -34,6 +34,28 @@ const StudentsService = {
                 pageSize: pageSize
             }
         });
+    },
+    followProfessor: (index, professorId) => {
+        const formParams = qs.stringify({
+            index: index,
+            professorId: professorId
+        });
+        return axios.post("/api/students/follow", formParams, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+    },
+    unfollowProfessor: (index, professorId) => {
+        const formParams = qs.stringify({
+            index: index,
+            professorId: professorId
+        });
+        return axios.post("/api/students/unfollow", formParams, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
     }
 };
 

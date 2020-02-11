@@ -130,6 +130,19 @@ pageSize:2
 
 ###
 
+POST http://localhost:8080/api/students/follow
+Content-Type: application/x-www-form-urlencoded
+
+index=170005&professorId=dimitar.trajanov
+
+###
+
+POST http://localhost:8080/api/students/unfollow
+Content-Type: application/x-www-form-urlencoded
+
+index=170005&professorId=dimitar.trajanov
+
+###
 
 
 ### ---CONSULTATIONS

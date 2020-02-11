@@ -10,7 +10,10 @@ const Consultations = (props) => {
             <Professor key={professor.id} value={professor} index={i++} student={props.student} 
                        studentSlotIds={props.studentSlotIds}
                        onStudentAddedToSlot={props.onStudentAddedToSlot} 
-                       onStudentRemovedFromSlot={props.onStudentRemovedFromSlot} />
+                       onStudentRemovedFromSlot={props.onStudentRemovedFromSlot}
+                       studentFollowingIds={props.studentFollowingIds} 
+                       followProfessor={props.followProfessor} 
+                       unfollowProfessor={props.unfollowProfessor} />
         );
     };
 

@@ -1,9 +1,12 @@
 package mk.ukim.finki.wp.proekt.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -30,6 +33,10 @@ public class Student {
     @NotFound(action = NotFoundAction.IGNORE)
     @JsonManagedReference
     private List<ConsultationSlot> slots;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<Professor> following;
 
     public void addSlot(ConsultationSlot slot) {
         this.slots.add(slot);

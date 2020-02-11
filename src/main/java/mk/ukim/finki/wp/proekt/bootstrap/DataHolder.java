@@ -84,22 +84,22 @@ public class DataHolder {
         rooms.add(new Room(null, "Л3", l, new ArrayList<>(), loremIpsum));
 
 
-        students.add(new Student("170000", "Андреа", "Павлеска", new ArrayList<>()));
-        students.add(new Student("170001", "Петко", "Петковски", new ArrayList<>()));
-        students.add(new Student("170002", "Марко", "Нолев", new ArrayList<>()));
-        students.add(new Student("170003", "Здравко", "Марковски", new ArrayList<>()));
-        students.add(new Student("170010", "Марта", "Петрова", new ArrayList<>()));
-        students.add(new Student("170004", "Кирил", "Здравковски", new ArrayList<>()));
-        students.add(new Student("170005", "Мартин", "Мартиновски", new ArrayList<>()));
-        students.add(new Student("170006", "Илија", "Здравковски", new ArrayList<>()));
-        students.add(new Student("170007", "Бојан", "Јованов", new ArrayList<>()));
-        students.add(new Student("170011", "Теодора", "Јованова", new ArrayList<>()));
-        students.add(new Student("170008", "Јован", "Петковски", new ArrayList<>()));
-        students.add(new Student("170009", "Кристијан", "Ефтимов", new ArrayList<>()));
-        students.add(new Student("170012", "Ана", "Поповска", new ArrayList<>()));
-        students.add(new Student("170013", "Кристина", "Јорданова", new ArrayList<>()));
-        students.add(new Student("170014", "Владимир", "Ивкоски", new ArrayList<>()));
-        students.add(new Student("170015", "Елена", "Младеновска", new ArrayList<>()));
+        students.add(new Student("170000", "Андреа", "Павлеска", new ArrayList<>(), new ArrayList<>()));
+        students.add(new Student("170001", "Петко", "Петковски", new ArrayList<>(), new ArrayList<>()));
+        students.add(new Student("170002", "Марко", "Нолев", new ArrayList<>(), new ArrayList<>()));
+        students.add(new Student("170003", "Здравко", "Марковски", new ArrayList<>(), new ArrayList<>()));
+        students.add(new Student("170010", "Марта", "Петрова", new ArrayList<>(), new ArrayList<>()));
+        students.add(new Student("170004", "Кирил", "Здравковски", new ArrayList<>(), new ArrayList<>()));
+        students.add(new Student("170005", "Мартин", "Мартиновски", new ArrayList<>(), new ArrayList<>()));
+        students.add(new Student("170006", "Илија", "Здравковски", new ArrayList<>(), new ArrayList<>()));
+        students.add(new Student("170007", "Бојан", "Јованов", new ArrayList<>(), new ArrayList<>()));
+        students.add(new Student("170011", "Теодора", "Јованова", new ArrayList<>(), new ArrayList<>()));
+        students.add(new Student("170008", "Јован", "Петковски", new ArrayList<>(), new ArrayList<>()));
+        students.add(new Student("170009", "Кристијан", "Ефтимов", new ArrayList<>(), new ArrayList<>()));
+        students.add(new Student("170012", "Ана", "Поповска", new ArrayList<>(), new ArrayList<>()));
+        students.add(new Student("170013", "Кристина", "Јорданова", new ArrayList<>(), new ArrayList<>()));
+        students.add(new Student("170014", "Владимир", "Ивкоски", new ArrayList<>(), new ArrayList<>()));
+        students.add(new Student("170015", "Елена", "Младеновска", new ArrayList<>(), new ArrayList<>()));
 
 
         Professor dt = new Professor("dimitar.trajanov", "проф. д-р", "Димитар", "Трајанов", new ArrayList<>());
@@ -137,7 +137,7 @@ public class DataHolder {
         professors.add(new Professor("danilo.gligoroski", "д-р", "Данило", "Глигороски", new ArrayList<>()));
         professors.add(new Professor("gjorgji.filipov", "д-р", "Ѓорѓи", "Филипов", new ArrayList<>()));
         professors.add(new Professor("stevo.bozhinovski", "д-р", "Стево", "Божиновски", new ArrayList<>()));
-        professors.add(new Professor("sonja.gievska", "д-р", "Соњљ", "Гиевска", new ArrayList<>()));
+        professors.add(new Professor("sonja.gievska", "д-р", "Соња", "Гиевска", new ArrayList<>()));
         professors.add(new Professor("dejan.spasov", "д-р", "Дејан", "Спасов", new ArrayList<>()));
         professors.add(new Professor("ivica.dimitrovski", "д-р", "Ивица", "Димитровски", new ArrayList<>()));
         professors.add(new Professor("igor.mishkovski", "д-р", "Игор", "Мишковски", new ArrayList<>()));
@@ -269,6 +269,8 @@ public class DataHolder {
         students.get(11).addSlot(s6);
         students.get(12).addSlot(s6);
 
+        students.get(6).getFollowing().add(rs);
+        students.get(6).getFollowing().add(km);
 
 
         // Initial save of all objects in relational database
