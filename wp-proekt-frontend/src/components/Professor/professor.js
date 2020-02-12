@@ -32,7 +32,7 @@ const Professor = (props) => {
             );
         } else {
             return (
-                <button onClick={followUnfollowButtonClick} className="btn btn-light" title="Следи">
+                <button onClick={followUnfollowButtonClick} className="btn btn-light" title="Откажи следење">
                     <i className="fa fa-fw fa-star"/>
                 </button>
             );
@@ -75,16 +75,26 @@ const Professor = (props) => {
 
     const cardHeader = () => {
         return (
-            <div className="professors card-header">
-                <div className="row">
-                    <div className="col-8">
-                        {props.value.title} {props.value.firstName} {props.value.lastName}
+            <AppContext.Consumer>
+                {context => (
+                    <div className="professors card-header">
+                        <div className="row">
+                            <div className="col-8">
+                                {props.value.title} {props.value.firstName} {props.value.lastName}
+                            </div>
+                            {(() => {
+                                if(context.role === 'student') {
+                                    return (
+                                        <div className="col-4 text-right">
+                                            {followUnfollowButton()}
+                                        </div>
+                                    );
+                                }
+                            })()}
+                        </div>
                     </div>
-                    <div className="col-4 text-right">
-                        {followUnfollowButton()}
-                    </div>
-                </div>
-            </div>
+                )}
+            </AppContext.Consumer>
         );
     };
 

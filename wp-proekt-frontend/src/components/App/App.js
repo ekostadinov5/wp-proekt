@@ -278,7 +278,8 @@ class App extends Component {
                     professors: promise.data,
                     page: 0,
                     pageSize: 18, // 18 ili 24
-                    totalPages: 0
+                    totalPages: 0,
+                    allProfessors: promise.data
                 });
             });
         },
