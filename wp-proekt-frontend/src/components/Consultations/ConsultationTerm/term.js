@@ -22,7 +22,8 @@ const Term = (props) => {
                     <div className="form-group">
                         <label htmlFor={"subject"} className="font-weight-bold">Предмет:</label>
                         <select className="form-control" id="subject">
-                            {props.professor.subjects.map(s => <option key={s.id}>{s.name}</option>)}
+                            {props.professor.subjects.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                            <option value={"0"}>Останато</option>
                         </select>
                     </div>
                     <div className="form-group">

@@ -3,7 +3,12 @@ import axios from '../custom-axios/axios';
 
 const ProfessorsService = {
     fetchProfessors: () => {
-        return axios.get("/api/professors");
+        return axios.get("/api/professors", {
+            headers: {
+                'page': 0,
+                'pageSize': 1000
+            }
+        });
     },
     fetchProfessorsPaged: (page, pageSize) => {
         return axios.get("/api/professors", {

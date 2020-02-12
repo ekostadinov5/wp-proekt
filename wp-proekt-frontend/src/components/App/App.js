@@ -17,7 +17,8 @@ import ConsultationsService from "../../repository/axiosConsultationsRepository"
 import Header from '../Header/header';
 import Footer from '../Footer/footer';
 
-import Consultations from '../Consultations/ConsultationsByProfessor/consultations';
+import ConsultationsAll from '../Consultations/ConsultationsByProfessors/AllProfessors/consultationsAll';
+import ConsultationsFollowing from '../Consultations/ConsultationsByProfessors/FollowingProfessors/consultationsFollowing';
 
 import Rooms from '../Rooms/RoomsByBuilding/rooms';
 
@@ -46,6 +47,7 @@ class App extends Component {
             page: 0,
             pageSize: 18, // 18 ili 24
             totalPages: 0,
+            allProfessors: [],
             
             buildings: [],
             
@@ -236,6 +238,11 @@ class App extends Component {
                     totalPages: promise.data.totalPages
                 });
             });
+            ProfessorsService.fetchProfessors().then((promise) => {
+                this.setState({
+                    allProfessors: promise.data.content
+                });
+            });
         },
         loadProfessor: () => {
             ProfessorsService.fetchById("kostadin.mishev").then((promise) => {
@@ -342,19 +349,35 @@ class App extends Component {
                 );
             };
 
+            const studentRoutes = () => {
+                return (
+                    <div className="container">
+                        <Route path={"/following"} exact render={()=>
+                            <ConsultationsFollowing professors={this.state.allProfessors}
+                                                    student={this.state.student} studentSlotIds={this.state.studentSlotIds}
+                                                    onStudentAddedToSlot={this.StudentsApi.addStudentToSlot}
+                                                    onStudentRemovedFromSlot={this.StudentsApi.removeStudentFromSlot}
+                                                    studentFollowingIds={this.state.studentFollowingIds}
+                                                    followProfessor={this.StudentsApi.followProfessor}
+                                                    unfollowProfessor={this.StudentsApi.unfollowProfessor} />}>
+                        </Route>
+                    </div>
+                );
+            };
+
             const routes = () => {
                 return (
                     <div className="container">
                         <Route path={"/consultations"} exact render={()=>
-                            <Consultations consultations={this.state.professors}
-                                           onPageClick={this.ProfessorsApi.loadProfessors}
-                                           page={this.state.page} totalPages={this.state.totalPages}
-                                           student={this.state.student} studentSlotIds={this.state.studentSlotIds}
-                                           onStudentAddedToSlot={this.StudentsApi.addStudentToSlot}
-                                           onStudentRemovedFromSlot={this.StudentsApi.removeStudentFromSlot}
-                                           studentFollowingIds={this.state.studentFollowingIds}
-                                           followProfessor={this.StudentsApi.followProfessor}
-                                           unfollowProfessor={this.StudentsApi.unfollowProfessor} />}>
+                            <ConsultationsAll consultations={this.state.professors}
+                                              onPageClick={this.ProfessorsApi.loadProfessors}
+                                              page={this.state.page} totalPages={this.state.totalPages}
+                                              student={this.state.student} studentSlotIds={this.state.studentSlotIds}
+                                              onStudentAddedToSlot={this.StudentsApi.addStudentToSlot}
+                                              onStudentRemovedFromSlot={this.StudentsApi.removeStudentFromSlot}
+                                              studentFollowingIds={this.state.studentFollowingIds}
+                                              followProfessor={this.StudentsApi.followProfessor}
+                                              unfollowProfessor={this.StudentsApi.unfollowProfessor} />}>
                         </Route>
 
                         <Route path={"/rooms"} exact render={()=>
@@ -385,6 +408,8 @@ class App extends Component {
                                         return adminRoutes();
                                     } else if(context.role === 'professor') {
                                         return professorRoutes();
+                                    } else if(context.role === 'student') {
+                                        return studentRoutes();
                                     }
                                 })()}
                             </div>

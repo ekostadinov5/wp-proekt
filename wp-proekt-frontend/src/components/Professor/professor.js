@@ -113,7 +113,7 @@ const Professor = (props) => {
     };
 
     return (
-        <div className="col-lg-4 col-md-6 mt-5 col-sm-12">
+        <div className="col-lg-4 col-md-6 mt-4 col-sm-12">
             <div className="card">
                 {cardHeader()}
                 {cardBody()}

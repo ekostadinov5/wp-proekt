@@ -1,8 +1,27 @@
 import React from 'react';
-import Professor from '../../Professor/professor';
+import Professor from '../../../Professor/professor';
 import ReactPaginate from 'react-paginate';
+import {Link} from "react-router-dom";
 
-const Consultations = (props) => {
+import AppContext from '../../../../context/AppContext';
+
+const ConsultationsAll = (props) => {
+
+    const subNavigation = () => {
+        return (
+            <div className={"mt-4"}>
+                <div className={"row ml-1"}>
+                    <Link to={"/consultations"} className={"btn mr-2 mt-2"} style={{background: "lightgray"}}>
+                        Сите професори
+                    </Link>
+                    <Link to={"/following"} className={"btn mt-2"}>
+                        Следени професори
+                    </Link>
+                </div>
+                <hr />
+            </div>
+        );
+    };
 
     const consultations = () => {
         let i = 0;
@@ -46,13 +65,24 @@ const Consultations = (props) => {
     };
 
     return (
-        <div className={"mt-5"}>
-            <div className="row mb-5">
-                {consultations()}
-            </div>
-            {pagination()}
-        </div>
+        <AppContext.Consumer>
+            {context => {
+                return (
+                    <div>
+                        {(() => {
+                            if(context.role === 'student') {
+                                return subNavigation();
+                            }
+                        })()}
+                        <div className="row mb-5">
+                            {consultations()}
+                        </div>
+                        {pagination()}
+                    </div>
+                );
+            }}
+        </AppContext.Consumer>
     );
 };
 
-export default Consultations;
+export default ConsultationsAll;
