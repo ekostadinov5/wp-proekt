@@ -1,6 +1,5 @@
 package mk.ukim.finki.wp.proekt.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,23 +28,12 @@ public class Student {
     @NotNull
     private String lastName;
 
-    @ManyToMany(mappedBy = "students", fetch = FetchType.EAGER)
-    @NotFound(action = NotFoundAction.IGNORE)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JsonManagedReference
-    private List<ConsultationSlot> slots;
+    private List<StudentSlot> slots;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Professor> following;
-
-    public void addSlot(ConsultationSlot slot) {
-        this.slots.add(slot);
-        slot.getStudents().add(this);
-    }
-
-    public void removeSlot(ConsultationSlot slot) {
-        this.slots.remove(slot);
-        slot.getStudents().remove(this);
-    }
 
 }

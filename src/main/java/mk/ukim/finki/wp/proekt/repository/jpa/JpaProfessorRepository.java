@@ -6,8 +6,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface JpaProfessorRepository extends JpaRepository<Professor, String> {
+
+    @Query("SELECT p " +
+            "FROM Professor p " +
+            "WHERE p.id = :id")
+    Optional<Professor> findById(@Param("id") String id);
 
     @Query("SELECT p " +
             "FROM Professor p " +

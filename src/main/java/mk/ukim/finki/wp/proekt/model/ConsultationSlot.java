@@ -1,18 +1,14 @@
 package mk.ukim.finki.wp.proekt.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,9 +27,9 @@ public class ConsultationSlot {
     @NotNull
     private Room room;
 
-    @ManyToMany
+    @OneToMany(mappedBy = "consultationSlot", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JsonBackReference
-    private List<Student> students;
+    private List<StudentSlot> students;
 
     private LocalDate date;
 

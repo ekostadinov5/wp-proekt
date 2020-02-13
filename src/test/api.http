@@ -1,3 +1,5 @@
+### ADJUST THE IDS WHEN TESTING !!!
+
 ### ---PROFESSORS
 
 GET http://localhost:8080/api/professors
@@ -97,21 +99,21 @@ DELETE http://localhost:8080/api/buildings/5
 
 ### ---STUDENTS
 
-GET http://localhost:8080/api/students/170001
+GET http://localhost:8080/api/students/170005
 
 ###
 
 POST http://localhost:8080/api/students/add
 Content-Type: application/x-www-form-urlencoded
 
-slotId=1&index=170006
+slotId=1&index=170005&subjectId=1&note=Note
 
 ###
 
 POST http://localhost:8080/api/students/remove
 Content-Type: application/x-www-form-urlencoded
 
-slotId=1&index=170006
+slotId=1&index=170005
 
 ###
 

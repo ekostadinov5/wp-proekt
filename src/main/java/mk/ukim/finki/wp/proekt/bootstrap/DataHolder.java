@@ -21,6 +21,7 @@ public class DataHolder {
     private final JpaStudentRepository studentRepository;
     private final JpaProfessorRepository professorRepository;
     private final JpaConsultationSlotRepository consultationSlotRepository;
+    private final JpaStudentSlotRepository studentSlotRepository;
 
     public static final List<Subject> subjects = new ArrayList<>();
     public static final List<Building> buildings = new ArrayList<>();
@@ -28,19 +29,22 @@ public class DataHolder {
     public static final List<Student> students = new ArrayList<>();
     public static final List<Professor> professors = new ArrayList<>();
     public static final List<ConsultationSlot> slots = new ArrayList<>();
+    public static final List<StudentSlot> studentSlots = new ArrayList<>();
 
     public DataHolder(JpaSubjectRepository subjectRepository,
                       JpaBuildingRepository buildingRepository,
                       JpaRoomRepository roomRepository,
                       JpaStudentRepository studentRepository,
                       JpaProfessorRepository professorRepository,
-                      JpaConsultationSlotRepository consultationSlotRepository) {
+                      JpaConsultationSlotRepository consultationSlotRepository,
+                      JpaStudentSlotRepository studentSlotRepository) {
         this.subjectRepository = subjectRepository;
         this.buildingRepository = buildingRepository;
         this.roomRepository = roomRepository;
         this.studentRepository = studentRepository;
         this.professorRepository = professorRepository;
         this.consultationSlotRepository = consultationSlotRepository;
+        this.studentSlotRepository = studentSlotRepository;
     }
 
     @PostConstruct
@@ -223,12 +227,12 @@ public class DataHolder {
         professors.get(2).getSubjects().add(eimt);
 
 
-        ConsultationSlot s1 = ConsultationSlot.createRecurringSlot(dt, rooms.get(1), DayOfWeek.TUESDAY, LocalTime.parse("10:00"), LocalTime.parse("12:00"));
-        ConsultationSlot s2 = ConsultationSlot.createRecurringSlot(dt, rooms.get(1), DayOfWeek.THURSDAY, LocalTime.parse("19:00"), LocalTime.parse("21:00"));
+        ConsultationSlot s1 = ConsultationSlot.createRecurringSlot(km, rooms.get(1), DayOfWeek.TUESDAY, LocalTime.parse("10:00"), LocalTime.parse("12:00"));
+        ConsultationSlot s2 = ConsultationSlot.createRecurringSlot(km, rooms.get(1), DayOfWeek.THURSDAY, LocalTime.parse("19:00"), LocalTime.parse("21:00"));
         ConsultationSlot s3 = ConsultationSlot.createRecurringSlot(rs, rooms.get(1), DayOfWeek.TUESDAY, LocalTime.parse("10:00"), LocalTime.parse("12:00"));
         ConsultationSlot s4 = ConsultationSlot.createRecurringSlot(rs, rooms.get(1), DayOfWeek.THURSDAY, LocalTime.parse("19:00"), LocalTime.parse("21:00"));
-        ConsultationSlot s5 = ConsultationSlot.createOneTimeSlot(km, rooms.get(1), LocalDate.now().plusDays(7), LocalTime.parse("10:00"), LocalTime.parse("12:00"));
-        ConsultationSlot s6 = ConsultationSlot.createRecurringSlot(km, rooms.get(1), DayOfWeek.THURSDAY, LocalTime.parse("19:00"), LocalTime.parse("21:00"));
+        ConsultationSlot s5 = ConsultationSlot.createOneTimeSlot(dt, rooms.get(1), LocalDate.now().plusDays(7), LocalTime.parse("10:00"), LocalTime.parse("12:00"));
+        ConsultationSlot s6 = ConsultationSlot.createRecurringSlot(dt, rooms.get(1), DayOfWeek.THURSDAY, LocalTime.parse("19:00"), LocalTime.parse("21:00"));
 
         s1.setStudents(new ArrayList<>());
         s2.setStudents(new ArrayList<>());
@@ -245,51 +249,49 @@ public class DataHolder {
         slots.add(s6);
 
 
-        students.get(0).addSlot(s1);
-        students.get(1).addSlot(s1);
-        students.get(2).addSlot(s1);
-        students.get(3).addSlot(s1);
-        students.get(4).addSlot(s1);
-        students.get(5).addSlot(s1);
-        students.get(6).addSlot(s1);
-        students.get(7).addSlot(s1);
-        students.get(8).addSlot(s1);
-        students.get(9).addSlot(s1);
-        students.get(10).addSlot(s1);
-        students.get(11).addSlot(s1);
-        students.get(12).addSlot(s1);
-        students.get(13).addSlot(s1);
-        students.get(14).addSlot(s1);
-        students.get(15).addSlot(s1);
+        StudentSlot ss1 = new StudentSlot(null, students.get(0), s1, wp, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+        students.get(0).getSlots().add(ss1);
+        s1.getStudents().add(ss1);
+        StudentSlot ss2 = new StudentSlot(null, students.get(1), s1, eimt, "");
+        students.get(1).getSlots().add(ss2);
+        s1.getStudents().add(ss2);
+        StudentSlot ss3 = new StudentSlot(null, students.get(2), s1, wp, "");
+        students.get(2).getSlots().add(ss3);
+        s1.getStudents().add(ss3);
+        StudentSlot ss4 = new StudentSlot(null, students.get(3), s1, eimt, "");
+        students.get(3).getSlots().add(ss4);
+        s1.getStudents().add(ss4);
+        StudentSlot ss5 = new StudentSlot(null, students.get(4), s1, wp, "");
+        students.get(4).getSlots().add(ss5);
+        s1.getStudents().add(ss5);
+        StudentSlot ss6 = new StudentSlot(null, students.get(5), s1, eimt, "");
+        students.get(5).getSlots().add(ss6);
+        s1.getStudents().add(ss6);
+        StudentSlot ss7 = new StudentSlot(null, students.get(6), s1, wp, "");
+        students.get(6).getSlots().add(ss7);
+        s1.getStudents().add(ss7);
+        StudentSlot ss8 = new StudentSlot(null, students.get(7), s1, eimt, "");
+        students.get(7).getSlots().add(ss8);
+        s1.getStudents().add(ss8);
 
-        students.get(0).addSlot(s2);
-        students.get(1).addSlot(s2);
-        students.get(2).addSlot(s2);
-        students.get(3).addSlot(s2);
-        students.get(4).addSlot(s2);
-        students.get(5).addSlot(s2);
-        students.get(6).addSlot(s2);
+        StudentSlot ss9 = new StudentSlot(null, students.get(0), s2, eimt, loremIpsum);
+        students.get(0).getSlots().add(ss9);
+        s2.getStudents().add(ss9);
+        StudentSlot ss10 = new StudentSlot(null, students.get(1), s2, wp, "");
+        students.get(1).getSlots().add(ss10);
+        s2.getStudents().add(ss10);
 
-        students.get(7).addSlot(s3);
-        students.get(8).addSlot(s3);
-        students.get(9).addSlot(s3);
-        students.get(10).addSlot(s3);
-        students.get(11).addSlot(s3);
+        studentSlots.add(ss1);
+        studentSlots.add(ss2);
+        studentSlots.add(ss3);
+        studentSlots.add(ss4);
+        studentSlots.add(ss5);
+        studentSlots.add(ss6);
+        studentSlots.add(ss7);
+        studentSlots.add(ss8);
+        studentSlots.add(ss9);
+        studentSlots.add(ss10);
 
-        students.get(13).addSlot(s5);
-        students.get(14).addSlot(s5);
-        students.get(15).addSlot(s5);
-
-        students.get(3).addSlot(s6);
-        students.get(4).addSlot(s6);
-        students.get(5).addSlot(s6);
-        students.get(6).addSlot(s6);
-        students.get(7).addSlot(s6);
-        students.get(8).addSlot(s6);
-        students.get(9).addSlot(s6);
-        students.get(10).addSlot(s6);
-        students.get(11).addSlot(s6);
-        students.get(12).addSlot(s6);
 
         students.get(6).getFollowing().add(rs);
         students.get(6).getFollowing().add(km);
@@ -303,6 +305,7 @@ public class DataHolder {
             this.professorRepository.saveAll(professors);
             this.studentRepository.saveAll(students);
             this.consultationSlotRepository.saveAll(slots);
+            this.studentSlotRepository.saveAll(studentSlots);
         }
     }
 

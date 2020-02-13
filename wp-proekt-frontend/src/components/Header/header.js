@@ -86,7 +86,7 @@ const Header = (props) => {
                                 {(() => {
                                     if(context.role) {
                                         return (
-                                            <button className={"nav-item btn btn-outline-danger mt-2 ml-3"}>
+                                            <button onClick={() => console.log("NOT IMPLEMENTED!")} className={"nav-item btn btn-outline-danger mt-2 ml-3"}>
                                                 Одјави се
                                             </button>
                                         );

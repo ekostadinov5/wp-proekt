@@ -30,7 +30,7 @@ public class Professor {
     @NotNull
     private String lastName;
 
-    @OneToMany(mappedBy = "professor", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "professor", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<ConsultationSlot> slots;
 

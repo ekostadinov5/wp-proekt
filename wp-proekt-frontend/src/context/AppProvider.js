@@ -5,7 +5,7 @@ class AppProvider extends Component {
 
     state = {
         // role: 'admin'
-        // role: 'professor'
+         role: 'professor'
         // role: 'student'
     };
 

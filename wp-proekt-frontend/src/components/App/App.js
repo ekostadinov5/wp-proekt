@@ -166,20 +166,20 @@ class App extends Component {
 
     StudentsApi = {
         loadStudent: () => {
-            StudentsService.fetchByIndex(170005).then((promise) => {
+            StudentsService.fetchByIndex(170006).then((promise) => {
                 this.setState({
                     student: {
                         index: promise.data.index,
                         firstName: promise.data.firstName,
                         lastName: promise.data.lastName
                     },
-                    studentSlotIds: promise.data.slots.map(s => s.id),
+                    studentSlotIds: promise.data.slots.map(s => s.consultationSlot.id),
                     studentFollowingIds: promise.data.following.map(p => p.id)
                 });
             });
         },
-        addStudentToSlot: (slotId, index) => {
-            StudentsService.addToSlot(slotId, index).then(() => {
+        addStudentToSlot: (slotId, index, subjectId, note) => {
+            StudentsService.addToSlot(slotId, index, subjectId, note).then(() => {
                 this.setState((prevState) => {
                     const newStudentSlotIdsRef = [...prevState.studentSlotIds, slotId];
                     return {
@@ -355,7 +355,8 @@ class App extends Component {
                     <div className="container">
                         <Route path={"/following"} exact render={()=>
                             <ConsultationsFollowing professors={this.state.allProfessors}
-                                                    student={this.state.student} studentSlotIds={this.state.studentSlotIds}
+                                                    student={this.state.student}
+                                                    studentSlotIds={this.state.studentSlotIds}
                                                     onStudentAddedToSlot={this.StudentsApi.addStudentToSlot}
                                                     onStudentRemovedFromSlot={this.StudentsApi.removeStudentFromSlot}
                                                     studentFollowingIds={this.state.studentFollowingIds}

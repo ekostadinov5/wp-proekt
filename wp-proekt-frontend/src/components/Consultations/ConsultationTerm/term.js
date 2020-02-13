@@ -33,8 +33,10 @@ const Term = (props) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="success" onClick={() => {
-                        handleClose();
-                        props.onStudentAdded(props.value.id, props.student.index);}}>
+                        const subjectId = document.getElementById("subject").value;
+                        const note = document.getElementById("note").value;
+                        props.onStudentAdded(props.value.id, props.student.index, subjectId, note);
+                        handleClose();}}>
                         Избери
                     </Button>
                     <Button variant="secondary" onClick={handleClose}>
@@ -107,10 +109,10 @@ const Term = (props) => {
         );
     };
 
-    const isAddedInStudentsList = () => {
+    const isAdded = () => {
         let exists = false;
-        props.studentSlotIds.forEach(id => {
-            if(id === props.value.id) {
+        props.studentSlotIds.forEach(studentSlotId => {
+            if(studentSlotId === props.value.id) {
                 exists = true;
             }
         });
@@ -118,7 +120,7 @@ const Term = (props) => {
     };
 
     const addRemoveButtonClick = () => {
-        if(!isAddedInStudentsList()) {
+        if(!isAdded()) {
             handleShow();
         } else {
             props.onStudentRemoved(props.value.id, props.student.index)
@@ -126,7 +128,7 @@ const Term = (props) => {
     };
 
     const addRemoveButton = () => {
-        if(!isAddedInStudentsList()) {
+        if(!isAdded()) {
             return (
                 <button onClick={addRemoveButtonClick} className="btn btn-outline-success mt-3" title="Пријави се">
                     <i className="fa fa-plus"/>

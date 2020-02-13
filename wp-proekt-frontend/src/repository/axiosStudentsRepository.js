@@ -5,10 +5,12 @@ const StudentsService = {
     fetchByIndex: (index) => {
         return axios.get(`/api/students/${index}`)
     },
-    addToSlot: (slotId, index) => {
+    addToSlot: (slotId, index, subjectId, note) => {
         const formParams = qs.stringify({
             slotId: slotId,
-            index: index
+            index: index,
+            subjectId: subjectId,
+            note: note
         });
         return axios.post("/api/students/add", formParams, {
             headers: {

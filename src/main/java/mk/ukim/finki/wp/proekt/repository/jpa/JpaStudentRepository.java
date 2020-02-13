@@ -11,7 +11,7 @@ public interface JpaStudentRepository extends JpaRepository<Student, String> {
 
     @Query("SELECT st " +
             "FROM Student st JOIN st.slots sl " +
-            "WHERE sl.id = :slotId")
+            "WHERE sl.consultationSlot.id = :slotId")
     Page<Student> findStudentsBySlotsId(@Param("slotId") Long slotId, Pageable pageable);
 
 }

@@ -12,12 +12,23 @@ const ProfessorConsultationTerm = (props) => {
     const [students, setStudents] = useState([]);
     const [totalStudentsCount, setTotalStudentsCount] = useState(null);
     const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(7); // 7?
+    const [pageSize, setPageSize] = useState(1); // 1 ili 7?
     const [totalPages, setTotalPages] = useState(0);
 
     const fetchStudents = useCallback((page = 0) => {
         StudentsService.fetchStudentsBySlotId(props.value.id, page, pageSize).then((promise) => {
-            setStudents(promise.data.content);
+            const students = promise.data.content.map(student => {
+                const studentSlot = student.slots.find(slot => slot.consultationSlot.id === props.value.id);
+                return {
+                    index: student.index,
+                    firstName: student.firstName,
+                    lastName: student.lastName,
+                    subjectName: studentSlot.subject.name,
+                    subjectShortName: studentSlot.subject.shortName,
+                    note: studentSlot.note
+                }
+            });
+            setStudents(students);
             setTotalStudentsCount(promise.data.totalElements);
             setPage(promise.data.number);
             setPageSize(promise.data.size);
@@ -179,14 +190,40 @@ const ProfessorConsultationTerm = (props) => {
 
     const cardBody = () => {
         return (
-            <div className="card-body">
+            <div className="card-body students">
                 <div className="card-text">
-                    <div className="students">
-                        <div className={"mt-4 mb-4"}>
+                    <div>
+                        <div className={"mb-4"}>
                             {students.map(s => {
+                                const option1 = ( //with pageSize = 7 !
+                                    <div key={s.index}>
+                                        {s.firstName} {s.lastName} ({s.index}) -
+                                        <span className="mx-2" title={s.subjectName}>{s.subjectShortName}</span>
+                                        <i className="fa fa-info" title={s.note}/>
+                                    </div>
+                                );
                                 return (
                                     <div key={s.index}>
-                                        {s.firstName} {s.lastName} ({s.index}) - Предмет
+                                        <div className="row mt-1">
+                                            <div className="col-md-5 font-weight-bold text-md-right">Име:</div>
+                                            <div className="col-md-7 text-md-left">{s.firstName}</div>
+                                        </div>
+                                        <div className="row mt-1">
+                                            <div className="col-md-5 font-weight-bold text-md-right">Презиме:</div>
+                                            <div className="col-md-7 text-md-left">{s.lastName}</div>
+                                        </div>
+                                        <div className="row mt-1">
+                                            <div className="col-md-5 font-weight-bold text-md-right">Индекс:</div>
+                                            <div className="col-md-7 text-md-left">{s.index}</div>
+                                        </div>
+                                        <div className="row mt-1">
+                                            <div className="col-md-5 font-weight-bold text-md-right">Предмет:</div>
+                                            <div className="col-md-7 text-md-left">{s.subjectName}</div>
+                                        </div>
+                                        <div className="row mt-1">
+                                            <div className="col-md-5 font-weight-bold text-md-right">Забелешка:</div>
+                                            <div className="col-md-7 text-md-left note">{s.note}</div>
+                                        </div>
                                     </div>
                                 );
                             })}
