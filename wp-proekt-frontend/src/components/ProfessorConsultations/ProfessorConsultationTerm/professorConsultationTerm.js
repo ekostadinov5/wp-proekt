@@ -23,8 +23,8 @@ const ProfessorConsultationTerm = (props) => {
                     index: student.index,
                     firstName: student.firstName,
                     lastName: student.lastName,
-                    subjectName: studentSlot.subject.name,
-                    subjectShortName: studentSlot.subject.shortName,
+                    subjectName: studentSlot.subject ? studentSlot.subject.name : "Останато",
+                    subjectShortName: studentSlot.subject ? studentSlot.subject.shortName : "/",
                     note: studentSlot.note
                 }
             });
@@ -195,13 +195,6 @@ const ProfessorConsultationTerm = (props) => {
                     <div>
                         <div className={"mb-4"}>
                             {students.map(s => {
-                                const option1 = ( //with pageSize = 7 !
-                                    <div key={s.index}>
-                                        {s.firstName} {s.lastName} ({s.index}) -
-                                        <span className="mx-2" title={s.subjectName}>{s.subjectShortName}</span>
-                                        <i className="fa fa-info" title={s.note}/>
-                                    </div>
-                                );
                                 return (
                                     <div key={s.index}>
                                         <div className="row mt-1">

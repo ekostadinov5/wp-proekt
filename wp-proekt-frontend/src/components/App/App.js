@@ -166,7 +166,7 @@ class App extends Component {
 
     StudentsApi = {
         loadStudent: () => {
-            StudentsService.fetchByIndex(170006).then((promise) => {
+            StudentsService.fetchByIndex(170005).then((promise) => {
                 this.setState({
                     student: {
                         index: promise.data.index,

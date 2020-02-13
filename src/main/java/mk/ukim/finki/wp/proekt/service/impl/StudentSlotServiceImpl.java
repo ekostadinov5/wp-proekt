@@ -57,7 +57,10 @@ public class StudentSlotServiceImpl implements StudentSlotService {
             throw new ConsultationInProgressException();
         }
         Student student = this.studentRepository.findById(studentIndex).orElseThrow(InvalidStudentIndexException::new);
-        Subject subject = this.subjectRepository.findById(subjectId).orElseThrow(InvalidSubjectIdException::new);
+        Subject subject = null;
+        if(subjectId != 0) {
+            this.subjectRepository.findById(subjectId).orElseThrow(InvalidSubjectIdException::new);
+        }
 
         StudentSlot studentSlot = new StudentSlot();
         studentSlot.setStudent(student);

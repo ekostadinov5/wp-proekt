@@ -29,7 +29,6 @@ public class StudentSlot {
     private ConsultationSlot consultationSlot;
 
     @ManyToOne
-    @NotNull
     private Subject subject;
 
     private String note;
