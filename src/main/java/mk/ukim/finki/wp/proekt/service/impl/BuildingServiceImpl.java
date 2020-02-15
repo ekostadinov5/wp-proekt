@@ -2,9 +2,8 @@ package mk.ukim.finki.wp.proekt.service.impl;
 
 import mk.ukim.finki.wp.proekt.model.Building;
 import mk.ukim.finki.wp.proekt.model.exceptions.DuplicateBuildingNameException;
-import mk.ukim.finki.wp.proekt.model.exceptions.InvalidBuildingNameException;
+import mk.ukim.finki.wp.proekt.model.exceptions.InvalidBuildingIdException;
 import mk.ukim.finki.wp.proekt.repository.jpa.JpaBuildingRepository;
-import mk.ukim.finki.wp.proekt.repository.jpa.JpaConsultationSlotRepository;
 import mk.ukim.finki.wp.proekt.repository.jpa.JpaRoomRepository;
 import mk.ukim.finki.wp.proekt.service.BuildingService;
 import org.springframework.stereotype.Service;
@@ -46,16 +45,16 @@ public class BuildingServiceImpl implements BuildingService {
 
     @Override
     public Building getBuilding(Long id) {
-        return this.buildingRepository.findById(id).orElseThrow(InvalidBuildingNameException::new);
+        return this.buildingRepository.findById(id).orElseThrow(InvalidBuildingIdException::new);
     }
 
     @Override
     public Building updateBuilding(Long id, String name, String description) {
         Optional<Building> temp;
-        if((temp = this.buildingRepository.findByName(name)).isPresent() && temp.get().getId() != id) {
+        if((temp = this.buildingRepository.findByName(name)).isPresent() && !temp.get().getId().equals(id)) {
             throw new DuplicateBuildingNameException();
         }
-        Building building = this.buildingRepository.findById(id).orElseThrow(InvalidBuildingNameException::new);
+        Building building = this.buildingRepository.findById(id).orElseThrow(InvalidBuildingIdException::new);
         building.setName(name);
         building.setDescription(description);
         return this.buildingRepository.save(building);

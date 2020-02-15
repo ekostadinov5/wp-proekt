@@ -10,39 +10,39 @@ const LocalStorageService = (() => {
     };
 
     const _setToken = (token) => {
-        localStorage.setItem('access_token', token);
+        localStorage.setItem('access_token_cons', token);
     };
 
     const _getToken = () => {
-        return localStorage.getItem('access_token');
+        return localStorage.getItem('access_token_cons');
     };
 
     const _clearToken = () => {
-        localStorage.removeItem('access_token');
+        localStorage.removeItem('access_token_cons');
     };
 
     const _setRole = (role) => {
-        localStorage.setItem('role', role);
+        localStorage.setItem('role_cons', role);
     };
 
     const _getRole = () => {
-        return localStorage.getItem('role');
+        return localStorage.getItem('role_cons');
     };
 
     const _clearRole = () => {
-        localStorage.removeItem('role');
+        localStorage.removeItem('role_cons');
     };
 
     const _setIdentifier = (identifier) => {
-        localStorage.setItem('identifier', identifier);
+        localStorage.setItem('identifier_cons', identifier);
     };
 
     const _getIdentifier = () => {
-        return localStorage.getItem('identifier');
+        return localStorage.getItem('identifier_cons');
     };
 
     const _clearIdentifier = () => {
-        localStorage.removeItem('identifier');
+        localStorage.removeItem('identifier_cons');
     };
 
     return {

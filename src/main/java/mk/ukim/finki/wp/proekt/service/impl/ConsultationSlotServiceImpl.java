@@ -5,7 +5,7 @@ import mk.ukim.finki.wp.proekt.model.Professor;
 import mk.ukim.finki.wp.proekt.model.Room;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidConsultationSlotIdException;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidProfessorIdException;
-import mk.ukim.finki.wp.proekt.model.exceptions.InvalidRoomNameException;
+import mk.ukim.finki.wp.proekt.model.exceptions.InvalidRoomIdException;
 import mk.ukim.finki.wp.proekt.repository.jpa.JpaConsultationSlotRepository;
 import mk.ukim.finki.wp.proekt.repository.jpa.JpaProfessorRepository;
 import mk.ukim.finki.wp.proekt.repository.jpa.JpaRoomRepository;
@@ -40,7 +40,7 @@ public class ConsultationSlotServiceImpl implements ConsultationSlotService {
         }
         ConsultationSlot slot;
         Professor professor = professorRepository.findById(professorId).orElseThrow(InvalidProfessorIdException::new);
-        Room room = roomRepository.findById(roomId).orElseThrow(InvalidRoomNameException::new);
+        Room room = roomRepository.findById(roomId).orElseThrow(InvalidRoomIdException::new);
         if(dayOfWeek != null) {
             slot = ConsultationSlot.createRecurringSlot(professor, room, dayOfWeek, from, to);
         } else {
@@ -61,7 +61,7 @@ public class ConsultationSlotServiceImpl implements ConsultationSlotService {
                 .orElseThrow(InvalidConsultationSlotIdException::new);
         Professor professor = this.professorRepository.findById(professorId)
                 .orElseThrow(InvalidProfessorIdException::new);
-        Room room = this.roomRepository.findById(roomId).orElseThrow(InvalidRoomNameException::new);
+        Room room = this.roomRepository.findById(roomId).orElseThrow(InvalidRoomIdException::new);
         slot.setProfessor(professor);
         slot.setRoom(room);
         slot.setDayOfWeek(dayOfWeek);

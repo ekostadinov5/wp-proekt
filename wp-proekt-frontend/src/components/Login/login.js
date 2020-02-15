@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import UserService from '../../repository/axiosUsersRepository';
 import LocalStorageService from '../../services/localStorageService';
 
 const Login = () => {
+
+    const [errorMessage, setErrorMessage] = useState("");
     
     const onSubmit = (e) => {
         e.preventDefault();
@@ -12,6 +14,10 @@ const Login = () => {
             LocalStorageService.setRole(promise.headers.role);
             LocalStorageService.setIdentifier(promise.headers.identifier);
             window.location.href = '/';
+        }).catch((error) => {
+            if(error.response.status === 403) {
+                setErrorMessage('Корисничкото име или лозинката кои ги внесовте се невалидни.');
+            }
         });
     };
 
@@ -34,6 +40,11 @@ const Login = () => {
                                className="form-control"
                                title="Лозинка"/>
                     </div>
+                </div>
+                <div className='text-right'>
+                    <small className='text-danger'>
+                        {errorMessage}
+                    </small>
                 </div>
                 <div className={"row my-4"}>
                     <div className="col-md-12 text-right">

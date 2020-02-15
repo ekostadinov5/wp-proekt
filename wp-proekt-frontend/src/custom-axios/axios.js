@@ -16,7 +16,25 @@ instance.interceptors.request.use(
         }
         return config;
     }, error => {
-        Promise.reject(error);
+        return Promise.reject(error);
+    }
+);
+
+instance.interceptors.response.use(
+    response => {
+        if(response.headers.authorization !== undefined) {
+            LocalStorageService.setToken(response.headers.authorization);
+        }
+        return response
+    }, error => { 
+        if((error.response.status === 403 && error.response.config.url !== '/login')
+            || error.response.data.exception === 'com.auth0.jwt.exceptions.TokenExpiredException') {
+            LocalStorageService.clearToken();
+            LocalStorageService.clearRole();
+            LocalStorageService.clearIdentifier();
+            window.location.href = '/';
+        }
+        return Promise.reject(error);
     }
 );
 
