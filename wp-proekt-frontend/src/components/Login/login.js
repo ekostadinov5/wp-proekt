@@ -1,10 +1,18 @@
 import React from 'react';
 
-const Login = () => {
+import UserService from '../../repository/axiosUsersRepository';
+import LocalStorageService from '../../services/localStorageService';
 
+const Login = () => {
+    
     const onSubmit = (e) => {
         e.preventDefault();
-        console.log("NOT IMPLEMENTED!");
+        UserService.login(e.target.username.value, e.target.password.value).then((promise) => {
+            LocalStorageService.setToken(promise.headers.authorization);
+            LocalStorageService.setRole(promise.headers.role);
+            LocalStorageService.setIdentifier(promise.headers.identifier);
+            window.location.href = '/';
+        });
     };
 
     return (

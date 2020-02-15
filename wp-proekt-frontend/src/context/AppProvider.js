@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import AppContext from './AppContext';
+import LocalStorageService from '../services/localStorageService';
 
 class AppProvider extends Component {
 
     state = {
-        // role: 'admin'
-        // role: 'professor'
-        // role: 'student'
+        role: LocalStorageService.getRole()
     };
 
     convertDay = (day) => {
@@ -77,9 +76,6 @@ class AppProvider extends Component {
             <AppContext.Provider
                 value={{
                     role: this.state.role,
-                    setRole: () => {
-                        //
-                    },
                     convertDay: this.convertDay,
                     getDayOfWeekIntValue: this.getDayOfWeekIntValue,
                     compareTimeVars: this.compareTimeVars

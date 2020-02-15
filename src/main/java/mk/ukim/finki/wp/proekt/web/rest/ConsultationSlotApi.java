@@ -3,6 +3,7 @@ package mk.ukim.finki.wp.proekt.web.rest;
 import mk.ukim.finki.wp.proekt.model.ConsultationSlot;
 import mk.ukim.finki.wp.proekt.service.ConsultationSlotService;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -24,6 +25,7 @@ public class ConsultationSlotApi {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ConsultationSlot createConsultationSlot(@RequestParam("professorId") String professorId,
                                                    @RequestParam("roomId") Long roomId,
                                                    @RequestParam(name = "dayOfWeek", required = false) String dayOfWeek,

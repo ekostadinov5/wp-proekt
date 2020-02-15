@@ -14,6 +14,8 @@ import BuildingsService from "../../repository/axiosBuildingsRepository";
 import StudentsService from "../../repository/axiosStudentsRepository";
 import ConsultationsService from "../../repository/axiosConsultationsRepository";
 
+import LocalStorageService from '../../services/localStorageService';
+
 import Header from '../Header/header';
 import Footer from '../Footer/footer';
 
@@ -166,17 +168,21 @@ class App extends Component {
 
     StudentsApi = {
         loadStudent: () => {
-            StudentsService.fetchByIndex(170005).then((promise) => {
-                this.setState({
-                    student: {
-                        index: promise.data.index,
-                        firstName: promise.data.firstName,
-                        lastName: promise.data.lastName
-                    },
-                    studentSlotIds: promise.data.slots.map(s => s.consultationSlot.id),
-                    studentFollowingIds: promise.data.following.map(p => p.id)
+            const role = LocalStorageService.getRole();
+            if(role === 'student') {
+                const index = LocalStorageService.getIdentifier();
+                StudentsService.fetchByIndex(index).then((promise) => {
+                    this.setState({
+                        student: {
+                            index: promise.data.index,
+                            firstName: promise.data.firstName,
+                            lastName: promise.data.lastName
+                        },
+                        studentSlotIds: promise.data.slots.map(s => s.consultationSlot.id),
+                        studentFollowingIds: promise.data.following.map(p => p.id)
+                    });
                 });
-            });
+            }
         },
         addStudentToSlot: (slotId, index, subjectId, note) => {
             StudentsService.addToSlot(slotId, index, subjectId, note).then(() => {
@@ -187,7 +193,7 @@ class App extends Component {
                     };
                 });
             }).catch(error => {
-                if(error.response.status === 403) {
+                if(error.response.status === 400) {
                     this.handleShowErrorModal('Консултациите се моментално во тек!');
                 }
             });
@@ -201,7 +207,7 @@ class App extends Component {
                     };
                 });
             }).catch(error => {
-                if(error.response.status === 403) {
+                if(error.response.status === 400) {
                     this.handleShowErrorModal('Консултациите се моментално во тек!');
                 }
             });
@@ -245,11 +251,15 @@ class App extends Component {
             });
         },
         loadProfessor: () => {
-            ProfessorsService.fetchById("kostadin.mishev").then((promise) => {
-                this.setState({
-                    professor: promise.data
+            const role = LocalStorageService.getRole();
+            if(role === 'professor') {
+                const id = LocalStorageService.getIdentifier();
+                ProfessorsService.fetchById(id).then((promise) => {
+                    this.setState({
+                        professor: promise.data
+                    });
                 });
-            });
+            }
         }
     };
 

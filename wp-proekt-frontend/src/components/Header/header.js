@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Link} from "react-router-dom";
 
 import AppContext from '../../context/AppContext';
+import LocalStorageService from '../../services/localStorageService';
 
 const Header = (props) => {
 
@@ -28,6 +29,13 @@ const Header = (props) => {
         } else if(lastClickedLink === 1) {
             props.onSearch.searchRooms(e.target.searchTerm.value);
         }
+    };
+
+    const logOut = () => {
+        LocalStorageService.clearToken();
+        LocalStorageService.clearRole();
+        LocalStorageService.clearIdentifier();
+        window.location.href = "/";
     };
 
     const menuItems = () => {
@@ -84,9 +92,9 @@ const Header = (props) => {
                         {context => (
                             <>
                                 {(() => {
-                                    if(context.role) {
+                                    if(context.role === 'admin' ||context.role === 'professor' || context.role === 'student') {
                                         return (
-                                            <button onClick={() => console.log("NOT IMPLEMENTED!")} className={"nav-item btn btn-outline-danger mt-2 ml-3"}>
+                                            <button onClick={logOut} className={"nav-item btn btn-outline-danger mt-2 ml-3"}>
                                                 Одјави се
                                             </button>
                                         );

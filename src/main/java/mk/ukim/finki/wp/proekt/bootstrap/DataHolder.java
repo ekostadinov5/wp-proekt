@@ -3,6 +3,7 @@ package mk.ukim.finki.wp.proekt.bootstrap;
 import lombok.Getter;
 import mk.ukim.finki.wp.proekt.model.*;
 import mk.ukim.finki.wp.proekt.repository.jpa.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +23,9 @@ public class DataHolder {
     private final JpaProfessorRepository professorRepository;
     private final JpaConsultationSlotRepository consultationSlotRepository;
     private final JpaStudentSlotRepository studentSlotRepository;
+    private final JpaApplicationUserRepository applicationUserRepository;
+    private final JpaRoleRepository roleRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public static final List<Subject> subjects = new ArrayList<>();
     public static final List<Building> buildings = new ArrayList<>();
@@ -30,6 +34,8 @@ public class DataHolder {
     public static final List<Professor> professors = new ArrayList<>();
     public static final List<ConsultationSlot> slots = new ArrayList<>();
     public static final List<StudentSlot> studentSlots = new ArrayList<>();
+    public static final List<Role> roles = new ArrayList<>();
+    public static final List<ApplicationUser> users = new ArrayList<>();
 
     public DataHolder(JpaSubjectRepository subjectRepository,
                       JpaBuildingRepository buildingRepository,
@@ -37,7 +43,10 @@ public class DataHolder {
                       JpaStudentRepository studentRepository,
                       JpaProfessorRepository professorRepository,
                       JpaConsultationSlotRepository consultationSlotRepository,
-                      JpaStudentSlotRepository studentSlotRepository) {
+                      JpaStudentSlotRepository studentSlotRepository,
+                      JpaApplicationUserRepository applicationUserRepository,
+                      JpaRoleRepository roleRepository,
+                      BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.subjectRepository = subjectRepository;
         this.buildingRepository = buildingRepository;
         this.roomRepository = roomRepository;
@@ -45,6 +54,9 @@ public class DataHolder {
         this.professorRepository = professorRepository;
         this.consultationSlotRepository = consultationSlotRepository;
         this.studentSlotRepository = studentSlotRepository;
+        this.applicationUserRepository = applicationUserRepository;
+        this.roleRepository = roleRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @PostConstruct
@@ -296,9 +308,31 @@ public class DataHolder {
         students.get(6).getFollowing().add(rs);
         students.get(6).getFollowing().add(km);
 
+        Role admin = new Role(null, "admin");
+        Role professor = new Role(null, "professor");
+        Role student = new Role(null, "student");
+        roles.add(admin);
+        roles.add(professor);
+        roles.add(student);
+
+
+        String password = bCryptPasswordEncoder.encode("password");
+        List<Role> adminRoles = new ArrayList<>();
+        adminRoles.add(admin);
+        List<Role> professorRoles = new ArrayList<>();
+        professorRoles.add(professor);
+        List<Role> studentRoles = new ArrayList<>();
+        studentRoles.add(student);
+        users.add(new ApplicationUser(null, "admin", password, adminRoles));
+        users.add(new ApplicationUser(null, "kostadin.mishev", password, professorRoles));
+        users.add(new ApplicationUser(null, "170005", password, studentRoles));
+
+
 
         // Initial save of all objects in relational database
         if (this.consultationSlotRepository.count() == 0) {
+            this.roleRepository.saveAll(roles);
+            this.applicationUserRepository.saveAll(users);
             this.subjectRepository.saveAll(subjects);
             this.buildingRepository.saveAll(buildings);
             this.roomRepository.saveAll(rooms);
