@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Building from '../../Buildings/Building/building';
 //import {loadConsultations} from "../../../repository/consultationsRepository";
 import {Link} from "react-router-dom";
@@ -6,7 +6,11 @@ import {Link} from "react-router-dom";
 import AppContext from '../../../context/AppContext';
 
 const Rooms = (props) => {
-    
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    });
+
     const roomsByBuilding = () => {
         return props.buildings.sort((b1, b2) => (b1.name > b2.name) ? 1 : -1).map(b =>
             <Building key={b.id} id={b.id} building={b} rooms={props.rooms.filter(r => r.building.id === b.id)}

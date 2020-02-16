@@ -1,12 +1,25 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 
 const BuildingAdd = (props) => {
 
+    const [nameErrorMsg, setNameErrorMsg] = useState('');
+
     const history = useHistory();
+
+    const validate = (e) => {
+        if(e.target.name.value === '') {
+            setNameErrorMsg('Ова поле е задолжително');
+            return false;
+        }
+        return true;
+    };
 
     const onFormSubmit = (e) => {
         e.preventDefault();
+        if(!validate(e)) {
+            return;
+        }
         const newBuilding = {
             name: e.target.name.value,
             description: e.target.description.value
@@ -17,25 +30,34 @@ const BuildingAdd = (props) => {
 
     const onBackClick = () => {
         history.push("/rooms");
-    }
+    };
 
     return (
         <div>
             <hr/>
             <form onSubmit={onFormSubmit} className={"mt-5"}>
-                <div className="row form-group">
+                <div className="row form-group mb-0">
                     <div className="col-md-4 font-weight-bold text-right">Име:</div>
                     <div className="col-lg-6 col-md-8">
                         <div className="row">
                             <div className="col-md-8 text-right">
-                                <input name={"name"} type="text"
+                                <input onChange={() => setNameErrorMsg('')}
+                                       name={"name"}
+                                       type="text"
                                        className="form-control"
                                        title="Име"/>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="row form-group mt-4">
+                <div className='row'>
+                    <div className='col-8 text-right'>
+                        <small className='text-danger'>
+                            {nameErrorMsg}
+                        </small>
+                    </div>
+                </div>
+                <div className="row form-group mt-3">
                     <div className="col-md-4 font-weight-bold text-right">Опис:</div>
                     <div className={"col-lg-6 col-md-8"}>
                         <div className="row">

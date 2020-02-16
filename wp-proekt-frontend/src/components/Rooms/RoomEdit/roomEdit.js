@@ -7,6 +7,7 @@ const RoomEdit = (props) => {
 
     const [buildings, setBuildings] = useState([]);
     const [room, setRoom] = useState({id: '', name: '', buildingId: '', description: ''});
+    const [nameErrorMsg, setNameErrorMsg] = useState('');
 
     const {roomId} = useParams();
 
@@ -26,8 +27,19 @@ const RoomEdit = (props) => {
 
     const history = useHistory();
 
+    const validate = (e) => {
+        if(e.target.name.value === '') {
+            setNameErrorMsg('Ова поле е задолжително');
+            return false;
+        }
+        return true;
+    };
+
     const onFormSubmit = (e) => {
         e.preventDefault();
+        if(!validate(e)) {
+            return;
+        }
         props.onRoomEdited({
             id: room.id,
             name: room.name,
@@ -42,6 +54,7 @@ const RoomEdit = (props) => {
     };
 
     const handleRoomOnChange = (e) => {
+        setNameErrorMsg('');
         const paramName = e.target.name;
         const paramValue = e.target.value;
         setRoom({...room, [paramName]: paramValue});
@@ -53,7 +66,7 @@ const RoomEdit = (props) => {
         <div>
             <hr/>
             <form onSubmit={onFormSubmit} className={"mt-5"}>
-                <div className="row form-group">
+                <div className="row form-group mb-0">
                     <div className="col-md-4 font-weight-bold text-right">Име:</div>
                     <div className="col-lg-6 col-md-8">
                         <div className="row">
@@ -68,7 +81,14 @@ const RoomEdit = (props) => {
                         </div>
                     </div>
                 </div>
-                <div className="row form-group">
+                <div className='row'>
+                    <div className='col-8 text-right'>
+                        <small className='text-danger'>
+                            {nameErrorMsg}
+                        </small>
+                    </div>
+                </div>
+                <div className="row form-group mt-3">
                     <div className="col-md-4 font-weight-bold text-right">Група на простории:</div>
                     <div className="col-lg-6 col-md-8">
                         <div className={"row"}>

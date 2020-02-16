@@ -3,15 +3,47 @@ import {useHistory} from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import TimeField from 'react-simple-timefield';
+import moment from "moment";
 
 const ConsultationAdd = (props) => {
 
     const [date, setDate] = useState(new Date());
+    const [dateTimeErrorMsg, setDateTimeErrorMsg] = useState('');
+    const [timeErrorMsg, setTimeErrorMsg] = useState('');
 
     const history = useHistory();
 
+    const validate = (e) => {
+        let result = true;
+
+        const dayInMs = new Date(moment(e.target.date.value, ['DD/MM/YYYY', 'MM/DD/YYYY'])).getTime();
+        const hoursFromInMs = e.target.from.value.split(':')[0] * 1000 * 60 * 60;
+        const minutesFromInMs = e.target.from.value.split(':')[1] * 1000 * 60;
+        const hoursToInMs = e.target.to.value.split(':')[0] * 1000 * 60 * 60;
+        const minutesToInMs = e.target.to.value.split(':')[1] * 1000 * 60;
+
+        if(new Date().getTime() -  dayInMs - hoursFromInMs - minutesFromInMs >= 0){
+            setDateTimeErrorMsg('Не можете да закажете консултациски термин во минатото');
+            result = false;
+        } else {
+            setDateTimeErrorMsg('');
+        }
+
+        if(hoursFromInMs + minutesFromInMs - hoursToInMs - minutesToInMs >= 0) {
+            setTimeErrorMsg('Времето на крај мора да биде по времето на почеток');
+            result = false;
+        } else {
+            setTimeErrorMsg('');
+        }
+
+        return result;
+    };
+
     const onFormSubmit = (e) => {
         e.preventDefault();
+        if(!validate(e)) {
+            return;
+        }
         let consultationSlot = {
             professorId: props.professor.id,
             roomId: e.target[`building${e.target.building.value}`].value,
@@ -196,6 +228,23 @@ const ConsultationAdd = (props) => {
         );
     };
 
+    const errorMessages = () => {
+        return (
+            <div className='row'>
+                <div className='col-8 text-right'>
+                    <small className='text-danger'>
+                        <div>
+                            {dateTimeErrorMsg}
+                        </div>
+                        <div>
+                            {timeErrorMsg}
+                        </div>
+                    </small>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div>
             <hr/>
@@ -204,6 +253,7 @@ const ConsultationAdd = (props) => {
                 {termFromAndTo()}
                 {termBuilding()}
                 {termRoom()}
+                {errorMessages()}
                 <div className="col-md-12 text-right mt-5">
                     <button type="submit" className="btn btn-primary" title="Додади">
                         Додади

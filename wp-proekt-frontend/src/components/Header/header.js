@@ -94,7 +94,9 @@ const Header = (props) => {
                                 {(() => {
                                     if(context.role === 'admin' ||context.role === 'professor' || context.role === 'student') {
                                         return (
-                                            <button onClick={logOut} className={"nav-item btn btn-outline-danger mt-2 ml-3"}>
+                                            <button onClick={logOut}
+                                                    className={"nav-item btn btn-outline-danger mt-2 ml-3"}
+                                                    title={LocalStorageService.getIdentifier()}>
                                                 Одјави се
                                             </button>
                                         );

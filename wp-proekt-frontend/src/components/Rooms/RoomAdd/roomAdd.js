@@ -5,6 +5,7 @@ import BuildingService from '../../../repository/axiosBuildingsRepository';
 const RoomAdd = (props) => {
 
     const [buildings, setBuildings] = useState([]);
+    const [nameErrorMsg, setNameErrorMsg] = useState('');
 
     useEffect(() => {
         BuildingService.fetchBuildingsOrdered().then((promise) => {
@@ -14,8 +15,19 @@ const RoomAdd = (props) => {
 
     const history = useHistory();
 
+    const validate = (e) => {
+        if(e.target.name.value === '') {
+            setNameErrorMsg('Ова поле е задолжително');
+            return false;
+        }
+        return true;
+    };
+
     const onFormSubmit = (e) => {
         e.preventDefault();
+        if(!validate(e)) {
+            return;
+        }
         const newRoom = {
             name: e.target.name.value,
             buildingId: e.target.buildingId.value,
@@ -27,7 +39,7 @@ const RoomAdd = (props) => {
 
     const onBackClick = () => {
         history.push("/rooms");
-    }
+    };
 
     const options = buildings.map(b => <option key={b.id} value={b.id}>{b.name}</option>);
 
@@ -35,19 +47,27 @@ const RoomAdd = (props) => {
         <div>
             <hr/>
             <form onSubmit={onFormSubmit} className={"mt-5"}>
-                <div className="row form-group">
+                <div className="row form-group mb-0">
                     <div className="col-md-4 font-weight-bold text-right">Име:</div>
                     <div className="col-lg-6 col-md-8">
                         <div className="row">
                             <div className="col-md-8 text-right">
-                                <input name={"name"} type="text"
+                                <input onChange={() => setNameErrorMsg('')}
+                                       name={"name"} type="text"
                                        className="form-control"
                                        title="Име"/>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="row form-group">
+                <div className='row'>
+                    <div className='col-8 text-right'>
+                        <small className='text-danger'>
+                            {nameErrorMsg}
+                        </small>
+                    </div>
+                </div>
+                <div className="row form-group mt-3">
                     <div className="col-md-4 font-weight-bold text-right">Група на простории:</div>
                     <div className="col-lg-6 col-md-8">
                         <div className={"row"}>

@@ -183,7 +183,7 @@ const ProfessorConsultationTerm = (props) => {
                     </div>
                 </div>
                 <hr />
-                <h5>Студенти ({totalStudentsCount})</h5>
+                <h4>Студенти ({totalStudentsCount})</h4>
             </div>
         );
     };
@@ -197,25 +197,12 @@ const ProfessorConsultationTerm = (props) => {
                             {students.map(s => {
                                 return (
                                     <div key={s.index}>
-                                        <div className="row mt-1">
-                                            <div className="col-md-5 font-weight-bold text-md-right">Име:</div>
-                                            <div className="col-md-7 text-md-left">{s.firstName}</div>
+                                        <div className="card-body">
+                                            <h5 className="card-title">{s.firstName} {s.lastName} - {s.index}</h5>
+                                            <h6 className="card-text">{s.subjectName}</h6>
                                         </div>
-                                        <div className="row mt-1">
-                                            <div className="col-md-5 font-weight-bold text-md-right">Презиме:</div>
-                                            <div className="col-md-7 text-md-left">{s.lastName}</div>
-                                        </div>
-                                        <div className="row mt-1">
-                                            <div className="col-md-5 font-weight-bold text-md-right">Индекс:</div>
-                                            <div className="col-md-7 text-md-left">{s.index}</div>
-                                        </div>
-                                        <div className="row mt-1">
-                                            <div className="col-md-5 font-weight-bold text-md-right">Предмет:</div>
-                                            <div className="col-md-7 text-md-left">{s.subjectName}</div>
-                                        </div>
-                                        <div className="row mt-1">
-                                            <div className="col-md-5 font-weight-bold text-md-right">Забелешка:</div>
-                                            <div className="col-md-7 text-md-left note">{s.note}</div>
+                                        <div className='note'>
+                                            <p className="card-text">{s.note}</p>
                                         </div>
                                     </div>
                                 );

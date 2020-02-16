@@ -50,19 +50,26 @@
 }
 
 .students {
-  height: 370px;
+  height: 300px;
   padding: 20px;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 550px) {
   .students {
-    height: 490px;
+    height: 340px;
+    padding: 20px;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .students {
+    height: 380px;
     padding: 20px;
   }
 }
 
 .note {
-  height: 150px;
+  height: 100px;
   overflow-y: auto;
 }
 

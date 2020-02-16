@@ -5,6 +5,7 @@ import BuildingService from "../../../repository/axiosBuildingsRepository";
 const BuildingEdit = (props) => {
 
     const [building, setBuilding] = useState({id: '', name: '', description: ''});
+    const [nameErrorMsg, setNameErrorMsg] = useState('');
 
     const {buildingId} = useParams();
 
@@ -20,8 +21,19 @@ const BuildingEdit = (props) => {
 
     const history = useHistory();
 
+    const validate = (e) => {
+        if(e.target.name.value === '') {
+            setNameErrorMsg('Ова поле е задолжително');
+            return false;
+        }
+        return true;
+    };
+
     const onFormSubmit = (e) => {
         e.preventDefault();
+        if(!validate(e)) {
+            return;
+        }
         props.onBuildingEdited({
             id: building.id,
             name: building.name,
@@ -32,9 +44,10 @@ const BuildingEdit = (props) => {
     
     const onBackClick = () => {
         history.push("/rooms");
-    }
+    };
 
     const handleBuildingOnChange = (e) => {
+        setNameErrorMsg('');
         const paramName = e.target.name;
         const paramValue = e.target.value;
         setBuilding({...building, [paramName]:paramValue});
@@ -44,7 +57,7 @@ const BuildingEdit = (props) => {
         <div>
             <hr/>
             <form onSubmit={onFormSubmit} className={"mt-5"}>
-                <div className="row form-group">
+                <div className="row form-group mb-0">
                     <div className="col-md-4 font-weight-bold text-right">Име:</div>
                     <div className="col-lg-6 col-md-8">
                         <div className="row">
@@ -59,7 +72,14 @@ const BuildingEdit = (props) => {
                         </div>
                     </div>
                 </div>
-                <div className="row form-group">
+                <div className='row'>
+                    <div className='col-8 text-right'>
+                        <small className='text-danger'>
+                            {nameErrorMsg}
+                        </small>
+                    </div>
+                </div>
+                <div className="row form-group mt-3">
                     <div className="col-md-4 font-weight-bold text-right">Опис:</div>
                     <div className={"col-lg-6 col-md-8"}>
                         <div className="row">

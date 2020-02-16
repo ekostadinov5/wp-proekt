@@ -54,7 +54,7 @@ public class StudentSlotServiceImpl implements StudentSlotService {
                 && slot.getFrom().isBefore(time) && slot.getTo().isAfter(time))
             || (slot.getDate() != null && slot.getDate().isEqual(date)
                 && slot.getFrom().isBefore(time) && slot.getTo().isAfter(time))) {
-            throw new ConsultationInProgressException();
+            throw new ConsultationsInProgressException();
         }
         Student student = this.studentRepository.findById(studentIndex).orElseThrow(InvalidStudentIndexException::new);
         Subject subject = null;
@@ -90,7 +90,7 @@ public class StudentSlotServiceImpl implements StudentSlotService {
                 && slot.getFrom().isBefore(time) && slot.getTo().isAfter(time))
                 || (slot.getDate() != null && slot.getDate().isEqual(date)
                 && slot.getFrom().isBefore(time) && slot.getTo().isAfter(time))) {
-            throw new ConsultationInProgressException();
+            throw new ConsultationsInProgressException();
         }
         Student student = studentSlot.getStudent();
 

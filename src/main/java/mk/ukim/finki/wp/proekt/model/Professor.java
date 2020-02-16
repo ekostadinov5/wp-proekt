@@ -8,10 +8,8 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.Comparator;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
-import java.util.TreeSet;
 
 @Entity
 @AllArgsConstructor
@@ -21,13 +19,13 @@ public class Professor {
     @Id
     private String id;
 
-    @NotNull
+    @NotEmpty
     private String title;
 
-    @NotNull
+    @NotEmpty
     private String firstName;
 
-    @NotNull
+    @NotEmpty
     private String lastName;
 
     @OneToMany(mappedBy = "professor", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)

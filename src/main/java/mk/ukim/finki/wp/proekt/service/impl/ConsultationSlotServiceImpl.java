@@ -4,6 +4,7 @@ import mk.ukim.finki.wp.proekt.model.ConsultationSlot;
 import mk.ukim.finki.wp.proekt.model.Professor;
 import mk.ukim.finki.wp.proekt.model.Room;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidConsultationSlotIdException;
+import mk.ukim.finki.wp.proekt.model.exceptions.InvalidConsultationSlotTimeInterval;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidProfessorIdException;
 import mk.ukim.finki.wp.proekt.model.exceptions.InvalidRoomIdException;
 import mk.ukim.finki.wp.proekt.repository.jpa.JpaConsultationSlotRepository;
@@ -35,6 +36,9 @@ public class ConsultationSlotServiceImpl implements ConsultationSlotService {
     @Override
     public ConsultationSlot createSlot(String professorId, Long roomId, DayOfWeek dayOfWeek, LocalDate date,
                                        LocalTime from, LocalTime to) {
+        if(!from.isBefore(to)) {
+            throw new InvalidConsultationSlotTimeInterval();
+        }
         if(dayOfWeek == null && date == null) {
             throw new IllegalArgumentException();
         }
@@ -57,6 +61,12 @@ public class ConsultationSlotServiceImpl implements ConsultationSlotService {
     @Override
     public ConsultationSlot updateSlot(Long slotId, String professorId, Long roomId, DayOfWeek dayOfWeek,
                                        LocalDate date, LocalTime from, LocalTime to) {
+        if(!from.isBefore(to)) {
+            throw new InvalidConsultationSlotTimeInterval();
+        }
+        if(dayOfWeek == null && date == null) {
+            throw new IllegalArgumentException();
+        }
         ConsultationSlot slot = this.consultationSlotRepository.findById(slotId)
                 .orElseThrow(InvalidConsultationSlotIdException::new);
         Professor professor = this.professorRepository.findById(professorId)

@@ -1,10 +1,10 @@
 package mk.ukim.finki.wp.proekt.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -31,6 +31,7 @@ public class ConsultationSlot {
     @JsonBackReference
     private List<StudentSlot> students;
 
+    @FutureOrPresent
     private LocalDate date;
 
     private DayOfWeek dayOfWeek;

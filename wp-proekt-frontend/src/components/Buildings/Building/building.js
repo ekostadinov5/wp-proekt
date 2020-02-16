@@ -49,7 +49,7 @@ const Building = (props) => {
                             {props.building.name}
                             <button className="btn btn-outline-info btn-lg ml-3" type="button" data-toggle="collapse"
                                     data-target={"#collapseBuilding" + props.id} aria-expanded="false"
-                                    aria-controls={"collapseBuilding" + props.id}>
+                                    aria-controls={"collapseBuilding" + props.id} title={"Повеќе..."}>
                                 <i className="fa fa-angle-down" />
                             </button>
                             {(() => {
