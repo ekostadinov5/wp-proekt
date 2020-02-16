@@ -66,7 +66,7 @@ const Header = (props) => {
 
     const searchForm = () => {
         return (
-            <form onSubmit={onSearch} className="nav-item form-inline mt-2">
+            <form onSubmit={onSearch} className="nav-item form-inline mt-2 mx-3">
                 <div className={"form-group m-auto"}>
                     <input id={"searchTerm"} name={"searchTerm"} className="form-control my-2 mr-2" type="search" 
                            placeholder="Пребарај..." aria-label="Search"/>
@@ -95,8 +95,9 @@ const Header = (props) => {
                                     if(context.role === 'admin' ||context.role === 'professor' || context.role === 'student') {
                                         return (
                                             <button onClick={logOut}
-                                                    className={"nav-item btn btn-outline-danger mt-2 ml-3"}
-                                                    title={LocalStorageService.getIdentifier()}>
+                                                    className={"nav-item btn btn-outline-danger mt-2"}
+                                                    //title={LocalStorageService.getIdentifier()}
+                                            >
                                                 Одјави се
                                             </button>
                                         );
@@ -106,7 +107,7 @@ const Header = (props) => {
                                                 document.getElementById("menu").childNodes
                                                     .forEach(c => c.classList.remove("active"))
                                             }}
-                                                  className="nav-item btn btn-outline-info mt-2 ml-3" to={"/login"}>
+                                                  className="nav-item btn btn-outline-info mt-2" to={"/login"}>
                                                 Најава
                                             </Link>
                                         );

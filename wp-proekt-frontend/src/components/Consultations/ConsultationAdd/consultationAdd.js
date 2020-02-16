@@ -22,11 +22,14 @@ const ConsultationAdd = (props) => {
         const hoursToInMs = e.target.to.value.split(':')[0] * 1000 * 60 * 60;
         const minutesToInMs = e.target.to.value.split(':')[1] * 1000 * 60;
 
-        if(new Date().getTime() -  dayInMs - hoursFromInMs - minutesFromInMs >= 0){
-            setDateTimeErrorMsg('Не можете да закажете консултациски термин во минатото');
-            result = false;
-        } else {
-            setDateTimeErrorMsg('');
+
+        if(e.target.dayDateSelect.value !== '1') {
+            if(new Date().getTime() -  dayInMs - hoursFromInMs - minutesFromInMs >= 0){
+                setDateTimeErrorMsg('Не можете да закажете консултациски термин во минатото');
+                result = false;
+            } else {
+                setDateTimeErrorMsg('');
+            }
         }
 
         if(hoursFromInMs + minutesFromInMs - hoursToInMs - minutesToInMs >= 0) {

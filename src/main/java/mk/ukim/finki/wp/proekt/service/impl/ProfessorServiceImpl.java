@@ -31,7 +31,8 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Override
     public Page<Professor> getAllProfessors(int page, int pageSize) {
-        return this.professorRepository.findAll(PageRequest.of(page, pageSize, Sort.by("lastName")));
+        return this.professorRepository
+                .findAll(PageRequest.of(page, pageSize, Sort.by("lastName").and(Sort.by("firstName"))));
     }
 
     @Override
