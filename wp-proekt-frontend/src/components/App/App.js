@@ -13,6 +13,7 @@ import RoomsService from '../../repository/axiosRoomsRepository';
 import BuildingsService from "../../repository/axiosBuildingsRepository";
 import StudentsService from "../../repository/axiosStudentsRepository";
 import ConsultationsService from "../../repository/axiosConsultationsRepository";
+import SubjectsService from '../../repository/axiosSubjectRepository';
 
 import LocalStorageService from '../../services/localStorageService';
 
@@ -35,6 +36,12 @@ import ProfessorConsultations from '../ProfessorConsultations/ProfessorConsultat
 import ConsultationAdd from '../Consultations/ConsultationAdd/consultationAdd';
 import ConsultationEdit from '../Consultations/ConsultationEdit/consultationEdit';
 
+import SubjectsList from '../Subjects/SubjectsList/subjects';
+import SubjectAdd from '../Subjects/SubjectAdd/subjectAdd';
+import SubjectEdit from '../Subjects/SubjectEdit/subjectEdit';
+import AddProfessorToSubject from '../Subjects/AddProfessorToSubject/addProfessorToSubject';
+import RemoveProfessorFromSubject from '../Subjects/RemoveProfessorFromSubject/removeProfessorFromSubject';
+
 import Login from '../Login/login';
 
 class App extends Component {
@@ -47,7 +54,7 @@ class App extends Component {
             
             professors: [],
             page: 0,
-            pageSize: 18, // 18 ili 24
+            pageSize: 24, // 18 ili 24
             totalPages: 0,
             allProfessors: [],
             
@@ -60,6 +67,8 @@ class App extends Component {
             studentFollowingIds: [],
 
             professor: null,
+
+            subjects: []
         }
     }
 
@@ -281,13 +290,79 @@ class App extends Component {
         }
     };
 
+    SubjectsApi = {
+        loadSubjects: () => {
+            SubjectsService.fetchSubjectsOrdered().then((promise) => {
+                this.setState({
+                    subjects: promise.data
+                });
+            });
+        },
+        createSubject: (newSubject) => {
+            SubjectsService.addSubject(newSubject).then((promise) => {
+                const newSubject = promise.data;
+                this.setState((prevState) => {
+                    const newSubjectsRef = [...prevState.subjects, newSubject];
+                    return {
+                        subjects: newSubjectsRef
+                    }
+                });
+            }).catch(error => {
+                if(error.response.status === 409 &&
+                    error.response.data.exception === "mk.ukim.finki.wp.proekt.model.exceptions.DuplicateSubjectNameException") {
+                    this.handleShowErrorModal(`Веќе постои предмет со име ${newSubject.name}!`);
+                }
+                if(error.response.status === 409 &&
+                    error.response.data.exception === "mk.ukim.finki.wp.proekt.model.exceptions.DuplicateSubjectShortNameException") {
+                    this.handleShowErrorModal(`Веќе постои предмет со кратенка ${newSubject.shortName}!`);
+                }
+            });
+        },
+        updateSubject: (editedSubject) => {
+            SubjectsService.updateSubject(editedSubject).then((promise) => {
+                const newSubject = promise.data;
+                this.setState((prevState) => {
+                    const newSubjectsRef = prevState.subjects.map(s => (newSubject.id !== s.id) ? s : newSubject);
+                    return {
+                        subjects: newSubjectsRef
+                    }
+                });
+            }).catch(error => {
+                if(error.response.status === 409 &&
+                    error.response.data.exception === "mk.ukim.finki.wp.proekt.model.exceptions.DuplicateSubjectNameException") {
+                    this.handleShowErrorModal(`Веќе постои предмет со име ${editedSubject.name}!`);
+                }
+                if(error.response.status === 409 &&
+                    error.response.data.exception === "mk.ukim.finki.wp.proekt.model.exceptions.DuplicateSubjectShortNameException") {
+                    this.handleShowErrorModal(`Веќе постои предмет со кратенка ${editedSubject.shortName}!`);
+                }
+            });
+        },
+        deleteSubject: (subjectId) => {
+            SubjectsService.deleteSubject(subjectId).then(() => {
+                this.setState((prevState) => {
+                    const newSubjectsRef = prevState.subjects.filter(s => subjectId !== s.id);
+                    return {
+                        subjects: newSubjectsRef
+                    }
+                });
+            });
+        },
+        addProfessorToSubject: (subjectId, professorId) => {
+            SubjectsService.addProfessor(subjectId, professorId);
+        },
+        removeProfessorFromSubject: (subjectId, professorId) => {
+            SubjectsService.removeProfessor(subjectId, professorId);
+        }
+    };
+
     SearchApi = {
         searchProfessors: (searchTerm) => {
             ProfessorsService.searchProfessors(searchTerm).then((promise) => {
                 this.setState({
                     professors: promise.data,
                     page: 0,
-                    pageSize: 18, // 18 ili 24
+                    pageSize: 24, // 18 ili 24
                     totalPages: 0,
                     allProfessors: promise.data
                 });
@@ -297,6 +372,13 @@ class App extends Component {
             RoomsService.searchRooms(searchTerm).then((promise) => {
                 this.setState({
                     rooms: promise.data,
+                });
+            });
+        },
+        searchSubjects: (searchTerm) => {
+            SubjectsService.searchSubjects(searchTerm).then((promise) => {
+                this.setState({
+                    subjects: promise.data
                 });
             });
         }
@@ -311,6 +393,7 @@ class App extends Component {
         this.RoomsApi.loadRooms();
         this.StudentsApi.loadStudent();
         this.ProfessorsApi.loadProfessor();
+        this.SubjectsApi.loadSubjects();
     }
 
     render() {
@@ -332,6 +415,23 @@ class App extends Component {
                         </Route>
                         <Route path={"/buildings/:buildingId/edit"} exact render={()=>
                             <BuildingEdit onBuildingEdited={this.BuildingsApi.updateBuilding} />}>
+                        </Route>
+
+                        <Route path={"/subjects"} exact render={()=>
+                            <SubjectsList subjects={this.state.subjects} onSubjectDelete={this.SubjectsApi.deleteSubject} />}>
+                        </Route>
+                        <Route path={"/subjects/add"} exact render={()=>
+                            <SubjectAdd onNewSubjectAdded={this.SubjectsApi.createSubject} />}>
+                        </Route>
+                        <Route path={"/subjects/:subjectId/edit"} exact render={()=>
+                            <SubjectEdit onSubjectEdited={this.SubjectsApi.updateSubject} />}>
+                        </Route>
+                        <Route path={"/subjects/:subjectId/add/professor"} exact render={()=>
+                            <AddProfessorToSubject professors={this.state.allProfessors}
+                                                   onProfessorAddedToSubject={this.SubjectsApi.addProfessorToSubject} />}>
+                        </Route>
+                        <Route path={"/subjects/:subjectId/remove/professor"} exact render={()=>
+                            <RemoveProfessorFromSubject onProfessorRemovedFromSubject={this.SubjectsApi.removeProfessorFromSubject} />}>
                         </Route>
                     </div>
                 );
@@ -411,8 +511,10 @@ class App extends Component {
                 <AppContext.Consumer>
                     {context => (
                         <Router>
-                            <Header onSearch={this.SearchApi} onTermsLinkClicked={this.ProfessorsApi.loadProfessors}
-                                    onRoomsLinkClicked={this.RoomsApi.loadRooms} />
+                            <Header onSearch={this.SearchApi} 
+                                    onTermsLinkClicked={this.ProfessorsApi.loadProfessors}
+                                    onRoomsLinkClicked={this.RoomsApi.loadRooms} 
+                                    onSubjectsLinkClicked={this.SubjectsApi.loadSubjects} />
                             <div role="main" className="mt-3">
                                 {routes()}
                                 {(() => {

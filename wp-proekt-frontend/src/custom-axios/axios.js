@@ -27,8 +27,8 @@ instance.interceptors.response.use(
         }
         return response
     }, error => { 
-        if((error.response.status === 403 && error.response.config.url !== '/login')
-            || error.response.data.exception === 'com.auth0.jwt.exceptions.TokenExpiredException') {
+        if(error.response !== undefined && ((error.response.status === 403 && error.response.config.url !== '/login')
+            || error.response.data.exception === 'com.auth0.jwt.exceptions.TokenExpiredException')) {
             LocalStorageService.clearToken();
             LocalStorageService.clearRole();
             LocalStorageService.clearIdentifier();

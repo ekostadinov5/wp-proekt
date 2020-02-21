@@ -197,3 +197,58 @@ Content-Type: application/json
 }
 
 ###
+
+
+### ---SUBJECTS
+
+GET http://localhost:8080/api/subjects
+
+###
+
+GET http://localhost:8080/api/subjects/ordered
+
+###
+
+GET http://localhost:8080/api/subjects?term=пр
+
+###
+
+GET http://localhost:8080/api/subjects/10
+
+###
+
+POST http://localhost:8080/api/subjects
+Content-Type: application/x-www-form-urlencoded
+
+name=Бази%20на%20податоци&shortName=БП
+
+###
+
+PATCH http://localhost:8080/api/subjects/33
+Content-Type: application/x-www-form-urlencoded
+
+name=Неструктурирани%20бази%20на%20податоци&shortName=НБП
+
+###
+
+DELETE http://localhost:8080/api/subjects/8
+
+###
+
+GET http://localhost:8080/api/subjects/professors/9
+
+###
+
+POST http://localhost:8080/api/subjects/add/professor
+Content-Type: application/x-www-form-urlencoded
+
+professorId=aleksandar.stojmenski&subjectId=12
+
+###
+
+POST http://localhost:8080/api/subjects/remove/professor
+Content-Type: application/x-www-form-urlencoded
+
+professorId=aleksandar.stojmenski&subjectId=12
+
+###

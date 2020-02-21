@@ -18,6 +18,10 @@ const Header = (props) => {
             props.onRoomsLinkClicked();
             setLastClickedLink(1);
         }
+        if(clicked.id === 'subjectsMenuLink') {
+            props.onSubjectsLinkClicked();
+            setLastClickedLink(2);
+        }
         clicked.parentElement.childNodes.forEach(child => child.classList.remove("active"));
         clicked.classList.add("active");
     };
@@ -28,6 +32,8 @@ const Header = (props) => {
             props.onSearch.searchProfessors(e.target.searchTerm.value);
         } else if(lastClickedLink === 1) {
             props.onSearch.searchRooms(e.target.searchTerm.value);
+        } else if(lastClickedLink === 2) {
+            props.onSearch.searchSubjects(e.target.searchTerm.value);
         }
     };
 
@@ -54,6 +60,13 @@ const Header = (props) => {
                                 return (
                                     <li className="nav-item">
                                         <Link onClick={linkChange} className="nav-link" to={"/professor"}>Мои термини</Link>
+                                    </li>
+                                );
+                            }
+                            if(context.role === 'admin') {
+                                return (
+                                    <li id={"subjectsMenuLink"} className="nav-item">
+                                        <Link onClick={linkChange} className="nav-link" to={"/subjects"}>Предмети</Link>
                                     </li>
                                 );
                             }
@@ -96,7 +109,6 @@ const Header = (props) => {
                                         return (
                                             <button onClick={logOut}
                                                     className={"nav-item btn btn-outline-danger mt-2"}
-                                                    //title={LocalStorageService.getIdentifier()}
                                             >
                                                 Одјави се
                                             </button>

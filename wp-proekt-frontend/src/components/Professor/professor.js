@@ -1,5 +1,6 @@
 import React from 'react';
 import Term from '../Consultations/ConsultationTerm/term';
+import $ from 'jquery';
 
 import AppContext from '../../context/AppContext';
 

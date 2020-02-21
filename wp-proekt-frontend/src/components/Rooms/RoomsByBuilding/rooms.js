@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import Building from '../../Buildings/Building/building';
-//import {loadConsultations} from "../../../repository/consultationsRepository";
+
 import {Link} from "react-router-dom";
 
 import AppContext from '../../../context/AppContext';

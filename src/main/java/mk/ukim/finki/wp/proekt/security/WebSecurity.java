@@ -28,10 +28,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
+                //.antMatchers("/api/**").permitAll()
 
-                .antMatchers(HttpMethod.POST, "/api/buildings", "/api/rooms").hasAuthority("admin")
-                .antMatchers(HttpMethod.PATCH, "/api/buildings/**", "/api/rooms/**").hasAuthority("admin")
-                .antMatchers(HttpMethod.DELETE, "/api/buildings/**", "/api/rooms/**").hasAuthority("admin")
+                .antMatchers(HttpMethod.POST, "/api/buildings", "/api/rooms", "/api/subjects").hasAuthority("admin")
+                .antMatchers(HttpMethod.PATCH, "/api/buildings/**", "/api/rooms/**", "/api/subjects/**").hasAuthority("admin")
+                .antMatchers(HttpMethod.DELETE, "/api/buildings/**", "/api/rooms/**", "/api/subjects/**").hasAuthority("admin")
 
                 .antMatchers(HttpMethod.POST, "/api/consultations").hasAuthority("professor")
                 .antMatchers(HttpMethod.PATCH, "/api/consultations/**").hasAuthority("professor")

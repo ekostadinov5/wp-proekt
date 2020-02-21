@@ -227,9 +227,25 @@ public class DataHolder {
 
         Subject wp = new Subject(null, "Веб програмирање", "ВП");
         Subject eimt = new Subject(null, "Електронска и мобилна трговија", "ЕиМТ");
+        Subject os = new Subject(null, "Оперативни системи", "ОС");
 
         subjects.add(wp);
         subjects.add(eimt);
+        subjects.add(os);
+        subjects.add(new Subject(null, "Вештачка интелигенција", "ВИ"));
+        subjects.add(new Subject(null, "Структурно програмирање", "СП"));
+        subjects.add(new Subject(null, "Објектно-ориентирано програмирање", "ООП"));
+        subjects.add(new Subject(null, "Архитектура и организација на компјутери", "АОК"));
+        subjects.add(new Subject(null, "Софтверско инженерство", "СИ"));
+        subjects.add(new Subject(null, "Роботика", "РБ"));
+        subjects.add(new Subject(null, "Иновации во ИКТ", "ИвИКТ"));
+        subjects.add(new Subject(null, "Бизнис и менаџмент", "БиМ"));
+        subjects.add(new Subject(null, "Калкулус 1", "К1"));
+        subjects.add(new Subject(null, "Дискретна математика 1", "ДМ1"));
+        subjects.add(new Subject(null, "Калкулус 2", "К2"));
+        subjects.add(new Subject(null, "Дискретна математика 2", "ДМ2"));
+        subjects.add(new Subject(null, "Калкулус 3", "К3"));
+
 
         professors.get(0).getSubjects().add(wp);
         professors.get(1).getSubjects().add(wp);
@@ -237,6 +253,7 @@ public class DataHolder {
         professors.get(0).getSubjects().add(eimt);
         professors.get(1).getSubjects().add(eimt);
         professors.get(2).getSubjects().add(eimt);
+        professors.get(0).getSubjects().add(os);
 
 
         ConsultationSlot s1 = ConsultationSlot.createRecurringSlot(km, rooms.get(1), DayOfWeek.TUESDAY, LocalTime.parse("10:00"), LocalTime.parse("12:00"));
