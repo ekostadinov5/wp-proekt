@@ -7,7 +7,6 @@ import {Button, Modal} from "react-bootstrap";
 import AppContext from '../../context/AppContext';
 import AppProvider from '../../context/AppProvider';
 
-//import * as consultationsRepository  from '../../repository/consultationsRepository';
 import ProfessorsService from '../../repository/axiosProfessorsRepository';
 import RoomsService from '../../repository/axiosRoomsRepository';
 import BuildingsService from "../../repository/axiosBuildingsRepository";
@@ -442,7 +441,8 @@ class App extends Component {
                     <div className="container">
                         <Route path={"/professor"} exact render={()=>
                             <ProfessorConsultations professor={this.state.professor}
-                                                    onConsultationSlotDeleted={this.ConsultationsApi.deleteConsultationSlot} />}>
+                                                    onConsultationSlotDeleted={this.ConsultationsApi.deleteConsultationSlot} 
+                                                    studentFollowingIds={this.state.studentFollowingIds} />}>
                         </Route>
                         <Route path={"/consultations/add"} exact render={() =>
                             <ConsultationAdd buildings={this.state.buildings}
@@ -502,7 +502,13 @@ class App extends Component {
                             <Login />}>
                         </Route>
 
-                        <Redirect to={"/consultations"} />
+                        {(() => {
+                            if(LocalStorageService.getRole() !== 'student') {
+                                return <Redirect to={"/consultations"} />
+                            } else {
+                                return <Redirect to={"/following"} />
+                            }
+                        })()}
                     </div>
                 );
             };

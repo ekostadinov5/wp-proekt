@@ -1,21 +1,29 @@
 import React from 'react';
-import Professor from '../../../Professor/professor';
+import Professor from '../../../Professor/ProfessorStandard/professor';
 import ReactPaginate from 'react-paginate';
 import {Link} from "react-router-dom";
 
 import AppContext from '../../../../context/AppContext';
 
 const ConsultationsAll = (props) => {
+    
+    const followingLink = () => {
+        if(props.studentFollowingIds.length !== 0) {
+            return (
+                <Link to={"/following"} className={"btn mt-2"}>
+                    Следени професори
+                </Link>
+            );
+        }
+    };
 
     const subNavigation = () => {
         return (
             <div className={"mt-4"}>
                 <div className={"row ml-1"}>
+                    {followingLink()}
                     <Link to={"/consultations"} className={"btn mr-2 mt-2"} style={{background: "lightgray"}}>
                         Сите професори
-                    </Link>
-                    <Link to={"/following"} className={"btn mt-2"}>
-                        Следени професори
                     </Link>
                 </div>
                 <hr />

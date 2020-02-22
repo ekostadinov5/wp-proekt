@@ -1,10 +1,12 @@
 import React from 'react';
-import Term from '../Consultations/ConsultationTerm/term';
-import $ from 'jquery';
+import Term from '../../Consultations/ConsultationTerm/term';
+import {useHistory} from 'react-router-dom';
 
-import AppContext from '../../context/AppContext';
+import AppContext from '../../../context/AppContext';
 
 const Professor = (props) => {
+
+    const history = useHistory();
 
     const isFollowingProfessor = () => {
         let exists = false;
@@ -21,6 +23,9 @@ const Professor = (props) => {
             props.followProfessor(props.student.index, props.value.id);
         } else {
             props.unfollowProfessor(props.student.index, props.value.id);
+            if(props.studentFollowingIds.length === 1) {
+                history.push('/consultations');
+            }
         }
     };
 
@@ -102,7 +107,7 @@ const Professor = (props) => {
     const cardBody = () => {
         return (
             <>
-                <button className="btn btn-info" type="button" data-toggle="collapse"
+                <button className="btn btn-info dropdown-toggle" type="button" data-toggle="collapse"
                         data-target={"#collapseProfessor" + props.index} aria-expanded="false"
                         aria-controls={"collapseProfessor" + props.index}>
                     Термини
@@ -110,10 +115,10 @@ const Professor = (props) => {
                 <div className={"collapse"} id={"collapseProfessor" + props.index}>
                     <div className="card-body">
                         <div className="card-text">
-                            Редовни консултации:
+                            <strong>Редовни консултации:</strong>
                             <hr />
                             {termsWeekly()}
-                            Дополнителни консултации:
+                            <strong>Дополнителни консултации:</strong>
                             <hr />
                             {termsDay()}
                         </div>

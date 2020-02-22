@@ -49,9 +49,21 @@ const Header = (props) => {
             <AppContext.Consumer>
                 {context => (
                     <ul id={"menu"} className="navbar-nav mr-auto">
-                        <li id={"termsMenuLink"} className="nav-item active">
-                            <Link onClick={linkChange} className="nav-link" to={"/consultations"}>Термини</Link>
-                        </li>
+                        {(() => {
+                            if(LocalStorageService.getRole() !== 'student') {
+                                return (
+                                    <li id={"termsMenuLink"} className="nav-item active">
+                                        <Link onClick={linkChange} className="nav-link" to={"/consultations"}>Термини</Link>
+                                    </li>
+                                );
+                            } else {
+                                return (
+                                    <li id={"termsMenuLink"} className="nav-item active">
+                                        <Link onClick={linkChange} className="nav-link" to={"/following"}>Термини</Link>
+                                    </li>
+                                );
+                            }
+                        })()}
                         <li id={"roomsMenuLink"} className="nav-item">
                             <Link onClick={linkChange} className="nav-link" to={"/rooms"}>Простории</Link>
                         </li>
