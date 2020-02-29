@@ -36,6 +36,8 @@ public class ConsultationSlot {
 
     private DayOfWeek dayOfWeek;
 
+    private boolean cancel;
+
     @Column(name = "from_time")
     @NotNull
     private LocalTime from;
@@ -43,6 +45,7 @@ public class ConsultationSlot {
     @Column(name = "to_time")
     @NotNull
     private LocalTime to;
+
 
     private ConsultationSlot() {
 
@@ -54,6 +57,7 @@ public class ConsultationSlot {
         slot.professor = professor;
         slot.room = room;
         slot.dayOfWeek = dayOfWeek;
+        slot.cancel = false;
         slot.from = from;
         slot.to = to;
         return slot;

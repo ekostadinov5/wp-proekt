@@ -15,7 +15,9 @@ const ProfessorConsultations = (props) => {
                         || context.compareTimeVars(t1.from, t2.from))
                     .map(term =>
                         <ProfessorConsultationTerm key={term.id} value={term}
-                                                   onTermDeleted={props.onConsultationSlotDeleted} />) : null
+                                                   onTermDeleted={props.onConsultationSlotDeleted}
+                                                   onTermCanceled={props.onConsultationSlotCanceled}
+                                                   onTermUncanceled={props.onConsultationSlotUncanceled} />) : null
                 }
             </AppContext.Consumer>
         );

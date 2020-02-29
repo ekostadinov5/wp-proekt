@@ -18,7 +18,9 @@ const RemoveProfessorFromSubject = (props) => {
             });
         });
         SubjectService.getProfessors(subjectId).then((promise) => {
-            setProfessors(promise.data);
+            setProfessors(promise.data.sort((p1, p2) => {
+                return p1.lastName.localeCompare(p2.lastName) || p1.firstName.localeCompare(p2.firstName);
+            }));
         });
     }, [subjectId]);
 

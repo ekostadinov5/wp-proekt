@@ -75,4 +75,14 @@ public class ConsultationSlotApi {
         this.consultationSlotService.deleteSlot(slotId);
     }
 
+    @PostMapping("/cancel/{slotId}")
+    public void cancelConsultationSlot(@PathVariable Long slotId) {
+        this.consultationSlotService.cancelSlot(slotId);
+    }
+
+    @PostMapping("/uncancel/{slotId}")
+    public void uncancelConsultationSlot(@PathVariable Long slotId) {
+        this.consultationSlotService.uncancelSlot(slotId);
+    }
+
 }

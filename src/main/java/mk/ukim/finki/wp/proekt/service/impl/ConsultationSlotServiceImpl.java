@@ -75,6 +75,7 @@ public class ConsultationSlotServiceImpl implements ConsultationSlotService {
         slot.setProfessor(professor);
         slot.setRoom(room);
         slot.setDayOfWeek(dayOfWeek);
+        slot.setCancel(false);
         slot.setDate(date);
         slot.setFrom(from);
         slot.setTo(to);
@@ -84,6 +85,26 @@ public class ConsultationSlotServiceImpl implements ConsultationSlotService {
     @Override
     public void deleteSlot(Long slotId) {
         this.consultationSlotRepository.deleteById(slotId);
+    }
+
+    @Override
+    public void cancelSlot(Long slotId) {
+        ConsultationSlot slot = this.consultationSlotRepository.findById(slotId)
+                .orElseThrow(InvalidConsultationSlotIdException::new);
+        if(slot.getDayOfWeek() != null) {
+            slot.setCancel(true);
+            this.consultationSlotRepository.save(slot);
+        }
+    }
+
+    @Override
+    public void uncancelSlot(Long slotId) {
+        ConsultationSlot slot = this.consultationSlotRepository.findById(slotId)
+                .orElseThrow(InvalidConsultationSlotIdException::new);
+        if(slot.getDayOfWeek() != null) {
+            slot.setCancel(false);
+            this.consultationSlotRepository.save(slot);
+        }
     }
 
     @Override
@@ -104,7 +125,10 @@ public class ConsultationSlotServiceImpl implements ConsultationSlotService {
                 .filter(cs -> (cs.getDayOfWeek() != null && cs.getDayOfWeek() == dayOfWeek
                         && cs.getTo().minusMinutes(7).isBefore(time) && cs.getTo().isAfter(time)))
                 .collect(Collectors.toList());
-        consultationSlotsForClearing.forEach(cs -> cs.setStudents(new ArrayList<>()));
+        consultationSlotsForClearing.forEach(cs -> {
+            cs.setStudents(new ArrayList<>());
+            cs.setCancel(false);
+        });
         this.consultationSlotRepository.saveAll(consultationSlotsForClearing);
     }
 

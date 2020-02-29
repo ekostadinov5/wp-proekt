@@ -35,6 +35,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/api/buildings/**", "/api/rooms/**", "/api/subjects/**").hasAuthority("admin")
 
                 .antMatchers(HttpMethod.POST, "/api/consultations").hasAuthority("professor")
+                .antMatchers(HttpMethod.POST, "/api/consultations/cancel/**").hasAuthority("professor")
+                .antMatchers(HttpMethod.POST, "/api/consultations/uncancel/**").hasAuthority("professor")
                 .antMatchers(HttpMethod.PATCH, "/api/consultations/**").hasAuthority("professor")
                 .antMatchers(HttpMethod.DELETE, "/api/consultations/**").hasAuthority("professor")
 

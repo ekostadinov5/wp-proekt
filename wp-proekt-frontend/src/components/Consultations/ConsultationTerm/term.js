@@ -14,36 +14,49 @@ const Term = (props) => {
 
     const selectModal = () => {
         return (
-            <Modal show={show} onHide={handleClose} animation={false}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Избери предмет</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <div className="form-group">
-                        <label htmlFor={"subject"} className="font-weight-bold">Предмет:</label>
-                        <select className="form-control" id="subject">
-                            {props.professor.subjects.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-                            <option value={"0"}>Останато</option>
-                        </select>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor={"note"} className="font-weight-bold">Забелешка:</label>
-                        <textarea className="form-control" rows={7} id="note"/>
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="success" onClick={() => {
-                        const subjectId = document.getElementById("subject").value;
-                        const note = document.getElementById("note").value;
-                        props.onStudentAdded(props.value.id, props.student.index, subjectId, note);
-                        handleClose();}}>
-                        Избери
-                    </Button>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Откажи
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <AppContext.Consumer>
+                {context => (
+                    <Modal show={show} onHide={handleClose} animation={false}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Избери предмет</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <div className="form-group">
+                                <label htmlFor={"subject"} className="font-weight-bold">Предмет:</label>
+                                <select className="form-control" id="subject">
+                                    {props.professor.subjects.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                                    <option value={"0"}>Останато</option>
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor={"note"} className="font-weight-bold">Датум:</label>
+                                <input className={'form-control'}
+                                       value={props.value.dayOfWeek ?
+                                           context.convertDayToNearestDate(props.value.dayOfWeek, props.value.to)
+                                           :
+                                           context.convertDateFormat(props.value.date)}
+                                       disabled={true} />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor={"note"} className="font-weight-bold">Забелешка:</label>
+                                <textarea className="form-control" rows={7} id="note"/>
+                            </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="success" onClick={() => {
+                                const subjectId = document.getElementById("subject").value;
+                                const note = document.getElementById("note").value;
+                                props.onStudentAdded(props.value.id, props.student.index, subjectId, note);
+                                handleClose();}}>
+                                Избери
+                            </Button>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Откажи
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                )}
+            </AppContext.Consumer>
         );
     };
 
@@ -109,6 +122,23 @@ const Term = (props) => {
         );
     };
 
+    const isCanceled = () => {
+        if(props.value.dayOfWeek && props.value.cancel) {
+            return (
+                <AppContext.Consumer>
+                    {context => (
+                        <div className="mt-2">
+                            <strong style={{color: 'red'}}>
+                                <span>Откажан - </span>
+                                {context.convertDayToNearestDate(props.value.dayOfWeek, props.value.to)}
+                            </strong>
+                        </div>
+                    )}
+                </AppContext.Consumer>
+            );
+        }
+    };
+
     const isAdded = () => {
         let exists = false;
         props.studentSlotIds.forEach(studentSlotId => {
@@ -150,8 +180,9 @@ const Term = (props) => {
                     {termDayOrDate()}
                     {termTime()}
                     {termRoom()}
+                    {isCanceled()}
                     {(() => {
-                        if(context.role === 'student') {
+                        if(context.role === 'student' && !props.value.cancel) {
                             return (
                                 <>
                                     {addRemoveButton()}

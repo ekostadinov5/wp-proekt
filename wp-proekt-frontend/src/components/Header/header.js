@@ -22,6 +22,9 @@ const Header = (props) => {
             props.onSubjectsLinkClicked();
             setLastClickedLink(2);
         }
+        if(clicked.id === 'myTermsMenuLink') {
+            props.onMyTermsLinkClicked();
+        }
         clicked.parentElement.childNodes.forEach(child => child.classList.remove("active"));
         clicked.classList.add("active");
     };
@@ -70,7 +73,7 @@ const Header = (props) => {
                         {(() => {
                             if(context.role === 'professor') {
                                 return (
-                                    <li className="nav-item">
+                                    <li id={"myTermsMenuLink"} className="nav-item">
                                         <Link onClick={linkChange} className="nav-link" to={"/professor"}>Мои термини</Link>
                                     </li>
                                 );

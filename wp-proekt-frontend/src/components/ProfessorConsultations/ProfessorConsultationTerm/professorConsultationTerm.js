@@ -72,30 +72,61 @@ const ProfessorConsultationTerm = (props) => {
     //
 
     // For showing delete confirm message
-    const [show, setShow] = useState(false);
+    const [showDelete, setShowDelete] = useState(false);
+    const [showCancel, setShowCancel] = useState(false);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleCloseDelete = () => setShowDelete(false);
+    const handleShowDelete = () => setShowDelete(true);
 
-    const confirmModal = () => {
+    const handleCloseCancel = () => setShowCancel(false);
+    const handleShowCancel = () => setShowCancel(true);
+
+    const confirmDeleteModal = () => {
         return (
-            <Modal show={show} onHide={handleClose} animation={false}>
+            <Modal show={showDelete} onHide={handleCloseDelete} animation={false}>
                 <Modal.Header closeButton>
                     <Modal.Title>Избриши</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Дали сте сигурни дека сакате да го избришете консултацискиот термин?</Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" onClick={() => {
-                        handleClose();
+                        handleCloseDelete();
                         props.onTermDeleted(props.value.id);}}>
                         Избриши
                     </Button>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Откажи
+                    <Button variant="secondary" onClick={handleCloseDelete}>
+                        Назад
                     </Button>
                 </Modal.Footer>
             </Modal>
         );
+    };
+
+    const confirmCancelModal = () => {
+        return props.value.dayOfWeek ? (
+            <AppContext.Consumer>
+                {context => (
+                    <Modal show={showCancel} onHide={handleCloseCancel} animation={false}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Откажи</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            Дали сте сигурни дека сакате да го откажете овој консултациски термин за тековната недела?
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="danger" onClick={() => {
+                                handleCloseCancel();
+                                props.onTermCanceled(props.value.id);}}>
+                                Откажи
+                            </Button>
+                            <Button variant="secondary" onClick={handleCloseCancel}>
+                                Назад
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                )}
+            </AppContext.Consumer>
+        ) : null;
     };
     //
 
@@ -171,15 +202,41 @@ const ProfessorConsultationTerm = (props) => {
                         {termRoom()}
                     </div>
                     <div className="col-md-5 mt-3">
-                        <Link className="btn btn-primary btn-lg ml-2" title="Промени"
+                        {(() => {
+                            if(props.value.dayOfWeek) {
+                                if(!props.value.cancel) {
+                                    return (
+                                        <>
+                                            <Button variant="primary" onClick={handleShowCancel} type={"button"}
+                                                    className="btn btn-danger ml-2" title="Откажи">
+                                                <i className="fa fa-fw fa-times" />
+                                            </Button>
+                                            {confirmCancelModal()}
+                                        </>
+                                    );
+                                } else {
+                                    return (
+                                        <>
+                                            <Button variant="primary"
+                                                    onClick={() => props.onTermUncanceled(props.value.id)}
+                                                    type={"button"}
+                                                    className="btn btn-success ml-2" title="Врати назад">
+                                                <i className="fa fa-fw fa-undo" />
+                                            </Button>
+                                        </>
+                                    );
+                                }
+                            }
+                        })()}
+                        <Link className="btn btn-primary ml-2" title="Промени"
                               to={`/consultations/${props.value.id}/edit`}>
                             <i className="fa fa-fw fa-edit" />
                         </Link>
-                        <Button variant="primary" onClick={handleShow} type={"button"}
-                                className="btn btn-danger btn-lg ml-2" title="Избриши">
+                        <Button variant="primary" onClick={handleShowDelete} type={"button"}
+                                className="btn btn-danger ml-2 mt-1" title="Избриши">
                             <i className="fa fa-fw fa-trash" />
                         </Button>
-                        {confirmModal()}
+                        {confirmDeleteModal()}
                     </div>
                 </div>
                 <hr />

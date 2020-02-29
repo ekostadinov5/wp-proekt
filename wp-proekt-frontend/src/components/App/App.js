@@ -286,6 +286,16 @@ class App extends Component {
             ConsultationsService.deleteConsultationSlot(slotId).then(() => {
                 this.ProfessorsApi.loadProfessor();
             });
+        },
+        cancelConsultationSlot: (slotId) => {
+            ConsultationsService.cancelConsultationSlot(slotId).then(() => {
+                this.ProfessorsApi.loadProfessor();
+            });
+        },
+        uncancelConsultationSlot: (slotId) => {
+            ConsultationsService.uncancelConsultationSlot(slotId).then(() => {
+                this.ProfessorsApi.loadProfessor();
+            });
         }
     };
 
@@ -442,7 +452,9 @@ class App extends Component {
                         <Route path={"/professor"} exact render={()=>
                             <ProfessorConsultations professor={this.state.professor}
                                                     onConsultationSlotDeleted={this.ConsultationsApi.deleteConsultationSlot} 
-                                                    studentFollowingIds={this.state.studentFollowingIds} />}>
+                                                    studentFollowingIds={this.state.studentFollowingIds}
+                                                    onConsultationSlotCanceled={this.ConsultationsApi.cancelConsultationSlot}
+                                                    onConsultationSlotUncanceled={this.ConsultationsApi.uncancelConsultationSlot} />}>
                         </Route>
                         <Route path={"/consultations/add"} exact render={() =>
                             <ConsultationAdd buildings={this.state.buildings}
@@ -520,7 +532,8 @@ class App extends Component {
                             <Header onSearch={this.SearchApi} 
                                     onTermsLinkClicked={this.ProfessorsApi.loadProfessors}
                                     onRoomsLinkClicked={this.RoomsApi.loadRooms} 
-                                    onSubjectsLinkClicked={this.SubjectsApi.loadSubjects} />
+                                    onSubjectsLinkClicked={this.SubjectsApi.loadSubjects}
+                                    onMyTermsLinkClicked={this.ProfessorsApi.loadProfessor} />
                             <div role="main" className="mt-3">
                                 {routes()}
                                 {(() => {

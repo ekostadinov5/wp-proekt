@@ -24,6 +24,12 @@ const ConsultationsService = {
     },
     deleteConsultationSlot: (id) => {
         return axios.delete(`/api/consultations/${id}`);
+    },
+    cancelConsultationSlot: (id) => {
+        return axios.post(`/api/consultations/cancel/${id}`);
+    },
+    uncancelConsultationSlot: (id) => {
+        return axios.post(`/api/consultations/uncancel/${id}`);
     }
 };
 

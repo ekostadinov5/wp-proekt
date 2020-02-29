@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import AppContext from './AppContext';
 import LocalStorageService from '../services/localStorageService';
+import moment from 'moment';
 
 class AppProvider extends Component {
 
@@ -70,6 +71,33 @@ class AppProvider extends Component {
         }
     };
 
+    convertDateFormat = (date) => {
+        return moment(date).format("DD-MM-YYYY");
+    };
+
+    convertDayToNearestDate = (dayOfWeek, time) => {
+        let intValueDayOfWeek = this.getDayOfWeekIntValue(dayOfWeek);
+        let hours = parseInt(time.split(':')[0]);
+        let minutes = parseInt(time.split(':')[1]);
+        console.log(hours + ' ' + minutes);
+        intValueDayOfWeek = intValueDayOfWeek !== 7 ? intValueDayOfWeek : 0;
+        let date = new Date();
+        let safetyFlag = 0;
+        if(date.getDay() !== intValueDayOfWeek) {
+            while(date.getDay() !== intValueDayOfWeek) {
+                date.setDate(date.getDate() + 1);
+                if(safetyFlag++ > 7) {
+                    break;
+                }
+            }
+        } else {
+            if(date.getHours() > hours || (date.getHours() === hours && date.getMinutes() > minutes)) {
+                date.setDate(date.getDate() + 7);
+            }
+        }
+        return this.convertDateFormat(date);
+    };
+
     render() {
 
         return(
@@ -78,13 +106,15 @@ class AppProvider extends Component {
                     role: this.state.role,
                     convertDay: this.convertDay,
                     getDayOfWeekIntValue: this.getDayOfWeekIntValue,
-                    compareTimeVars: this.compareTimeVars
+                    compareTimeVars: this.compareTimeVars,
+                    convertDateFormat: this.convertDateFormat,
+                    convertDayToNearestDate: this.convertDayToNearestDate
                 }}>
                 {this.props.children}
             </AppContext.Provider>
         );
     }
 
-};
+}
 
 export default AppProvider;

@@ -178,6 +178,14 @@ DELETE http://localhost:8080/api/consultations/7
 
 ###
 
+POST http://localhost:8080/api/consultations/cancel/1
+
+###
+
+POST http://localhost:8080/api/consultations/uncancel/1
+
+###
+
 
 ### ---USERS
 
