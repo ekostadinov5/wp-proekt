@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -28,7 +27,6 @@ public class ConsultationSlotApi {
     @ResponseStatus(HttpStatus.CREATED)
     public ConsultationSlot createConsultationSlot(@RequestParam("professorId") String professorId,
                                                    @RequestParam("roomId") Long roomId,
-                                                   @RequestParam(name = "dayOfWeek", required = false) String dayOfWeek,
                                                    @RequestParam(name = "date", required = false) String date,
                                                    @RequestParam("from")
                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime from,
@@ -36,12 +34,9 @@ public class ConsultationSlotApi {
                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime to,
                                                    HttpServletResponse response,
                                                    UriComponentsBuilder builder) {
-        LocalDate localDate = null;
-        if(date != null) {
-            localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        }
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         ConsultationSlot slot = this.consultationSlotService
-                .createSlot(professorId, roomId, (dayOfWeek != null) ? DayOfWeek.valueOf(dayOfWeek) : null, localDate, from, to);
+                .createSlot(professorId, roomId, localDate, from, to);
         response.setHeader("Location",
                 builder.path("/api/consultations/${slotId}").buildAndExpand(slot.getId()).toUriString());
         return slot;
@@ -56,18 +51,14 @@ public class ConsultationSlotApi {
     public ConsultationSlot updateConsultationSlot(@PathVariable Long slotId,
                                                    @RequestParam("professorId") String professorId,
                                                    @RequestParam("roomId") Long roomId,
-                                                   @RequestParam(name = "dayOfWeek", required = false) String dayOfWeek,
                                                    @RequestParam(name = "date", required = false) String date,
                                                    @RequestParam("from")
                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime from,
                                                    @RequestParam("to")
                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime to) {
-        LocalDate localDate = null;
-        if(date != null) {
-            localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        }
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         return this.consultationSlotService
-                .updateSlot(slotId, professorId, roomId, (dayOfWeek != null) ? DayOfWeek.valueOf(dayOfWeek) : null, localDate, from, to);
+                .updateSlot(slotId, professorId, roomId, localDate, from, to);
     }
 
     @DeleteMapping("/{slotId}")

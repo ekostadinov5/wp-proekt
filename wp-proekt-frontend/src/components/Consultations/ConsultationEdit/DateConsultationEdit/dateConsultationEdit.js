@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react';
 import DatePicker from "react-datepicker";
 import TimeField from "react-simple-timefield";
 import {useHistory, useParams} from "react-router-dom";
-import ConsultationsService from '../../../repository/axiosConsultationsRepository';
+import ConsultationsService from '../../../../repository/axiosConsultationsRepository';
 import moment from 'moment';
 
-const ConsultationEdit = (props) => {
+const DateConsultationEdit = (props) => {
 
     const [term, setTerm] = useState({});
     const [date, setDate] = useState(null);
@@ -66,7 +66,6 @@ const ConsultationEdit = (props) => {
             id: slotId,
             professorId: props.professor.id,
             roomId: e.target[`building${e.target.buildingId.value}`].value,
-            dayOfWeek: ((e.target.dayOfWeek === undefined) ? undefined : e.target.dayOfWeek.value),
             date: ((e.target.date === undefined) ? undefined : e.target.date.value),
             from: e.target.from.value,
             to: e.target.to.value,
@@ -122,57 +121,26 @@ const ConsultationEdit = (props) => {
         });
     };
 
-    const termDayOrDate = () => {
-        if(term.dayOfWeek) {
-            return (
-                <div className="row form-group">
-                    <div className="col-md-4 font-weight-bold text-right">
-                        Ден:
-                    </div>
-                    <div className="col-lg-6 col-md-8">
-                        <div className={"row"}>
-                            <div className={"col-md-8"}>
-                                <select name={"dayOfWeek"}
-                                        className="form-control"
-                                        title={"Ден"}
-                                        value={term.dayOfWeek}
-                                        onChange={handleTermOnChange}>
-                                    <option value={"MONDAY"}>Понеделник</option>
-                                    <option value={"TUESDAY"}>Вторник</option>
-                                    <option value={"WEDNESDAY"}>Среда</option>
-                                    <option value={"THURSDAY"}>Четврток</option>
-                                    <option value={"FRIDAY"}>Петок</option>
-                                    <option value={"SATURDAY"}>Сабота</option>
-                                    <option value={"SUNDAY"}>Недела</option>
-                                </select>
-                            </div>
+    const termDate = () => {
+        return (
+            <div className="row form-group">
+                <div className="col-md-4 font-weight-bold text-right">
+                    Датум:
+                </div>
+                <div className="col-lg-6 col-md-8">
+                    <div className={"row"}>
+                        <div className={"col-md-8"}>
+                            <DatePicker name={"date"}
+                                        className={"form-control"}
+                                        selected={date}
+                                        onChange={(date) => setDate(date)}
+                                        dateFormat={"dd/MM/yyyy"}
+                                        title={"Датум"} />
                         </div>
                     </div>
                 </div>
-            );
-        } else if(date) {
-            return (
-                <div className="row form-group">
-                    <div className="col-md-4 font-weight-bold text-right">
-                        Датум:
-                    </div>
-                    <div className="col-lg-6 col-md-8">
-                        <div className={"row"}>
-                            <div className={"col-md-8"}>
-                                <DatePicker name={"date"}
-                                            className={"form-control"}
-                                            selected={date}
-                                            onChange={(date) => setDate(date)}
-                                            dateFormat={"dd/MM/yyyy"}
-                                            title={"Датум"} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-        } else {
-            return null;
-        }
+            </div>
+        );
     };
 
     const termFromAndTo = () => {
@@ -277,7 +245,7 @@ const ConsultationEdit = (props) => {
         <div>
             <hr/>
             <form onSubmit={onFormSubmit} className={"mt-5"}>
-                {termDayOrDate()}
+                {termDate()}
                 {termFromAndTo()}
                 {termBuilding()}
                 {termRoom()}
@@ -297,4 +265,4 @@ const ConsultationEdit = (props) => {
     );
 };
 
-export default ConsultationEdit;
+export default DateConsultationEdit;

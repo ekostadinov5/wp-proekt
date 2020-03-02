@@ -48,10 +48,9 @@ const Professor = (props) => {
     const termsWeekly = () => {
         return (
             <AppContext.Consumer>
-                {context => props.value.slots
-                    .filter(cs => cs.dayOfWeek)
-                    .sort((cs1, cs2) => (context.getDayOfWeekIntValue(cs1.dayOfWeek) - context.getDayOfWeekIntValue(cs2.dayOfWeek))
-                    || context.compareTimeVars(cs1.from, cs2.from))
+                {context => props.value.weeklyTerms
+                    .sort((t1, t2) => (context.getDayOfWeekIntValue(t1.dayOfWeek) - context.getDayOfWeekIntValue(t2.dayOfWeek))
+                    || context.compareTimeVars(t1.from, t2.from))
                     .map(term => <Term key={term.id} value={term} student={props.student} 
                                        studentSlotIds={props.studentSlotIds} 
                                        onStudentAdded={props.onStudentAddedToSlot} 
@@ -66,7 +65,6 @@ const Professor = (props) => {
         return (
             <AppContext.Consumer>
                 {context => props.value.slots
-                    .filter(cs => cs.date)
                     .sort((cs1, cs2) => (new Date(cs1.date) - new Date(cs2.date)) || context.compareTimeVars(cs1.from, cs2.from))
                     .map(term =>
                         <Term key={term.id} value={term} student={props.student}

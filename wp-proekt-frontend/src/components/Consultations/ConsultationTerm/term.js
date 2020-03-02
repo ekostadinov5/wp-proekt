@@ -1,13 +1,36 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Moment from 'react-moment';
 import {Link} from "react-router-dom";
 
 import AppContext from '../../../context/AppContext';
 import {Button, Modal} from "react-bootstrap";
+import moment from "moment";
 
 const Term = (props) => {
 
+    const [addedOrRemoved, setAddedOrRemoved] = useState(null);
     const [show, setShow] = useState(false);
+    
+    useEffect(() => {
+        let exists = false;
+        if(props.value.dayOfWeek) {
+            const termsIds = props.value.slots.map(t => t.id);
+            props.studentSlotIds.forEach(studentSlotId => {
+                termsIds.forEach(termId => {
+                    if(studentSlotId === termId) {
+                        exists = true;
+                    }
+                });
+            });
+        } else {
+            props.studentSlotIds.forEach(studentSlotId => {
+                if(studentSlotId === props.value.id) {
+                    exists = true;
+                }
+            });
+        }
+        setAddedOrRemoved(exists);
+    }, [props.studentSlotIds, props.value.dayOfWeek, props.value.id, props.value.slots]);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -18,7 +41,7 @@ const Term = (props) => {
                 {context => (
                     <Modal show={show} onHide={handleClose} animation={false}>
                         <Modal.Header closeButton>
-                            <Modal.Title>Избери предмет</Modal.Title>
+                            <Modal.Title>Предмет</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             <div className="form-group">
@@ -29,13 +52,28 @@ const Term = (props) => {
                                 </select>
                             </div>
                             <div className="form-group">
-                                <label htmlFor={"note"} className="font-weight-bold">Датум:</label>
-                                <input className={'form-control'}
-                                       value={props.value.dayOfWeek ?
-                                           context.convertDayToNearestDate(props.value.dayOfWeek, props.value.to)
-                                           :
-                                           context.convertDateFormat(props.value.date)}
-                                       disabled={true} />
+                                <label htmlFor={"dayOrDate"} className="font-weight-bold">Датум:</label>
+                                {(() => {
+                                    if(props.value.dayOfWeek) {
+                                        const uncanceledTerms = props.value.slots.filter(t => t.cancel !== true);
+                                        return (
+                                            <select id={'dayOrDate'}
+                                                    className="form-control">
+                                                {uncanceledTerms.map(t =>
+                                                    <option key={t.id} value={t.id}>
+                                                        {moment(t.date).format("DD-MM-YYYY")}
+                                                    </option>)}
+                                            </select>
+                                        );
+                                    } else {
+                                        return (
+                                            <input id={'dayOrDate'}
+                                                   className={'form-control'}
+                                                   value={context.convertDateFormat(props.value.date)}
+                                                   disabled={true} />
+                                        );
+                                    }
+                                })()}
                             </div>
                             <div className="form-group">
                                 <label htmlFor={"note"} className="font-weight-bold">Забелешка:</label>
@@ -45,10 +83,11 @@ const Term = (props) => {
                         <Modal.Footer>
                             <Button variant="success" onClick={() => {
                                 const subjectId = document.getElementById("subject").value;
+                                const termId = document.getElementById("dayOrDate").value;
                                 const note = document.getElementById("note").value;
-                                props.onStudentAdded(props.value.id, props.student.index, subjectId, note);
+                                props.onStudentAdded(props.value.dayOfWeek ? termId : props.value.id, props.student.index, subjectId, note);
                                 handleClose();}}>
-                                Избери
+                                Потврди
                             </Button>
                             <Button variant="secondary" onClick={handleClose}>
                                 Откажи
@@ -123,42 +162,65 @@ const Term = (props) => {
     };
 
     const isCanceled = () => {
-        if(props.value.dayOfWeek && props.value.cancel) {
-            return (
-                <AppContext.Consumer>
-                    {context => (
-                        <div className="mt-2">
-                            <strong style={{color: 'red'}}>
-                                <span>Откажан - </span>
-                                {context.convertDayToNearestDate(props.value.dayOfWeek, props.value.to)}
-                            </strong>
+        if(props.value.dayOfWeek) {
+            const canceledTerms = props.value.slots.filter(t => t.cancel === true);
+            if(canceledTerms.length > 0) {
+                return (
+                    <div className="mt-2">
+                        <div style={{color: 'red'}}>
+                            <div>
+                                <strong>Откажани термини:</strong>
+                            </div>
+                            {canceledTerms.map(t => <div key={t.id}>{moment(t.date).format("DD-MM-YYYY")}</div>)}
                         </div>
-                    )}
-                </AppContext.Consumer>
-            );
+                    </div>
+                );
+            }
         }
     };
 
-    const isAdded = () => {
-        let exists = false;
-        props.studentSlotIds.forEach(studentSlotId => {
-            if(studentSlotId === props.value.id) {
-                exists = true;
+    const addedDate = () => {
+        if(props.value.dayOfWeek) {
+            const addedTerm = props.value.slots.find(t => props.studentSlotIds.includes(t.id));
+            const canceledTermsIds = props.value.slots.filter(t => t.cancel === true).map(t => t.id);
+            if(addedTerm && !canceledTermsIds.includes(addedTerm.id)) {
+                return (
+                    <div className="mt-2">
+                        <div style={{color: 'green'}}>
+                            <div>
+                                <strong>Пријавен за: </strong>
+                                {moment(addedTerm.date).format("DD-MM-YYYY")}
+                            </div>
+                        </div>
+                    </div>
+                );
             }
-        });
-        return exists;
+        }
     };
 
     const addRemoveButtonClick = () => {
-        if(!isAdded()) {
+        if(!addedOrRemoved) {
             handleShow();
         } else {
-            props.onStudentRemoved(props.value.id, props.student.index)
+            if(props.value.dayOfWeek) {
+                const termsIds = props.value.slots.map(t => t.id);
+                let addedTermId = null;
+                props.studentSlotIds.forEach(studentSlotId => {
+                    termsIds.forEach(termId => {
+                        if(studentSlotId === termId) {
+                            addedTermId = termId;
+                        }
+                    });
+                });
+                props.onStudentRemoved(addedTermId, props.student.index)
+            } else {
+                props.onStudentRemoved(props.value.id, props.student.index)
+            }
         }
     };
 
     const addRemoveButton = () => {
-        if(!isAdded()) {
+        if(!addedOrRemoved) {
             return (
                 <button onClick={addRemoveButtonClick} className="btn btn-outline-success mt-3" title="Пријави се">
                     <i className="fa fa-plus"/>
@@ -185,6 +247,7 @@ const Term = (props) => {
                         if(context.role === 'student' && !props.value.cancel) {
                             return (
                                 <>
+                                    {addedDate()}
                                     {addRemoveButton()}
                                     {selectModal()}
                                 </>

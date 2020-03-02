@@ -28,7 +28,11 @@ public class Professor {
     @NotEmpty
     private String lastName;
 
+    @OneToMany(mappedBy = "professor",cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<WeeklyConsultationTerm> weeklyTerms;
+
     @OneToMany(mappedBy = "professor", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JsonManagedReference
     private List<ConsultationSlot> slots;
 

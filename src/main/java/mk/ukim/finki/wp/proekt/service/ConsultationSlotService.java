@@ -10,13 +10,12 @@ import java.util.List;
 
 public interface ConsultationSlotService {
 
-    ConsultationSlot createSlot(String professorId, Long roomId, DayOfWeek dayOfWeek, LocalDate date,
-                                LocalTime from, LocalTime to);
+    ConsultationSlot createSlot(String professorId, Long roomId, LocalDate date, LocalTime from, LocalTime to);
 
     ConsultationSlot getConsultationSlot(Long slotId);
 
-    ConsultationSlot updateSlot(Long slotId, String professorId, Long roomId, DayOfWeek dayOfWeek,
-                                LocalDate date, LocalTime from, LocalTime to);
+    ConsultationSlot updateSlot(Long slotId, String professorId, Long roomId, LocalDate date, LocalTime from,
+                                LocalTime to);
 
     void deleteSlot(Long slotId);
 
@@ -25,7 +24,5 @@ public interface ConsultationSlotService {
     void uncancelSlot(Long slotId);
 
     void cleanFinishedDateSlots(LocalDate date, LocalTime time);
-
-    void cleanStudentsFromWeeklySlots(DayOfWeek dayOfWeek, LocalTime time);
 
 }

@@ -7,9 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -17,30 +16,21 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ConsultationSlot {
+public class WeeklyConsultationTerm {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
     @JsonIgnore
-    private WeeklyConsultationTerm term;
-
-    @ManyToOne
-    @JsonBackReference
+    @NotNull
     private Professor professor;
 
     @ManyToOne
     @NotNull
     private Room room;
 
-    @OneToMany(mappedBy = "consultationSlot", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    @JsonBackReference
-    private List<StudentSlot> students;
-
-    @FutureOrPresent
-    @NotNull
-    private LocalDate date;
+    private DayOfWeek dayOfWeek;
 
     @Column(name = "from_time")
     @NotNull
@@ -50,6 +40,7 @@ public class ConsultationSlot {
     @NotNull
     private LocalTime to;
 
-    private boolean cancel;
+    @OneToMany(mappedBy = "term", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<ConsultationSlot> slots;
 
 }

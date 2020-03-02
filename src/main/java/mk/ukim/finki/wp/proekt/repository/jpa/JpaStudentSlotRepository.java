@@ -9,4 +9,6 @@ public interface JpaStudentSlotRepository extends JpaRepository<StudentSlot, Lon
 
     Optional<StudentSlot> findByConsultationSlot_IdAndStudent_Index(Long slotId, String studentIndex);
 
+    void deleteByConsultationSlot_Id(Long slotId);
+
 }

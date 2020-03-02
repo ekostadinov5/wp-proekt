@@ -1,36 +1,38 @@
-import React, {useState} from 'react';
-import {useHistory} from 'react-router-dom';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
-import TimeField from 'react-simple-timefield';
-import moment from "moment";
+import React, {useEffect, useState} from 'react';
+import TimeField from "react-simple-timefield";
+import {useHistory, useParams} from "react-router-dom";
+import TermsService from '../../../../repository/axiosTermsRepository';
 
-const ConsultationAdd = (props) => {
+const DateConsultationEdit = (props) => {
 
-    const [date, setDate] = useState(new Date());
-    const [dateTimeErrorMsg, setDateTimeErrorMsg] = useState('');
+    const [term, setTerm] = useState({});
     const [timeErrorMsg, setTimeErrorMsg] = useState('');
+
+    const {termId} = useParams();
+
+    useEffect(() => {
+        TermsService.fetchById(termId).then((promise) => {
+            console.log(promise.data);
+            console.log(termId);
+            setTerm({
+                buildingId: promise.data.room.building.id,
+                roomId: promise.data.room.id,
+                dayOfWeek: promise.data.dayOfWeek,
+                from: promise.data.from,
+                to: promise.data.to
+            });
+        });
+    }, [termId]);
 
     const history = useHistory();
 
     const validate = (e) => {
         let result = true;
 
-        const dayInMs = new Date(moment(e.target.date.value, ['DD/MM/YYYY', 'MM/DD/YYYY'])).getTime();
         const hoursFromInMs = e.target.from.value.split(':')[0] * 1000 * 60 * 60;
         const minutesFromInMs = e.target.from.value.split(':')[1] * 1000 * 60;
         const hoursToInMs = e.target.to.value.split(':')[0] * 1000 * 60 * 60;
         const minutesToInMs = e.target.to.value.split(':')[1] * 1000 * 60;
-
-
-        if(e.target.dayDateSelect.value !== '1') {
-            if(new Date().getTime() -  dayInMs - hoursFromInMs - minutesFromInMs >= 0){
-                setDateTimeErrorMsg('Не можете да закажете консултациски термин во минатото');
-                result = false;
-            } else {
-                setDateTimeErrorMsg('');
-            }
-        }
 
         if(hoursFromInMs + minutesFromInMs - hoursToInMs - minutesToInMs >= 0) {
             setTimeErrorMsg('Времето на крај мора да биде по времето на почеток');
@@ -48,18 +50,14 @@ const ConsultationAdd = (props) => {
             return;
         }
         let consultationSlot = {
+            id: termId,
             professorId: props.professor.id,
-            roomId: e.target[`building${e.target.building.value}`].value,
+            roomId: e.target[`building${e.target.buildingId.value}`].value,
+            dayOfWeek: ((e.target.dayOfWeek === undefined) ? undefined : e.target.dayOfWeek.value),
             from: e.target.from.value,
             to: e.target.to.value,
         };
-        if(e.target.dayDateSelect.value === '1') {
-            consultationSlot.dayOfWeek = e.target.dayOfWeek.value;
-            props.onWeeklyConsultationTermAdded(consultationSlot);
-        } else {
-            consultationSlot.date = e.target.date.value;
-            props.onConsultationSlotAdded(consultationSlot);
-        }
+        props.onWeeklyConsultationTermEdited(consultationSlot);
         history.push("/professor");
     };
 
@@ -67,27 +65,28 @@ const ConsultationAdd = (props) => {
         history.push("/professor");
     };
 
-    const onDayDateChange = (e) => {
-        const index = e.target.value;
-        e.target.parentElement.parentElement.childNodes[index].style.display='block';
-        e.target.parentElement.parentElement.childNodes[(index === '1') ? 2 : 1].style.display='none';
+    const handleTermOnChange = (e) => {
+        const paramName = (!isNaN(e.target.id[8])) ? 'roomId' : e.target.name;
+        const paramValue = e.target.value;
+        setTerm({...term, [paramName] : paramValue})
     };
 
     const optionsBuildings = () => props.buildings.sort((b1, b2) => (b1.name > b2.name) ? 1 : -1)
         .map(b => <option key={b.id} value={b.id}>{b.name}</option>);
 
     const optionsRooms = () => {
-        let flag = true;
         return props.buildings
             .sort((b1, b2) => (b1.name > b2.name) ? 1 : -1)
             .map(b => {
                 return (
-                    <select style={(flag && !(flag = !flag)) ? {display: "block"} : {display: "none"}} // ;)
+                    <select style={(b.id === term.buildingId) ? {display: "block"} : {display: "none"}} // ;)
                             key={b.id}
                             className="form-control"
                             title={"Просторија"}
                             id={`building${b.id}`}
-                            name={`building${b.id}`}>
+                            name={`building${b.id}`}
+                            value={term.roomId}
+                            onChange={handleTermOnChange}>
                         {
                             props.rooms.filter(r => r.building.id === b.id)
                                 .sort((r1, r2) => (r1.name > r2.name) ? 1 : -1)
@@ -109,22 +108,20 @@ const ConsultationAdd = (props) => {
         });
     };
 
-    const termDayOrDate = () => {
+    const termDay = () => {
         return (
             <div className="row form-group">
-                <div className="col-md-4 text-right">
-                    <select name={"dayDateSelect"} onChange={onDayDateChange}
-                            className="form-control-sm border-0 font-weight-bold">
-                        <option className={"font-weight-bold"} value={1}>Ден:</option>
-                        <option className={"font-weight-bold"} value={2}>Датум:</option>
-                    </select>
+                <div className="col-md-4 font-weight-bold text-right">
+                    Ден:
                 </div>
                 <div className="col-lg-6 col-md-8">
                     <div className={"row"}>
                         <div className={"col-md-8"}>
                             <select name={"dayOfWeek"}
                                     className="form-control"
-                                    title={"Ден"}>
+                                    title={"Ден"}
+                                    value={term.dayOfWeek}
+                                    onChange={handleTermOnChange}>
                                 <option value={"MONDAY"}>Понеделник</option>
                                 <option value={"TUESDAY"}>Вторник</option>
                                 <option value={"WEDNESDAY"}>Среда</option>
@@ -133,18 +130,6 @@ const ConsultationAdd = (props) => {
                                 <option value={"SATURDAY"}>Сабота</option>
                                 <option value={"SUNDAY"}>Недела</option>
                             </select>
-                        </div>
-                    </div>
-                </div>
-                <div style={{display: "none"}} className="col-lg-6 col-md-8">
-                    <div className={"row"}>
-                        <div className={"col-md-8"}>
-                            <DatePicker name={"date"}
-                                        className={"form-control"}
-                                        selected={date}
-                                        onChange={(date) => setDate(date)}
-                                        dateFormat={"dd/MM/yyyy"}
-                                        title={"Датум"} />
                         </div>
                     </div>
                 </div>
@@ -163,8 +148,8 @@ const ConsultationAdd = (props) => {
                                 <TimeField
                                     name={"from"}
                                     className={"form-control"}
-                                    value={""}                          // {String}   required, format '00:00' or '00:00:00'
-                                    onChange={() => null}               // {Function} required
+                                    value={term.from ? term.from : ""}  // {String}   required, format '00:00' or '00:00:00'
+                                    onChange={handleTermOnChange}       // {Function} required
                                     input={<input type={"text"} />}     // {Element}  default: <input type="text" />
                                     colon={":"}                         // {String}   default: ":"
                                     showSeconds={false}                 // {Boolean}  default: false
@@ -182,8 +167,8 @@ const ConsultationAdd = (props) => {
                                 <TimeField
                                     name={"to"}
                                     className={"form-control"}
-                                    value={""}                          // {String}   required, format '00:00' or '00:00:00'
-                                    onChange={() => null}               // {Function} required
+                                    value={term.to ? term.to : ""}      // {String}   required, format '00:00' or '00:00:00'
+                                    onChange={handleTermOnChange}       // {Function} required
                                     input={<input type={"text"} />}     // {Element}  default: <input type="text" />
                                     colon=":"                           // {String}   default: ":"
                                     showSeconds={false}                 // {Boolean}  default: false
@@ -204,10 +189,11 @@ const ConsultationAdd = (props) => {
                 <div className="col-lg-6 col-md-8">
                     <div className={"row"}>
                         <div className={"col-md-8"}>
-                            <select name={"building"}
-                                    onChange={listRooms}
+                            <select name={"buildingId"}
+                                    onChange={(e) => {handleTermOnChange(e); listRooms(e);}}
                                     className="form-control"
-                                    title={"Просторија"}>
+                                    title={"Просторија"}
+                                    value={term.buildingId}>
                                 {optionsBuildings()}
                             </select>
                         </div>
@@ -238,9 +224,6 @@ const ConsultationAdd = (props) => {
                 <div className='col-8 text-right'>
                     <small className='text-danger'>
                         <div>
-                            {dateTimeErrorMsg}
-                        </div>
-                        <div>
                             {timeErrorMsg}
                         </div>
                     </small>
@@ -253,14 +236,14 @@ const ConsultationAdd = (props) => {
         <div>
             <hr/>
             <form onSubmit={onFormSubmit} className={"mt-5"}>
-                {termDayOrDate()}
+                {termDay()}
                 {termFromAndTo()}
                 {termBuilding()}
                 {termRoom()}
                 {errorMessages()}
                 <div className="col-md-12 text-right mt-5">
-                    <button type="submit" className="btn btn-success" title="Додади">
-                        Додади
+                    <button type="submit" className="btn btn-primary" title="Промени">
+                        Промени
                     </button>
                     <button onClick={onClickBack} type="submit"
                             className="btn btn-secondary ml-2" title="Назад">
@@ -273,4 +256,4 @@ const ConsultationAdd = (props) => {
     );
 };
 
-export default ConsultationAdd;
+export default DateConsultationEdit;

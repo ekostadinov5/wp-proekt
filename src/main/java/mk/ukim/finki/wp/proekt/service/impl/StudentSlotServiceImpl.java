@@ -48,12 +48,8 @@ public class StudentSlotServiceImpl implements StudentSlotService {
         ConsultationSlot slot = this.consultationSlotRepository.findById(slotId)
                 .orElseThrow(InvalidConsultationSlotIdException::new);
         LocalDate date = LocalDate.now();
-        DayOfWeek dayOfWeek = date.getDayOfWeek();
         LocalTime time = LocalTime.now();
-        if((slot.getDayOfWeek() != null && slot.getDayOfWeek() == dayOfWeek
-                && slot.getFrom().isBefore(time) && slot.getTo().isAfter(time))
-            || (slot.getDate() != null && slot.getDate().isEqual(date)
-                && slot.getFrom().isBefore(time) && slot.getTo().isAfter(time))) {
+        if(slot.getDate().isEqual(date) && slot.getFrom().isBefore(time) && slot.getTo().isAfter(time)) {
             throw new ConsultationsInProgressException();
         }
         Student student = this.studentRepository.findById(studentIndex).orElseThrow(InvalidStudentIndexException::new);
@@ -84,12 +80,8 @@ public class StudentSlotServiceImpl implements StudentSlotService {
                 .orElseThrow(InvalidStudentSlotException::new);
         ConsultationSlot slot = studentSlot.getConsultationSlot();
         LocalDate date = LocalDate.now();
-        DayOfWeek dayOfWeek = date.getDayOfWeek();
         LocalTime time = LocalTime.now();
-        if((slot.getDayOfWeek() != null && slot.getDayOfWeek() == dayOfWeek
-                && slot.getFrom().isBefore(time) && slot.getTo().isAfter(time))
-                || (slot.getDate() != null && slot.getDate().isEqual(date)
-                && slot.getFrom().isBefore(time) && slot.getTo().isAfter(time))) {
+        if(slot.getDate().isEqual(date) && slot.getFrom().isBefore(time) && slot.getTo().isAfter(time)) {
             throw new ConsultationsInProgressException();
         }
         Student student = studentSlot.getStudent();

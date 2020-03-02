@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-//import logo from '../../logo.svg';
 import './App.css';
 import {BrowserRouter as Router, Redirect, Route} from 'react-router-dom';
 import {Button, Modal} from "react-bootstrap";
@@ -12,6 +11,7 @@ import RoomsService from '../../repository/axiosRoomsRepository';
 import BuildingsService from "../../repository/axiosBuildingsRepository";
 import StudentsService from "../../repository/axiosStudentsRepository";
 import ConsultationsService from "../../repository/axiosConsultationsRepository";
+import TermsService from '../../repository/axiosTermsRepository';
 import SubjectsService from '../../repository/axiosSubjectRepository';
 
 import LocalStorageService from '../../services/localStorageService';
@@ -33,7 +33,8 @@ import BuildingEdit from '../Buildings/BuildingEdit/buildingEdit';
 import ProfessorConsultations from '../ProfessorConsultations/ProfessorConsultationsList/professorConsultations';
 
 import ConsultationAdd from '../Consultations/ConsultationAdd/consultationAdd';
-import ConsultationEdit from '../Consultations/ConsultationEdit/consultationEdit';
+import DateConsultationEdit from '../Consultations/ConsultationEdit/DateConsultationEdit/dateConsultationEdit';
+import WeeklyConsultationEdit from '../Consultations/ConsultationEdit/WeeklyConsultationEdit/weeklyConsultationEdit';
 
 import SubjectsList from '../Subjects/SubjectsList/subjects';
 import SubjectAdd from '../Subjects/SubjectAdd/subjectAdd';
@@ -194,12 +195,7 @@ class App extends Component {
         },
         addStudentToSlot: (slotId, index, subjectId, note) => {
             StudentsService.addToSlot(slotId, index, subjectId, note).then(() => {
-                this.setState((prevState) => {
-                    const newStudentSlotIdsRef = [...prevState.studentSlotIds, slotId];
-                    return {
-                        studentSlotIds: newStudentSlotIdsRef
-                    };
-                });
+                this.StudentsApi.loadStudent();
             }).catch(error => {
                 if(error.response.status === 400) {
                     this.handleShowErrorModal('Консултациите се моментално во тек!');
@@ -294,6 +290,24 @@ class App extends Component {
         },
         uncancelConsultationSlot: (slotId) => {
             ConsultationsService.uncancelConsultationSlot(slotId).then(() => {
+                this.ProfessorsApi.loadProfessor();
+            });
+        }
+    };
+
+    TermsApi = {
+        createWeeklyConsultationTerm: (newTerm) => {
+            TermsService.addWeeklyConsultationTerm(newTerm).then(() => {
+                this.ProfessorsApi.loadProfessor();
+            });
+        },
+        updateWeeklyConsultationTerm: (editedTerm) => {
+            TermsService.updateWeeklyConsultationTerm(editedTerm).then(() => {
+                this.ProfessorsApi.loadProfessor();
+            });
+        },
+        deleteWeeklyConsultationTerm: (termId) => {
+            TermsService.deleteWeeklyConsultationTerm(termId).then(() => {
                 this.ProfessorsApi.loadProfessor();
             });
         }
@@ -451,7 +465,8 @@ class App extends Component {
                     <div className="container">
                         <Route path={"/professor"} exact render={()=>
                             <ProfessorConsultations professor={this.state.professor}
-                                                    onConsultationSlotDeleted={this.ConsultationsApi.deleteConsultationSlot} 
+                                                    onConsultationSlotDeleted={this.ConsultationsApi.deleteConsultationSlot}
+                                                    onWeeklyConsultationTermDeleted={this.TermsApi.deleteWeeklyConsultationTerm}
                                                     studentFollowingIds={this.state.studentFollowingIds}
                                                     onConsultationSlotCanceled={this.ConsultationsApi.cancelConsultationSlot}
                                                     onConsultationSlotUncanceled={this.ConsultationsApi.uncancelConsultationSlot} />}>
@@ -460,13 +475,20 @@ class App extends Component {
                             <ConsultationAdd buildings={this.state.buildings}
                                              rooms={this.state.rooms}
                                              professor={this.state.professor}
-                                             onConsultationSlotAdded={this.ConsultationsApi.createConsultationSlot} />}>
+                                             onConsultationSlotAdded={this.ConsultationsApi.createConsultationSlot}
+                                             onWeeklyConsultationTermAdded={this.TermsApi.createWeeklyConsultationTerm} />}>
                         </Route>
-                        <Route path={"/consultations/:slotId/edit"} exact render={() =>
-                            <ConsultationEdit buildings={this.state.buildings}
-                                              rooms={this.state.rooms}
-                                              professor={this.state.professor}
-                                              onConsultationSlotEdited={this.ConsultationsApi.updateConsultationSlot} />}>
+                        <Route path={"/consultations/date/:slotId/edit"} exact render={() =>
+                            <DateConsultationEdit buildings={this.state.buildings}
+                                                  rooms={this.state.rooms}
+                                                  professor={this.state.professor}
+                                                  onConsultationSlotEdited={this.ConsultationsApi.updateConsultationSlot} />}>
+                        </Route>
+                        <Route path={"/consultations/weekly/:termId/edit"} exact render={() =>
+                            <WeeklyConsultationEdit buildings={this.state.buildings}
+                                                    rooms={this.state.rooms}
+                                                    professor={this.state.professor}
+                                                    onWeeklyConsultationTermEdited={this.TermsApi.updateWeeklyConsultationTerm} />}>
                         </Route>
                     </div>
                 );

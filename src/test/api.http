@@ -52,14 +52,14 @@ name=007&buildingId=1&description=Спроти%20студентски%20праш
 
 ###
 
-PATCH http://localhost:8080/api/rooms/20
+PATCH http://localhost:8080/api/rooms/28
 Content-Type: application/x-www-form-urlencoded
 
 name=008&buildingId=2&description=На%20трети%20кат
 
 ###
 
-DELETE http://localhost:8080/api/rooms/20
+DELETE http://localhost:8080/api/rooms/28
 
 ###
 
@@ -106,7 +106,7 @@ GET http://localhost:8080/api/students/170005
 POST http://localhost:8080/api/students/add
 Content-Type: application/x-www-form-urlencoded
 
-slotId=1&index=170005&subjectId=1&note=Note
+slotId=2&index=170005&subjectId=7&note=Note
 
 ###
 
@@ -117,7 +117,7 @@ slotId=1&index=170005
 
 ###
 
-GET http://localhost:8080/api/students/bySlotId/1
+GET http://localhost:8080/api/students/bySlotId/2
 
 ###
 
@@ -135,14 +135,39 @@ pageSize:2
 POST http://localhost:8080/api/students/follow
 Content-Type: application/x-www-form-urlencoded
 
-index=170005&professorId=dimitar.trajanov
+index=170005&professorId=kostadin.mishev
 
 ###
 
 POST http://localhost:8080/api/students/unfollow
 Content-Type: application/x-www-form-urlencoded
 
-index=170005&professorId=dimitar.trajanov
+index=170005&professorId=kostadin.mishev
+
+###
+
+
+### ---TERMS
+
+GET http://localhost:8080/api/terms/1
+
+###
+
+POST http://localhost:8080/api/terms
+Content-Type: application/x-www-form-urlencoded
+
+professorId=kostadin.mishev&roomId=14&dayOfWeek=MONDAY&from=12:00&to=13:30
+
+###
+
+PATCH http://localhost:8080/api/terms/1
+Content-Type: application/x-www-form-urlencoded
+
+professorId=kostadin.mishev&roomId=14&dayOfWeek=TUESDAY&from=14:30&to=15:45
+
+###
+
+DELETE http://localhost:8080/api/terms/1
 
 ###
 
@@ -156,33 +181,18 @@ GET http://localhost:8080/api/consultations/1
 POST http://localhost:8080/api/consultations
 Content-Type: application/x-www-form-urlencoded
 
-professorId=kostadin.mishev&roomId=14&date=04/02/2020&from=12:00&to=13:30
+professorId=kostadin.mishev&roomId=14&date=04/03/2020&from=12:00&to=13:30
 
 ###
 
-POST http://localhost:8080/api/consultations
+PATCH http://localhost:8080/api/consultations/1
 Content-Type: application/x-www-form-urlencoded
 
-professorId=kostadin.mishev&roomId=14&dayOfWeek=WEDNESDAY&from=12:00&to=13:30
+professorId=kostadin.mishev&roomId=14&date=03/03/2020&from=12:30&to=13:45
 
 ###
 
-PATCH http://localhost:8080/api/consultations/7
-Content-Type: application/x-www-form-urlencoded
-
-professorId=kostadin.mishev&roomId=14&date=03/02/2020&from=12:30&to=13:45
-
-###
-
-DELETE http://localhost:8080/api/consultations/7
-
-###
-
-POST http://localhost:8080/api/consultations/cancel/1
-
-###
-
-POST http://localhost:8080/api/consultations/uncancel/1
+DELETE http://localhost:8080/api/consultations/1
 
 ###
 
@@ -232,18 +242,18 @@ name=Бази%20на%20податоци&shortName=БП
 
 ###
 
-PATCH http://localhost:8080/api/subjects/33
+PATCH http://localhost:8080/api/subjects/4
 Content-Type: application/x-www-form-urlencoded
 
 name=Неструктурирани%20бази%20на%20податоци&shortName=НБП
 
 ###
 
-DELETE http://localhost:8080/api/subjects/8
+DELETE http://localhost:8080/api/subjects/4
 
 ###
 
-GET http://localhost:8080/api/subjects/professors/9
+GET http://localhost:8080/api/subjects/professors/4
 
 ###
 

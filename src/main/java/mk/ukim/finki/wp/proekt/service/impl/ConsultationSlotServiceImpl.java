@@ -10,9 +10,11 @@ import mk.ukim.finki.wp.proekt.model.exceptions.InvalidRoomIdException;
 import mk.ukim.finki.wp.proekt.repository.jpa.JpaConsultationSlotRepository;
 import mk.ukim.finki.wp.proekt.repository.jpa.JpaProfessorRepository;
 import mk.ukim.finki.wp.proekt.repository.jpa.JpaRoomRepository;
+import mk.ukim.finki.wp.proekt.repository.jpa.JpaStudentSlotRepository;
 import mk.ukim.finki.wp.proekt.service.ConsultationSlotService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -25,31 +27,31 @@ public class ConsultationSlotServiceImpl implements ConsultationSlotService {
     private final JpaConsultationSlotRepository consultationSlotRepository;
     private final JpaProfessorRepository professorRepository;
     private final JpaRoomRepository roomRepository;
+    private final JpaStudentSlotRepository studentSlotRepository;
 
     public ConsultationSlotServiceImpl(JpaConsultationSlotRepository consultationSlotRepository,
-                                       JpaProfessorRepository professorRepository, JpaRoomRepository roomRepository) {
+                                       JpaProfessorRepository professorRepository,
+                                       JpaRoomRepository roomRepository,
+                                       JpaStudentSlotRepository studentSlotRepository) {
         this.consultationSlotRepository = consultationSlotRepository;
         this.professorRepository = professorRepository;
         this.roomRepository = roomRepository;
+        this.studentSlotRepository = studentSlotRepository;
     }
 
     @Override
-    public ConsultationSlot createSlot(String professorId, Long roomId, DayOfWeek dayOfWeek, LocalDate date,
-                                       LocalTime from, LocalTime to) {
+    public ConsultationSlot createSlot(String professorId, Long roomId, LocalDate date, LocalTime from, LocalTime to) {
         if(!from.isBefore(to)) {
             throw new InvalidConsultationSlotTimeInterval();
         }
-        if(dayOfWeek == null && date == null) {
-            throw new IllegalArgumentException();
-        }
-        ConsultationSlot slot;
         Professor professor = professorRepository.findById(professorId).orElseThrow(InvalidProfessorIdException::new);
         Room room = roomRepository.findById(roomId).orElseThrow(InvalidRoomIdException::new);
-        if(dayOfWeek != null) {
-            slot = ConsultationSlot.createRecurringSlot(professor, room, dayOfWeek, from, to);
-        } else {
-            slot = ConsultationSlot.createOneTimeSlot(professor, room, date, from, to);
-        }
+        ConsultationSlot slot = new ConsultationSlot();
+        slot.setProfessor(professor);
+        slot.setRoom(room);
+        slot.setDate(date);
+        slot.setFrom(from);
+        slot.setTo(to);
         return this.consultationSlotRepository.save(slot);
     }
 
@@ -59,13 +61,10 @@ public class ConsultationSlotServiceImpl implements ConsultationSlotService {
     }
 
     @Override
-    public ConsultationSlot updateSlot(Long slotId, String professorId, Long roomId, DayOfWeek dayOfWeek,
-                                       LocalDate date, LocalTime from, LocalTime to) {
+    public ConsultationSlot updateSlot(Long slotId, String professorId, Long roomId, LocalDate date, LocalTime from,
+                                       LocalTime to) {
         if(!from.isBefore(to)) {
             throw new InvalidConsultationSlotTimeInterval();
-        }
-        if(dayOfWeek == null && date == null) {
-            throw new IllegalArgumentException();
         }
         ConsultationSlot slot = this.consultationSlotRepository.findById(slotId)
                 .orElseThrow(InvalidConsultationSlotIdException::new);
@@ -74,8 +73,6 @@ public class ConsultationSlotServiceImpl implements ConsultationSlotService {
         Room room = this.roomRepository.findById(roomId).orElseThrow(InvalidRoomIdException::new);
         slot.setProfessor(professor);
         slot.setRoom(room);
-        slot.setDayOfWeek(dayOfWeek);
-        slot.setCancel(false);
         slot.setDate(date);
         slot.setFrom(from);
         slot.setTo(to);
@@ -88,11 +85,13 @@ public class ConsultationSlotServiceImpl implements ConsultationSlotService {
     }
 
     @Override
+    @Transactional
     public void cancelSlot(Long slotId) {
         ConsultationSlot slot = this.consultationSlotRepository.findById(slotId)
                 .orElseThrow(InvalidConsultationSlotIdException::new);
-        if(slot.getDayOfWeek() != null) {
+        if(slot.getProfessor() == null) {
             slot.setCancel(true);
+            this.studentSlotRepository.deleteByConsultationSlot_Id(slotId);
             this.consultationSlotRepository.save(slot);
         }
     }
@@ -101,7 +100,7 @@ public class ConsultationSlotServiceImpl implements ConsultationSlotService {
     public void uncancelSlot(Long slotId) {
         ConsultationSlot slot = this.consultationSlotRepository.findById(slotId)
                 .orElseThrow(InvalidConsultationSlotIdException::new);
-        if(slot.getDayOfWeek() != null) {
+        if(slot.getProfessor() == null) {
             slot.setCancel(false);
             this.consultationSlotRepository.save(slot);
         }
@@ -117,19 +116,6 @@ public class ConsultationSlotServiceImpl implements ConsultationSlotService {
                 ))
                 .collect(Collectors.toList());
         this.consultationSlotRepository.deleteAll(consultationSlotsForDeleting);
-    }
-
-    @Override
-    public void cleanStudentsFromWeeklySlots(DayOfWeek dayOfWeek, LocalTime time) {
-        List<ConsultationSlot> consultationSlotsForClearing = this.consultationSlotRepository.findAll().stream()
-                .filter(cs -> (cs.getDayOfWeek() != null && cs.getDayOfWeek() == dayOfWeek
-                        && cs.getTo().minusMinutes(7).isBefore(time) && cs.getTo().isAfter(time)))
-                .collect(Collectors.toList());
-        consultationSlotsForClearing.forEach(cs -> {
-            cs.setStudents(new ArrayList<>());
-            cs.setCancel(false);
-        });
-        this.consultationSlotRepository.saveAll(consultationSlotsForClearing);
     }
 
 }

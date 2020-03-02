@@ -80,7 +80,7 @@ const AddProfessorToSubject = (props) => {
                     </div>
                 </div>
                 <div className="col-md-12 text-right mt-5">
-                    <button type="submit" className="btn btn-primary" title="Додади">
+                    <button type="submit" className="btn btn-success" title="Додади">
                         Додади
                     </button>
                     <button onClick={onBackClick} type="submit"

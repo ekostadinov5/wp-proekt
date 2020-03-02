@@ -4,11 +4,13 @@ import {Button, Modal} from "react-bootstrap";
 import Moment from "react-moment";
 import StudentsService from '../../../repository/axiosStudentsRepository';
 import ReactPaginate from "react-paginate";
+import moment from 'moment';
 
 import AppContext from '../../../context/AppContext';
 
 const ProfessorConsultationTerm = (props) => {
 
+    const [term, setTerm] = useState(null);
     const [students, setStudents] = useState([]);
     const [totalStudentsCount, setTotalStudentsCount] = useState(null);
     const [page, setPage] = useState(0);
@@ -16,29 +18,39 @@ const ProfessorConsultationTerm = (props) => {
     const [totalPages, setTotalPages] = useState(0);
 
     const fetchStudents = useCallback((page = 0) => {
-        StudentsService.fetchStudentsBySlotId(props.value.id, page, pageSize).then((promise) => {
-            const students = promise.data.content.map(student => {
-                const studentSlot = student.slots.find(slot => slot.consultationSlot.id === props.value.id);
-                return {
-                    index: student.index,
-                    firstName: student.firstName,
-                    lastName: student.lastName,
-                    subjectName: studentSlot.subject ? studentSlot.subject.name : "Останато",
-                    subjectShortName: studentSlot.subject ? studentSlot.subject.shortName : "/",
-                    note: studentSlot.note
-                }
-            });
-            setStudents(students);
-            setTotalStudentsCount(promise.data.totalElements);
-            setPage(promise.data.number);
-            setPageSize(promise.data.size);
-            setTotalPages(promise.data.totalPages);
-        });
-    }, [props.value.id, pageSize]);
+        StudentsService
+            .fetchStudentsBySlotId(props.value.dayOfWeek ? (term ? term.id : props.value.slots[0].id) : props.value.id, page, pageSize)
+                .then((promise) => {
+                    const students = promise.data.content.map(student => {
+                        const studentSlot = student.slots
+                            .find(slot => slot.consultationSlot.id === (props.value.dayOfWeek ? (term ? term.id : props.value.slots[0].id) : props.value.id));
+                        return {
+                            index: student.index,
+                            firstName: student.firstName,
+                            lastName: student.lastName,
+                            subjectName: studentSlot.subject ? studentSlot.subject.name : "Останато",
+                            subjectShortName: studentSlot.subject ? studentSlot.subject.shortName : "/",
+                            note: studentSlot.note
+                        }
+                    });
+                    setStudents(students);
+                    setTotalStudentsCount(promise.data.totalElements);
+                    setPage(promise.data.number);
+                    setPageSize(promise.data.size);
+                    setTotalPages(promise.data.totalPages);
+                });
+    }, [term, pageSize, props.value.dayOfWeek, props.value.id, props.value.slots]);
 
     useEffect(() => {
+        if(props.value.dayOfWeek) {
+            let newTerm = props.value.slots[0];
+            if(term) {
+                newTerm = props.value.slots.find(t => t.id === term.id);
+            }
+            setTerm(newTerm);
+        }
         fetchStudents();
-    }, [fetchStudents]);
+    }, [term, props.value.dayOfWeek, props.value.slots, fetchStudents]);
 
     // Pagination of students
     const handlePageClick = (e) => {
@@ -104,31 +116,55 @@ const ProfessorConsultationTerm = (props) => {
 
     const confirmCancelModal = () => {
         return props.value.dayOfWeek ? (
-            <AppContext.Consumer>
-                {context => (
-                    <Modal show={showCancel} onHide={handleCloseCancel} animation={false}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Откажи</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            Дали сте сигурни дека сакате да го откажете овој консултациски термин за тековната недела?
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant="danger" onClick={() => {
-                                handleCloseCancel();
-                                props.onTermCanceled(props.value.id);}}>
-                                Откажи
-                            </Button>
-                            <Button variant="secondary" onClick={handleCloseCancel}>
-                                Назад
-                            </Button>
-                        </Modal.Footer>
-                    </Modal>
-                )}
-            </AppContext.Consumer>
+            <Modal show={showCancel} onHide={handleCloseCancel} animation={false}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Откажи</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Дали сте сигурни дека сакате да го откажете консултацискиот термин на
+                    датум {moment(term.date).format("DD/MM/YYYY")}?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={() => {
+                        handleCloseCancel();
+                        props.onTermCanceled(term.id);}}>
+                        Откажи
+                    </Button>
+                    <Button variant="secondary" onClick={handleCloseCancel}>
+                        Назад
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         ) : null;
     };
     //
+
+    const onDateChange = (e) => {
+        const value = parseInt(e.target.value);
+        const selectedTerm = props.value.slots.find(t => t.id === value);
+        setTerm(selectedTerm);
+        StudentsService
+            .fetchStudentsBySlotId(value, page, pageSize)
+            .then((promise) => {
+                const students = promise.data.content.map(student => {
+                    const studentSlot = student.slots
+                        .find(slot => slot.consultationSlot.id === value);
+                    return {
+                        index: student.index,
+                        firstName: student.firstName,
+                        lastName: student.lastName,
+                        subjectName: studentSlot.subject ? studentSlot.subject.name : "Останато",
+                        subjectShortName: studentSlot.subject ? studentSlot.subject.shortName : "/",
+                        note: studentSlot.note
+                    }
+                });
+                setStudents(students);
+                setTotalStudentsCount(promise.data.totalElements);
+                setPage(promise.data.number);
+                setPageSize(promise.data.size);
+                setTotalPages(promise.data.totalPages);
+            });
+    };
 
     const termDayOrDate = () => {
         if(props.value.dayOfWeek) {
@@ -198,17 +234,37 @@ const ProfessorConsultationTerm = (props) => {
                 <div className="row">
                     <div className="col-md-7">
                         {termDayOrDate()}
+                        {(() => {
+                            return props.value.dayOfWeek ? (
+                                <div className="row">
+                                    <div className="col-md-6 font-weight-bold">Датум:</div>
+                                    <div className="col-md-6">
+                                        <select onChange={onDateChange}
+                                                className="form-control-sm border-0 bg-light"
+                                                value={term.id}>
+                                            {props.value.slots.map(s => {
+                                                return (
+                                                    <option key={s.id} value={s.id}>
+                                                        {moment(s.date).format("DD/MM/YYYY")}
+                                                    </option>
+                                                );
+                                            })}
+                                        </select>
+                                    </div>
+                                </div>
+                            ) : null;
+                        })()}
                         {termTime()}
                         {termRoom()}
                     </div>
                     <div className="col-md-5 mt-3">
                         {(() => {
                             if(props.value.dayOfWeek) {
-                                if(!props.value.cancel) {
+                                if(!term.cancel) {
                                     return (
                                         <>
                                             <Button variant="primary" onClick={handleShowCancel} type={"button"}
-                                                    className="btn btn-danger ml-2" title="Откажи">
+                                                    className="btn btn-danger ml-2 mt-1" title="Откажи">
                                                 <i className="fa fa-fw fa-times" />
                                             </Button>
                                             {confirmCancelModal()}
@@ -218,9 +274,9 @@ const ProfessorConsultationTerm = (props) => {
                                     return (
                                         <>
                                             <Button variant="primary"
-                                                    onClick={() => props.onTermUncanceled(props.value.id)}
+                                                    onClick={() => props.onTermUncanceled(term.id)}
                                                     type={"button"}
-                                                    className="btn btn-success ml-2" title="Врати назад">
+                                                    className="btn btn-success ml-2 mt-1" title="Врати назад">
                                                 <i className="fa fa-fw fa-undo" />
                                             </Button>
                                         </>
@@ -228,10 +284,23 @@ const ProfessorConsultationTerm = (props) => {
                                 }
                             }
                         })()}
-                        <Link className="btn btn-primary ml-2" title="Промени"
-                              to={`/consultations/${props.value.id}/edit`}>
-                            <i className="fa fa-fw fa-edit" />
-                        </Link>
+                        {(() => {
+                            if(props.value.dayOfWeek) {
+                                return (
+                                    <Link className="btn btn-primary ml-2 mt-1" title="Промени"
+                                          to={`/consultations/weekly/${props.value.id}/edit`}>
+                                        <i className="fa fa-fw fa-edit" />
+                                    </Link>
+                                );
+                            } else {
+                                return (
+                                    <Link className="btn btn-primary ml-2 mt-1" title="Промени"
+                                          to={`/consultations/date/${props.value.id}/edit`}>
+                                        <i className="fa fa-fw fa-edit" />
+                                    </Link>
+                                );
+                            }
+                        })()}
                         <Button variant="primary" onClick={handleShowDelete} type={"button"}
                                 className="btn btn-danger ml-2 mt-1" title="Избриши">
                             <i className="fa fa-fw fa-trash" />
@@ -276,7 +345,7 @@ const ProfessorConsultationTerm = (props) => {
 
     return (
         (totalStudentsCount !== null) ?
-            <div className="col-lg-6 col-md-12 col-sm-12 mt-5">
+            <div className="col-lg-6 col-md-12 col-sm-12 mt-4">
                 <div className="professorTerms card">
                     {cardHeader()}
                     {cardBody()}

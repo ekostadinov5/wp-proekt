@@ -79,7 +79,6 @@ class AppProvider extends Component {
         let intValueDayOfWeek = this.getDayOfWeekIntValue(dayOfWeek);
         let hours = parseInt(time.split(':')[0]);
         let minutes = parseInt(time.split(':')[1]);
-        console.log(hours + ' ' + minutes);
         intValueDayOfWeek = intValueDayOfWeek !== 7 ? intValueDayOfWeek : 0;
         let date = new Date();
         let safetyFlag = 0;
