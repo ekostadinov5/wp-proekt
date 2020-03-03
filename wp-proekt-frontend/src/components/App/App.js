@@ -315,7 +315,7 @@ class App extends Component {
 
     SubjectsApi = {
         loadSubjects: () => {
-            SubjectsService.fetchSubjectsOrdered().then((promise) => {
+            SubjectsService.fetchSubjects().then((promise) => {
                 this.setState({
                     subjects: promise.data
                 });
@@ -552,10 +552,10 @@ class App extends Component {
                     {context => (
                         <Router>
                             <Header onSearch={this.SearchApi} 
-                                    onTermsLinkClicked={this.ProfessorsApi.loadProfessors}
-                                    onRoomsLinkClicked={this.RoomsApi.loadRooms} 
-                                    onSubjectsLinkClicked={this.SubjectsApi.loadSubjects}
-                                    onMyTermsLinkClicked={this.ProfessorsApi.loadProfessor} />
+                                    loadTerms={this.ProfessorsApi.loadProfessors}
+                                    loadRooms={this.RoomsApi.loadRooms} 
+                                    loadSubjects={this.SubjectsApi.loadSubjects}
+                                    loadMyTerms={this.ProfessorsApi.loadProfessor} />
                             <div role="main" className="mt-3">
                                 {routes()}
                                 {(() => {

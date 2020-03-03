@@ -5,7 +5,9 @@ import {Link} from "react-router-dom";
 const Subjects = (props) => {
     
     const subjects = () => {
-        return props.subjects.map(s => <Subject key={s.id} value={s} onDelete={props.onSubjectDelete} />);
+        return props.subjects
+            .sort((s1, s2) => s1.name.localeCompare(s2.name))
+            .map(s => <Subject key={s.id} value={s} onDelete={props.onSubjectDelete} />);
     };
     
     return(

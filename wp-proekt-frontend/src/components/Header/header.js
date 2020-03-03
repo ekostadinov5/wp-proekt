@@ -11,19 +11,19 @@ const Header = (props) => {
     const linkChange = (e) => {
         let clicked = e.target.parentElement;
         if(clicked.id === 'termsMenuLink') {
-            props.onTermsLinkClicked();
+            props.loadTerms();
             setLastClickedLink(0);
         }
         if(clicked.id === 'roomsMenuLink') {
-            props.onRoomsLinkClicked();
+            props.loadRooms();
             setLastClickedLink(1);
         }
         if(clicked.id === 'subjectsMenuLink') {
-            props.onSubjectsLinkClicked();
+            props.loadSubjects();
             setLastClickedLink(2);
         }
         if(clicked.id === 'myTermsMenuLink') {
-            props.onMyTermsLinkClicked();
+            props.loadMyTerms();
         }
         clicked.parentElement.childNodes.forEach(child => child.classList.remove("active"));
         clicked.classList.add("active");
@@ -37,6 +37,18 @@ const Header = (props) => {
             props.onSearch.searchRooms(e.target.searchTerm.value);
         } else if(lastClickedLink === 2) {
             props.onSearch.searchSubjects(e.target.searchTerm.value);
+        }
+    };
+
+    const emptySearch = (e) => {
+        if(e.target.value === '') {
+            if(lastClickedLink === 0) {
+                props.loadTerms();
+            } else if(lastClickedLink === 1) {
+                props.loadRooms();
+            } else if(lastClickedLink === 2) {
+                props.loadSubjects();
+            }
         }
     };
 
@@ -96,7 +108,8 @@ const Header = (props) => {
         return (
             <form onSubmit={onSearch} className="nav-item form-inline mt-2 mx-3">
                 <div className={"form-group m-auto"}>
-                    <input id={"searchTerm"} name={"searchTerm"} className="form-control my-2 mr-2" type="search" 
+                    <input ref={element => (element || {}).onsearch=emptySearch}
+                           id={"searchTerm"} name={"searchTerm"} className="form-control my-2 mr-2" type="search"
                            placeholder="Пребарај..." aria-label="Search"/>
                     <button className="btn btn-outline-success my-2" type="submit">Пребарај</button>
                 </div>
